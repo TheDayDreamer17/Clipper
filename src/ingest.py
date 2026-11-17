@@ -39,8 +39,9 @@ class StreamIngester:
         cmd = [
             "/Users/vismaythaker/workspace/projects/Clipper/.venv/bin/yt-dlp",
             "--ffmpeg-location", "/opt/homebrew/bin/ffmpeg",
+            "--extractor-args", "youtube:player_client=android,web",
             "--download-sections", section_spec,
-            "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+            "-f", "b/best[height<=720]/bestvideo+bestaudio/best",
             "--force-overwrites",
             "-o", str(target_path),
             url
