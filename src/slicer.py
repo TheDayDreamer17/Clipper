@@ -11,7 +11,7 @@ class VideoSlicer:
     - 16:9 centered gameplay with blurred background filling 1080x1920
     - Audio sync & positive PTS fix for macOS QuickTime/Safari
     - Dynamic duration rounding (e.g. 22s -> 25s)
-    - Stylish typography banners in the upper blurred margin
+    - Modern Glassmorphic Viral Banner UI (Neon Pill Badge, Cyan Glow, Drop Shadows)
     """
     def __init__(self, ffmpeg_bin: Optional[str] = None):
         self.ffmpeg_bin = ffmpeg_bin or shutil.which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
@@ -20,10 +20,7 @@ class VideoSlicer:
             self.font_path = "/Library/Fonts/Arial Unicode.ttf"
 
     def round_duration(self, raw_duration: float, step: int = 5, min_sec: int = 15, max_sec: int = 60) -> int:
-        """
-        Rounds a duration (e.g. 22s) up to the nearest clean 5s window (e.g. 25s),
-        ensuring it fits standard Shorts / Reels duration limits.
-        """
+        """Rounds a duration up to the nearest clean 5s window."""
         rounded = int(step * round(raw_duration / step))
         if rounded < raw_duration:
             rounded += step
@@ -33,46 +30,53 @@ class VideoSlicer:
         self,
         title: str,
         subtitle: Optional[str] = None,
+        tag_text: str = "🔥 GTA SHOWCASE",
         output_png: Optional[Path] = None
     ) -> Path:
         """
-        Renders a crisp 1080x1920 transparent PNG with a rounded translucent
-        banner bar located in the upper blurred margin (above the 16:9 video).
+        Renders a sleek, modern glassmorphic viral short banner:
+        - Floating neon pink pill badge
+        - Electric cyan glowing container border
+        - High-contrast bold white title + drop shadow
+        - Cyan/Gold accent subtitle
         """
         if not output_png:
-            output_png = Path(tempfile.gettempdir()) / f"banner_{abs(hash(title)) % 100000}.png"
+            output_png = Path(tempfile.gettempdir()) / f"viral_banner_{abs(hash(title)) % 100000}.png"
 
         img = Image.new("RGBA", (1080, 1920), (0, 0, 0, 0))
         draw = ImageDraw.Draw(img)
 
-        # Translucent rounded banner container
-        # Box from y=160 to y=330 (upper third, right above y=656 where 16:9 gameplay sits)
-        banner_box = [(60, 160), (1020, 330)]
-        draw.rounded_rectangle(
-            banner_box,
-            radius=24,
-            fill=(0, 0, 0, 200),
-            outline=(255, 255, 255, 70),
-            width=3
-        )
+        # 1. Main Glassmorphic Container (y=180 to y=330)
+        pill_box = [(70, 180), (1010, 330)]
+        # Glowing cyan outline
+        draw.rounded_rectangle([(66, 176), (1014, 334)], radius=28, outline=(0, 240, 255, 140), width=3)
+        # Translucent dark body
+        draw.rounded_rectangle(pill_box, radius=24, fill=(12, 16, 24, 230))
+
+        # 2. Category Pill Badge (floating on top-left of container)
+        badge_box = [(110, 162), (360, 204)]
+        draw.rounded_rectangle(badge_box, radius=12, fill=(255, 0, 128, 255)) # Vibrant Neon Pink
 
         # Load fonts
         try:
-            main_font = ImageFont.truetype(self.font_path, 42)
-            sub_font = ImageFont.truetype(self.font_path, 28)
+            badge_font = ImageFont.truetype(self.font_path, 22)
+            main_font = ImageFont.truetype(self.font_path, 38)
+            sub_font = ImageFont.truetype(self.font_path, 25)
         except Exception:
-            main_font = ImageFont.load_default()
-            sub_font = ImageFont.load_default()
+            badge_font = main_font = sub_font = ImageFont.load_default()
+
+        # Render Pill Badge Text
+        draw.text((235, 183), tag_text, font=badge_font, fill=(255, 255, 255, 255), anchor="mm")
 
         # Render Main Title (with shadow)
-        text_y = 225 if not subtitle else 215
-        draw.text((542, text_y + 2), title, font=main_font, fill=(0, 0, 0, 220), anchor="mm")
-        draw.text((540, text_y), title, font=main_font, fill=(255, 255, 255, 255), anchor="mm")
+        title_y = 244 if subtitle else 255
+        draw.text((542, title_y + 2), title.upper(), font=main_font, fill=(0, 0, 0, 220), anchor="mm")
+        draw.text((540, title_y), title.upper(), font=main_font, fill=(255, 255, 255, 255), anchor="mm")
 
         # Render Subtitle if present
         if subtitle:
-            draw.text((542, 277), subtitle, font=sub_font, fill=(0, 0, 0, 200), anchor="mm")
-            draw.text((540, 275), subtitle, font=sub_font, fill=(255, 215, 0, 255), anchor="mm") # Gold accent
+            draw.text((542, 292), subtitle.upper(), font=sub_font, fill=(0, 0, 0, 200), anchor="mm")
+            draw.text((540, 290), subtitle.upper(), font=sub_font, fill=(0, 240, 255, 255), anchor="mm") # Electric Cyan
 
         img.save(output_png)
         return output_png
@@ -85,7 +89,8 @@ class VideoSlicer:
         output_path: str,
         style: str = "blur_bg",
         overlay_text: Optional[str] = None,
-        overlay_subtitle: Optional[str] = None
+        overlay_subtitle: Optional[str] = None,
+        tag_text: str = "🔥 GTA SHOWCASE"
     ) -> bool:
         """
         Slices a video window and formats it into a 9:16 (1080x1920) vertical video.
@@ -95,7 +100,7 @@ class VideoSlicer:
         
         banner_png = None
         if overlay_text:
-            banner_png = self.create_text_banner_image(overlay_text, overlay_subtitle)
+            banner_png = self.create_text_banner_image(overlay_text, overlay_subtitle, tag_text=tag_text)
 
         if style == "blur_bg":
             # 16:9 gameplay centered (1080x608), blurred background filling 1080x1920
@@ -152,7 +157,6 @@ class VideoSlicer:
                     output_path
                 ]
         else:
-            # Direct Center Crop
             filter_str = "crop=ih*(9/16):ih:(iw-ow)/2:0,scale=1080:1920"
             cmd = [
                 self.ffmpeg_bin,
