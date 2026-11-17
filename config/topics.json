@@ -1,0 +1,144 @@
+{
+  "topics": [
+    {
+      "id": "T1_01_opening_intro",
+      "category": "Opening Cutscene & Intro",
+      "keywords_en": ["intro", "opening", "cutscene", "start", "beginning", "story", "first look"],
+      "keywords_hi": ["शुरुआत", "ओपनिंग", "कहानी", "स्टोरी", "पहला सीन", "कट्सिन"],
+      "keywords_roman": ["intro", "opening", "starting", "pehla scene", "kahani", "shuru", "scene"]
+    },
+    {
+      "id": "T1_02_graphics_first_look",
+      "category": "Graphics & Visuals",
+      "keywords_en": ["graphics", "visuals", "ray tracing", "reflection", "lighting", "unreal", "view", "resolution", "fps"],
+      "keywords_hi": ["ग्राफिक्स", "दिखता", "नेक्स्ट लेवल", "नजारा", "विजुअल्स", "लाइटिंग"],
+      "keywords_roman": ["graphics", "dikh raha", "next level", "visuals", "look", "lighting", "mast dikh raha"]
+    },
+    {
+      "id": "T1_03_characters_intro",
+      "category": "Protagonists & Characters",
+      "keywords_en": ["character", "jason", "lucia", "trevor", "michael", "franklin", "bonnie", "clyde", "dialogue"],
+      "keywords_hi": ["किरदार", "लूसिया", "जेसन", "ट्रेवर", "माइकल", "फ्रैंकलिन", "बंदा"],
+      "keywords_roman": ["character", "lucia", "jason", "trevor", "michael", "franklin", "banda", "ladki"]
+    },
+    {
+      "id": "T1_04_vice_city_drive",
+      "category": "Vice City First Drive",
+      "keywords_en": ["vice city", "drive", "driving", "cruise", "streets", "city", "ocean drive", "beach"],
+      "keywords_hi": ["वाइस सिटी", "ड्राइव", "शहर", "सड़क", "बीच", "गाड़ी चला"],
+      "keywords_roman": ["vice city", "drive", "driving", "sheher", "sadak", "beach", "ghumo"]
+    },
+    {
+      "id": "T1_05_gta5_vs_gta6",
+      "category": "GTA 5 vs GTA 6 Comparison",
+      "keywords_en": ["difference", "comparison", "gta 5", "gta 6", "versus", "improved", "better"],
+      "keywords_hi": ["फर्क", "तुलना", "बेहतर", "बदल गया", "पहले से"],
+      "keywords_roman": ["fark", "compare", "pehla gta", "better hai", "badal gaya"]
+    },
+    {
+      "id": "T2_06_police_ai_wanted",
+      "category": "Police AI & Wanted Level",
+      "keywords_en": ["police", "cops", "chase", "wanted", "5 star", "siren", "escape", "arrest", "swat", "fbi"],
+      "keywords_hi": ["पुलिस", "पीछे", "ठुल्ला", "भागा", "पकड़", "स्टार", "भागो", "केस"],
+      "keywords_roman": ["police", "peeche", "thulla", "bhago", "bhag", "pakar", "piche", "thulle", "siren"]
+    },
+    {
+      "id": "T2_07_npc_reactions",
+      "category": "NPC Reactions & Crowd AI",
+      "keywords_en": ["npc", "pedestrian", "crowd", "people", "reaction", "talking", "civilian", "ai"],
+      "keywords_hi": ["लोग", "पब्लिक", "एनपीसी", "बात कर रहे", "रिएक्शन", "भीड़"],
+      "keywords_roman": ["log", "public", "npc", "reaction", "bheed", "bhag rahe", "chilla rahe"]
+    },
+    {
+      "id": "T2_08_physics_destruction",
+      "category": "Physics & Destruction",
+      "keywords_en": ["physics", "destruction", "damage", "crash", "explosion", "break", "demolish", "ragdoll"],
+      "keywords_hi": ["फिजिक्स", "टूटा", "उड़ा", "धमाका", "ब्लास्ट", "विस्फोट"],
+      "keywords_roman": ["physics", "toot gaya", "uda diya", "dhamaka", "blast", "phat gaya"]
+    },
+    {
+      "id": "T2_09_easter_eggs",
+      "category": "Easter Eggs & Hidden Details",
+      "keywords_en": ["easter egg", "secret", "hidden", "mystery", "clue", "found", "did you see"],
+      "keywords_hi": ["सीक्रेट", "छुपा", "राज", "रहस्य", "ईस्टर एग", "मिला"],
+      "keywords_roman": ["secret", "chupa hua", "mystery", "kisi ko nahi pata", "easter egg"]
+    },
+    {
+      "id": "T2_10_bugs_and_fails",
+      "category": "Bugs, Glitches & Hilarious Fails",
+      "keywords_en": ["glitch", "bug", "fail", "died", "wasted", "hilarious", "dead", "ragdoll", "funny"],
+      "keywords_hi": ["मर गया", "खत्म", "गया", "फेल", "हंसी", "मजाक", "बग", "अटक गया"],
+      "keywords_roman": ["mar gaya", "khatam", "fail ho gaya", "wasted", "haso", "lol", "bhai gaya", "glitch"]
+    },
+    {
+      "id": "T3_11_map_size_exploration",
+      "category": "Map Size & Exploration",
+      "keywords_en": ["map", "huge", "size", "border", "island", "keys", "swamp", "exploration", "big"],
+      "keywords_hi": ["नक्शा", "मैप", "बड़ा", "एरिया", "जंगल", "दलदल", "सीमा"],
+      "keywords_roman": ["map", "kitna bada", "area", "jungle", "border", "sheher"]
+    },
+    {
+      "id": "T3_12_vehicle_customization",
+      "category": "Vehicle Customization & Garage",
+      "keywords_en": ["garage", "customization", "mod", "car", "supercar", "tuning", "paint", "upgrade"],
+      "keywords_hi": ["गैराज", "गाड़ी", "कार", "मॉडिफाई", "कलर", "अपग्रेड", "पहिया"],
+      "keywords_roman": ["garage", "gaadi", "car", "modify", "colour", "upgrade", "tuning"]
+    },
+    {
+      "id": "T3_13_streamer_reaction",
+      "category": "Streamer Reaction & Hype",
+      "keywords_en": ["omg", "insane", "unbelievable", "hype", "screaming", "shocked", "no way", "bro"],
+      "keywords_hi": ["तेरी", "भाई", "बाप रे", "गजब", "अरे वाह", "मजा आ गया"],
+      "keywords_roman": ["bhai", "omg", "teri", "kya baat hai", "maja aa gaya", "arre bhai", "insane"]
+    },
+    {
+      "id": "T3_14_soundtrack_radio",
+      "category": "Radio Stations & Soundtrack",
+      "keywords_en": ["radio", "song", "music", "station", "soundtrack", "track", "tune", "beat"],
+      "keywords_hi": ["रेडियो", "गाना", "म्यूजिक", "सॉन्ग", "धुन", "आवाज"],
+      "keywords_roman": ["radio", "gana", "music", "song", "sun rahe ho"]
+    },
+    {
+      "id": "T3_15_water_weather_system",
+      "category": "Water & Weather System",
+      "keywords_en": ["water", "rain", "storm", "hurricane", "waves", "ocean", "weather", "clouds"],
+      "keywords_hi": ["पानी", "बारिश", "तूफान", "लहरें", "मौसम", "समुंदर", "बादल"],
+      "keywords_roman": ["paani", "barish", "toofan", "lahrein", "mausam", "samundar", "weather"]
+    },
+    {
+      "id": "T4_16_best_settings_fps",
+      "category": "Best Settings & FPS Performance",
+      "keywords_en": ["fps", "settings", "performance", "lag", "smooth", "resolution", "frame rate"],
+      "keywords_hi": ["एफपीएस", "सेटिंग्स", "लैग", "अटक", "स्मूथ", "परफॉर्मेंस"],
+      "keywords_roman": ["fps", "settings", "lag ho raha", "smooth chal raha", "frame rate"]
+    },
+    {
+      "id": "T4_17_secret_locations",
+      "category": "Secret Locations & Hidden Spots",
+      "keywords_en": ["secret spot", "hidden place", "roof", "tunnel", "underground", "hidden bunker"],
+      "keywords_hi": ["खुफिया जगह", "गुफा", "सुरंग", "अंडरग्राउंड", "तहखाना"],
+      "keywords_roman": ["khufiya", "gupt jagah", "underground", "surang", "secret spot"]
+    },
+    {
+      "id": "T4_18_combat_weapons",
+      "category": "Combat & Weapons Arsenal",
+      "keywords_en": ["gun", "weapon", "shooting", "pistol", "rifle", "rpg", "sniper", "ammo", "aim"],
+      "keywords_hi": ["बंदूक", "हथियार", "गोली", "गन", "निशाना", "राइफल", "आरपीजी"],
+      "keywords_roman": ["bandook", "gun", "goli", "weapon", "nishana", "sniper", "rpg"]
+    },
+    {
+      "id": "T4_19_gta_online_hints",
+      "category": "GTA Online Clues & Multiplayer",
+      "keywords_en": ["online", "multiplayer", "friends", "heist", "crew", "lobby", "server"],
+      "keywords_hi": ["ऑनलाइन", "मल्टीप्लेयर", "दोस्त", "साथ में", "सर्वर", "लॉबी"],
+      "keywords_roman": ["online", "multiplayer", "dost", "saath me", "lobby", "server"]
+    },
+    {
+      "id": "T4_20_trailer_vs_reality",
+      "category": "Trailer vs Gameplay Reality",
+      "keywords_en": ["trailer", "real", "gameplay", "downgrade", "fake", "promised", "truth"],
+      "keywords_hi": ["ट्रेलर", "असली", "गेमप्ले", "झूठ", "सच", "दिखाया था"],
+      "keywords_roman": ["trailer", "asli", "gameplay", "dikhaya tha", "sach hai", "real"]
+    }
+  ]
+}

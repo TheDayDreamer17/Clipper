@@ -1,0 +1,27 @@
+# Virtual environment
+.venv/
+venv/
+ENV/
+
+# Python cache
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+
+# Media and temporary processing files
+downloads/
+output/
+*.mp4
+*.mp3
+*.m4a
+*.wav
+*.aac
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Model caches
+huggingface/
+.cache/
