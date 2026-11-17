@@ -1,0 +1,95 @@
+{
+  "version": "2.0.0",
+  "properties": {
+    "PROP_01": {
+      "name": "Game Loading & Intro Transition",
+      "category": "Story & First Boot",
+      "description": "Rockstar logo splash, loading artwork transition, first time engine boot",
+      "visual_cues": ["black_screen", "rockstar_logo", "artwork_slides", "loading_bar"],
+      "audio_cues": ["theme_music_intro", "bass_drop", "menu_chime"],
+      "priority": "HIGH",
+      "once_per_stream": true
+    },
+    "PROP_02": {
+      "name": "Character Intro & First Look",
+      "category": "Characters & Dialogue",
+      "description": "Lucia prison booking, Jason reveal, close-up character facial animation",
+      "visual_cues": ["character_closeup", "prison_uniform", "dialogue_camera", "face_detail"],
+      "audio_cues": ["story_dialogue", "intercom_chime", "dramatic_score"],
+      "priority": "HIGH",
+      "once_per_stream": true
+    },
+    "PROP_03": {
+      "name": "Cinematic Panorama & Lighting",
+      "category": "Graphics & Atmosphere",
+      "description": "Ocean Drive neon reflections, volumetric sunset over Everglades, ray-traced puddles",
+      "visual_cues": ["neon_lights", "sunset_skyline", "ray_traced_reflections", "static_wide_angle"],
+      "audio_cues": ["synth_radio", "distant_sirens", "ambient_city"],
+      "priority": "MEDIUM",
+      "once_per_stream": false
+    },
+    "PROP_04": {
+      "name": "Traffic AI & Density Showcase",
+      "category": "Physics & Simulation",
+      "description": "Intersection congestion, car turns, pedestrian crosswalks, traffic jams",
+      "visual_cues": ["multiple_vehicles", "brake_lights", "intersection_gridlock", "dense_traffic"],
+      "audio_cues": ["car_horns", "engine_revs", "tire_screech"],
+      "priority": "HIGH",
+      "once_per_stream": false
+    },
+    "PROP_05": {
+      "name": "Water & Fluid Dynamics / Mud",
+      "category": "Physics & Simulation",
+      "description": "Everglades airboat wake, ocean waves cresting, boat rooster tail, mud splatters",
+      "visual_cues": ["water_spray", "boat_wake", "mud_particles", "wave_foam"],
+      "audio_cues": ["water_splash", "propeller_roar", "heavy_slosh"],
+      "priority": "HIGH",
+      "once_per_stream": false
+    },
+    "PROP_06": {
+      "name": "Euphoria Ragdoll & Body Physics",
+      "category": "Physics & Simulation",
+      "description": "Character or NPC hit by vehicle, falling down stairs, stumbling over curb",
+      "visual_cues": ["ragdoll_limp", "airborne_body", "stumble_animation", "impact_rebound"],
+      "audio_cues": ["body_thud", "groan_grunt", "pedestrian_scream"],
+      "priority": "HIGH",
+      "once_per_stream": false
+    },
+    "PROP_07": {
+      "name": "Police Wanted AI Escalation",
+      "category": "Law Enforcement",
+      "description": "1 to 5 stars, roadblock cruisers, spike strips, helicopter spotlight",
+      "visual_cues": ["red_blue_strobe", "police_cruisers", "helicopter_spotlight", "wanted_stars"],
+      "audio_cues": ["police_siren", "police_radio", "helicopter_blades"],
+      "priority": "HIGH",
+      "once_per_stream": false
+    },
+    "PROP_08": {
+      "name": "Soft-Body Vehicle Crash Physics",
+      "category": "Physics & Simulation",
+      "description": "High-speed crash, hood crumple, wheel detachment, rollover collision",
+      "visual_cues": ["sudden_deceleration", "crumpled_metal", "smoke_radiator", "shattered_glass"],
+      "audio_cues": ["metallic_crunch", "glass_break", "tire_skid"],
+      "priority": "HIGH",
+      "once_per_stream": false
+    },
+    "PROP_09": {
+      "name": "Interior Density & Robberies",
+      "category": "Crime & Gameplay",
+      "description": "Convenience store hold-up, clerk raising hands, cash register drawer",
+      "visual_cues": ["store_interior", "gun_aimed_at_clerk", "cash_drawer", "shelves_goods"],
+      "audio_cues": ["clerk_pleading", "register_chime", "alarm_bell"],
+      "priority": "HIGH",
+      "once_per_stream": false
+    },
+    "PROP_10": {
+      "name": "NPC Dynamic Life & World Events",
+      "category": "AI & World",
+      "description": "Beach crowd routines, NPCs taking selfies, street brawls, alligator in pool",
+      "visual_cues": ["beach_crowd", "npc_phone_recording", "alligator_wildlife", "street_fight"],
+      "audio_cues": ["crowd_banter", "camera_click", "animal_hiss"],
+      "priority": "MEDIUM",
+      "once_per_stream": false
+    }
+  }
+}

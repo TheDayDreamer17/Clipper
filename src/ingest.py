@@ -28,6 +28,9 @@ class StreamIngester:
         without downloading a 10-hour full stream.
         """
         target_path = self.output_dir / output_name
+        if target_path.exists() and target_path.stat().st_size > 100000:
+            print(f"⚡ Chunk already cached on disk: {target_path}")
+            return target_path
         start_s = self._to_seconds(start_time)
         end_s = start_s + duration_sec
         section_spec = f"*{start_s}-{end_s}"
