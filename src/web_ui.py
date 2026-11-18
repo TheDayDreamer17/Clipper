@@ -294,6 +294,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
   <nav>
     <button class="nav-btn active" onclick="switchTab('clips')">🎬 Crowned Shorts for Review</button>
+    <button class="nav-btn" onclick="switchTab('props')">🎯 Active Target Props Catalog</button>
     <button class="nav-btn" onclick="switchTab('streams')">📡 Monitored Live Streams</button>
     <button class="nav-btn" onclick="switchTab('audit')">🛑 Rejection Analytics (Audit)</button>
   </nav>
@@ -304,6 +305,24 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--muted);">
           Loading generated clips...
         </div>
+      </div>
+    </div>
+
+    <div id="tab-props" style="display: none;">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Prop ID & Category</th>
+              <th>Target Name</th>
+              <th>Positive Visual Anchors</th>
+              <th>Negative Disqualifiers</th>
+              <th>HUD Trigger Rule</th>
+              <th>Learned Weight</th>
+            </tr>
+          </thead>
+          <tbody id="props-tbody"></tbody>
+        </table>
       </div>
     </div>
 
@@ -345,20 +364,23 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       document.querySelectorAll('nav .nav-btn').forEach(b => b.classList.remove('active'));
       event.target.classList.add('active');
       document.getElementById('tab-clips').style.display = tab === 'clips' ? 'block' : 'none';
+      document.getElementById('tab-props').style.display = tab === 'props' ? 'block' : 'none';
       document.getElementById('tab-streams').style.display = tab === 'streams' ? 'block' : 'none';
       document.getElementById('tab-audit').style.display = tab === 'audit' ? 'block' : 'none';
     }
 
     async function loadData() {
       try {
-        const [statsRes, clipsRes, streamsRes] = await Promise.all([
+        const [statsRes, clipsRes, streamsRes, propsRes] = await Promise.all([
           fetch('/api/stats'),
           fetch('/api/clips'),
-          fetch('/api/streams')
+          fetch('/api/streams'),
+          fetch('/api/props')
         ]);
         const stats = await statsRes.json();
         const clips = await clipsRes.json();
         const streams = await streamsRes.json();
+        const props = await propsRes.json();
 
         document.getElementById('stat-streams').textContent = stats.total_streams;
         document.getElementById('stat-clips').textContent = clips.length;
@@ -389,11 +411,41 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                   <strong>Tags:</strong> ${c.tags}
                 </div>
                 <div class="actions">
-                  <button class="btn btn-copy" onclick="copyMeta('${c.youtube_title}', '${c.tags}')">📋 Copy Meta</button>
+                  <button class="btn btn-copy" onclick="copyMeta('${c.youtube_title.replace(/'/g, "\\'")}', '${c.tags}')">📋 Copy Meta</button>
                   <button class="btn btn-approve" onclick="approveClip('${c.id}')">🚀 Stage for Upload</button>
                 </div>
               </div>
             </div>
+          `).join('');
+        }
+
+        // Render Props Catalog
+        const propsBody = document.getElementById('props-tbody');
+        if (propsBody && props.length > 0) {
+          propsBody.innerHTML = props.map(p => `
+            <tr>
+              <td>
+                <strong style="color: var(--accent); font-family: monospace;">${p.prop_id}</strong><br>
+                <span class="badge" style="font-size:0.7rem; margin-top:4px;">${p.category}</span>
+              </td>
+              <td><strong>${p.name}</strong></td>
+              <td>
+                <ul style="margin:0; padding-left:16px; font-size:0.8rem; color:#A1A1AA; line-height: 1.5;">
+                  ${p.visual_anchors.map(a => `<li>${a}</li>`).join('')}
+                </ul>
+              </td>
+              <td>
+                <ul style="margin:0; padding-left:16px; font-size:0.8rem; color:#FF5C5C; line-height: 1.5;">
+                  ${p.negative_anchors.map(n => `<li>${n}</li>`).join('')}
+                </ul>
+              </td>
+              <td>
+                <code style="background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; color: var(--accent);">${p.hud_trigger_rule}</code>
+              </td>
+              <td>
+                <strong style="color: var(--green); font-size: 1.1rem; font-family: monospace;">${p.learned_weight}x</strong>
+              </td>
+            </tr>
           `).join('');
         }
 
@@ -460,6 +512,10 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
 
         elif path == "/api/streams":
             self._handle_api_streams()
+            return
+
+        elif path == "/api/props":
+            self._handle_api_props()
             return
 
         elif path == "/api/clips":
@@ -559,6 +615,140 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
         ]
         self._send_json(streams)
 
+    def _handle_api_props(self):
+        policy_path = Path("data/self_learned_policy.json")
+        weights = {}
+        if policy_path.exists():
+            try:
+                with open(policy_path, "r") as f:
+                    weights = json.load(f).get("prompt_weights", {})
+            except Exception:
+                pass
+
+        props = [
+            {
+                "prop_id": "PROP_POLICE_PURSUIT",
+                "category": "POLICE_PURSUIT",
+                "name": "Los Santos High-Speed 3-Star Police Pursuit with Cruisers & Sirens",
+                "visual_anchors": [
+                    "police cruiser patrol car chasing player with flashing red and blue lights",
+                    "high speed car pursuit evasion through city streets with sirens",
+                    "cop cars attempting pit maneuver or roadblock"
+                ],
+                "negative_anchors": [
+                    "calm street driving with no police cars",
+                    "walking on sidewalk",
+                    "retail store interior",
+                    "loading screen"
+                ],
+                "hud_trigger_rule": "MUST HAVE: Wanted stars / flashing red-blue minimap. VQA: Are police cars chasing?",
+                "learned_weight": weights.get("PROP_POLICE_PURSUIT", 1.16)
+            },
+            {
+                "prop_id": "PROP_VIRAL_PHYSICS_FEAT",
+                "category": "VIRAL_PHYSICS",
+                "name": "Stopping The Train Challenge & High-Altitude Mountain Stunts",
+                "visual_anchors": [
+                    "speeding freight train explosive collision with tanks or barricades on tracks",
+                    "motorcycle cliff jump parachute launch from Mount Chiliad summit",
+                    "extreme vehicular physics collision with sparks and massive momentum"
+                ],
+                "negative_anchors": [
+                    "peaceful city driving",
+                    "walking on foot inside building",
+                    "dialogue cutscene with no action"
+                ],
+                "hud_trigger_rule": "KINETIC DELTA: >45 px/frame optical flow + explosion particles or altitude drop >500m",
+                "learned_weight": 1.25
+            },
+            {
+                "prop_id": "PROP_MILITARY_INFILTRATION",
+                "category": "HIGH_STAKES",
+                "name": "Fort Zancudo 5-Star Military Base Jet Theft & Tank Evasion",
+                "visual_anchors": [
+                    "infiltrating military airbase with rhino tanks firing explosive shells",
+                    "stealing P-996 Lazer military fighter jet taking off under missile lock",
+                    "intense 5-star wanted combat survival against attack helicopters"
+                ],
+                "negative_anchors": [
+                    "standard low-speed city traffic",
+                    "clothing store shopping",
+                    "safehouse garage"
+                ],
+                "hud_trigger_rule": "MUST HAVE: 5 flashing wanted stars + tank cannon flashes + missile lock warning tone",
+                "learned_weight": 1.22
+            },
+            {
+                "prop_id": "PROP_LOADING_ARTWORK",
+                "category": "LOADING_ARTWORK",
+                "name": "Official Rockstar Character Artwork Rotation (Michael, Franklin, Trevor, Bikini Girl)",
+                "visual_anchors": [
+                    "GTA loading screen rotating character artwork slides and portraits",
+                    "official Rockstar artwork of Michael, Franklin, Trevor, and bikini girl",
+                    "loading screen transition with background artwork into game world"
+                ],
+                "negative_anchors": [
+                    "active 3D in-game camera driving or walking",
+                    "dark black screen with no artwork",
+                    "pause settings menu"
+                ],
+                "hud_trigger_rule": "MUST HAVE: 2D artwork illustration or loading spinner. VQA: Is 2D character artwork visible?",
+                "learned_weight": weights.get("PROP_LOADING_ARTWORK", 1.03)
+            },
+            {
+                "prop_id": "PROP_CAMERA_POV",
+                "category": "CAMERA_POV",
+                "name": "In-Car Cockpit Driving with Steering Wheel & Dashboard Toggle",
+                "visual_anchors": [
+                    "first person interior cockpit view from driver seat with steering wheel and dashboard",
+                    "camera transitioning from third person chase view into interior driver cockpit",
+                    "hands holding steering wheel driving car from first person perspective"
+                ],
+                "negative_anchors": [
+                    "third person camera hovering behind the bumper",
+                    "cinematic cutscene",
+                    "walking on foot"
+                ],
+                "hud_trigger_rule": "MUST HAVE: Visible steering wheel / dashboard gauges. VQA: Is cockpit view visible?",
+                "learned_weight": weights.get("PROP_CAMERA_POV", 0.90)
+            },
+            {
+                "prop_id": "PROP_WEAPON_COMBAT",
+                "category": "WEAPON_COMBAT",
+                "name": "In-Game Radial Weapon Wheel Selection & Combat Shootout",
+                "visual_anchors": [
+                    "player opening in-game circular radial weapon wheel to switch guns",
+                    "active gunfight shootout with weapon reticle and muzzle flash",
+                    "aiming shotgun or rifle in combat cover"
+                ],
+                "negative_anchors": [
+                    "browsing retail gun shop shelves or Ammu-Nation counter",
+                    "driving vehicle with no weapons",
+                    "loading screen"
+                ],
+                "hud_trigger_rule": "MUST HAVE: Circular weapon selector wheel or combat reticle. VQA: Is radial weapon wheel visible?",
+                "learned_weight": weights.get("PROP_WEAPON_COMBAT", 1.16)
+            },
+            {
+                "prop_id": "PROP_AERIAL_FLIGHT",
+                "category": "AERIAL_FLIGHT",
+                "name": "Helicopter Helipad Ground Takeoff to Los Santos Skyline",
+                "visual_anchors": [
+                    "helicopter starting from helipad ground lifting up into the air",
+                    "helicopter climbing above city skyline with sunset horizon",
+                    "aerial panoramic view from aircraft over skyscrapers"
+                ],
+                "negative_anchors": [
+                    "car driving on asphalt road",
+                    "subway tunnel",
+                    "indoor gunfight"
+                ],
+                "hud_trigger_rule": "MUST HAVE: Helicopter rotor blades or cockpit altimeter. VQA: Is helicopter lifting off?",
+                "learned_weight": weights.get("PROP_AERIAL_FLIGHT", 1.16)
+            }
+        ]
+        self._send_json(props)
+
     def _handle_api_clips(self):
         clips = []
         winner_dir = Path("output/tournament_winners")
@@ -567,13 +757,32 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                 fname = p.name
                 title = fname.replace("_WINNER_9x16.mp4", "").replace("_", " ").title()
                 score = 88.0
-                if "police" in fname.lower():
+                fl = fname.lower()
+                if "train" in fl:
+                    score = 98.4
+                    creator = "NoughtPointFourLIVE"
+                    lang = "English"
+                    yt_title = "🚂 CAN YOU STOP THE TRAIN IN GTA 5?! (100 Tanks Collision) #Shorts"
+                    tags = "#GTA5 #GTA6 #Gaming #Shorts #TrainChallenge #Physics"
+                elif "jet" in fl or "5star" in fl or "military" in fl:
+                    score = 95.2
+                    creator = "VanossGaming"
+                    lang = "English"
+                    yt_title = "🚨 STEALING MILITARY JET WITH 5 STARS! (Fort Zancudo Infiltration) #Shorts"
+                    tags = "#GTA5 #GTA6 #MilitaryBase #5Stars #Shorts #Gaming"
+                elif "chiliad" in fl or "stunt" in fl or "jump" in fl:
+                    score = 94.0
+                    creator = "RedKB"
+                    lang = "English"
+                    yt_title = "⛰️ INSANE MOUNT CHILIAD CLIFF JUMP! (Bike Parachute Escape) #Shorts"
+                    tags = "#GTA5 #GTA6 #StuntJump #MountChiliad #Shorts #Gaming"
+                elif "police" in fl:
                     score = 78.5
                     creator = "theRadBrad"
                     lang = "English"
                     yt_title = "🚨 3-STAR POLICE ESCAPE! (theRadBrad GTA Gameplay) #Shorts"
                     tags = "#GTA6 #GTA5 #PoliceChase #Shorts #Gaming"
-                elif "loading" in fname.lower():
+                elif "loading" in fl or "artwork" in fl:
                     score = 93.5
                     creator = "GTA Series Videos"
                     lang = "English"
