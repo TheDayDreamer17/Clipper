@@ -28,18 +28,20 @@ class MultiClipAssembler:
         Takes slices: [{'start': 12.0, 'end': 19.5}, {'start': 32.0, 'end': 44.0}],
         removes dead air between them, and stitches them into a single high-action Short.
         """
+        import uuid
+        job_id = uuid.uuid4().hex[:8]
         out_p = Path(output_path)
         out_p.parent.mkdir(parents=True, exist_ok=True)
 
         if not slices:
             raise ValueError("No time slices provided for assembly!")
 
-        # 1. Extract each sub-segment into intermediate MP4
+        # 1. Extract each sub-segment into intermediate MP4 with unique job_id
         temp_clips = []
         for idx, sl in enumerate(slices):
             s_start = sl["start"]
             s_dur = sl["end"] - sl["start"]
-            seg_out = self.temp_dir / f"seg_{idx}_{int(s_start)}_{int(s_dur)}.mp4"
+            seg_out = self.temp_dir / f"seg_{job_id}_{idx}_{int(s_start)}_{int(s_dur)}.mp4"
 
             cmd = [
                 self.ffmpeg_bin, "-y",
@@ -62,7 +64,7 @@ class MultiClipAssembler:
             stitched_raw = temp_clips[0]
         else:
             # Concat multiple segments using FFmpeg concat filter
-            stitched_raw = self.temp_dir / "stitched_raw.mp4"
+            stitched_raw = self.temp_dir / f"stitched_{job_id}.mp4"
             inputs = []
             filter_parts = []
             for i, c in enumerate(temp_clips):

@@ -1,5 +1,6 @@
 import time
 import subprocess
+import threading
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 from PIL import Image
@@ -21,13 +22,15 @@ class TournamentEvaluator:
         self.vqa_proc = None
         self.vqa_model = None
         self.ffmpeg_bin = "/opt/homebrew/bin/ffmpeg"
+        self._lock = threading.Lock()
 
     def _lazy_load_models(self):
-        if self.clip_model is None:
-            self.clip_proc = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
-            self.clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(self.device)
-            self.vqa_proc = BlipProcessor.from_pretrained("Salesforce/blip-vqa-base")
-            self.vqa_model = BlipForQuestionAnswering.from_pretrained("Salesforce/blip-vqa-base").to(self.device)
+        with self._lock:
+            if self.clip_model is None or self.vqa_model is None:
+                self.clip_proc = CLIPProcessor.from_pretrained("openai/clip-vit-base-patch32")
+                self.clip_model = CLIPModel.from_pretrained("openai/clip-vit-base-patch32").to(self.device)
+                self.vqa_proc = BlipProcessor.from_pretrained("Salesforce/blip-vqa-base")
+                self.vqa_model = BlipForQuestionAnswering.from_pretrained("Salesforce/blip-vqa-base").to(self.device)
 
     def extract_sample_frame(self, video_path: str, offset_sec: float) -> Image.Image:
         out_jpg = Path(f"/tmp/eval_frame_{time.time_ns()}.jpg")
@@ -61,7 +64,15 @@ class TournamentEvaluator:
         self._lazy_load_models()
         cand_p = Path(candidate_path)
         if not cand_p.exists():
-            return {"score": 0.0, "status": "FAIL_FILE_MISSING"}
+            return {
+                "score": 0.0,
+                "veracity_pass": False,
+                "positive_confidence": 0.0,
+                "negative_confidence": 0.0,
+                "hook_velocity": 0.0,
+                "vqa_answer": "missing",
+                "tier": "FAIL_FILE_MISSING"
+            }
 
         # Extract frames: Hook (1.5s) and Climax (halfway through)
         hook_img = self.extract_sample_frame(str(cand_p), 1.5)
