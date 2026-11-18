@@ -1,0 +1,26 @@
+{
+  "version": 1.0,
+  "total_evaluations": 132,
+  "prompt_weights": {
+    "PROP_LOADING_ARTWORK": 1.03,
+    "PROP_POLICE_PURSUIT": 1.16,
+    "PROP_CAMERA_POV": 0.9,
+    "PROP_WEAPON_COMBAT": 1.16,
+    "PROP_AERIAL_FLIGHT": 1.16
+  },
+  "learned_optimal_durations": {
+    "LOADING_ARTWORK": 16.0,
+    "POLICE_PURSUIT": 13.0,
+    "CAMERA_POV": 13.0,
+    "WEAPON_COMBAT": 13.0,
+    "AERIAL_FLIGHT": 10.0
+  },
+  "learned_negative_anchors": [
+    "calm street driving with no police cars",
+    "walking on sidewalk",
+    "retail store interior",
+    "dark black screen with no artwork",
+    "third person camera hovering behind bumper"
+  ],
+  "performance_history": []
+}
