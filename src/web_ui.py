@@ -793,6 +793,13 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                     lang = "English"
                     yt_title = "🔥 OFFICIAL CHARACTER ARTWORK REVEAL! #Shorts"
                     tags = "#GTA6 #GTA6Clips #RockstarGames #GTAArtwork #Shorts"
+                elif "global" in fl:
+                    score = 92.5
+                    creator = "theRadBrad"
+                    lang = "English"
+                    channel = "GTA 6 CLIPS"
+                    yt_title = "🚨 CAN YOU STOP THE TRAIN?! (GTA 6 Clips Global) #Shorts"
+                    tags = "#GTA6 #GTA6Clips #Gaming #Shorts #TrainCollision"
                 else:
                     score = 84.8
                     creator = "Techno Gamerz"
