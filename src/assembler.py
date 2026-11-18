@@ -22,7 +22,10 @@ class MultiClipAssembler:
         output_path: str,
         banner_title: str,
         banner_subtitle: str,
-        banner_tag: str = "🔥 HIGHLIGHT"
+        banner_tag: str = "🔥 HIGHLIGHT",
+        brand_name: str = "GTA 6 CLIPS",
+        creator_credit: Optional[str] = None,
+        hook_text: Optional[str] = "👀 WAIT TILL THE END..."
     ) -> Path:
         """
         Takes slices: [{'start': 12.0, 'end': 19.5}, {'start': 32.0, 'end': 44.0}],
@@ -84,7 +87,7 @@ class MultiClipAssembler:
             ]
             subprocess.run(cmd_concat, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
 
-        # 3. Apply 9:16 mobile canvas + glassmorphic banner UI
+        # 3. Apply 9:16 mobile canvas + glassmorphic banner UI + Timed Branding
         total_dur = sum(sl["end"] - sl["start"] for sl in slices)
         self.slicer.slice_clip(
             input_path=str(stitched_raw),
@@ -93,7 +96,10 @@ class MultiClipAssembler:
             output_path=str(out_p),
             overlay_text=banner_title,
             overlay_subtitle=banner_subtitle,
-            tag_text=banner_tag
+            tag_text=banner_tag,
+            brand_name=brand_name,
+            creator_credit=creator_credit,
+            hook_text=hook_text
         )
 
         return out_p

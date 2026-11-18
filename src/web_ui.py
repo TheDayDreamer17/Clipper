@@ -402,6 +402,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                   <div class="virality-badge">🔥 ${c.virality_score}/100</div>
                 </div>
                 <div class="meta-box">
+                  <div class="meta-row"><span>Channel:</span> <span class="badge" style="border-color: ${c.channel && c.channel.includes('INDIA') ? '#FF9933' : 'var(--accent)'}; color: #FFF; font-weight: 700;">${c.channel || 'GTA 6 CLIPS'}</span></div>
                   <div class="meta-row"><span>Creator:</span> <span class="meta-val">${c.creator}</span></div>
                   <div class="meta-row"><span>Platform:</span> <span class="meta-val">${c.platform.toUpperCase()} (${c.language})</span></div>
                   <div class="meta-row"><span>QA Veracity:</span> <span class="meta-val" style="color: var(--green);">VERIFIED PASS</span></div>
@@ -758,42 +759,47 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                 title = fname.replace("_WINNER_9x16.mp4", "").replace("_", " ").title()
                 score = 88.0
                 fl = fname.lower()
+                channel = "GTA 6 CLIPS"
+                if "techno" in fl or "carry" in fl or "india" in fl:
+                    channel = "GTA 6 CLIPS INDIA"
+
                 if "train" in fl:
                     score = 98.4
                     creator = "NoughtPointFourLIVE"
                     lang = "English"
-                    yt_title = "🚂 CAN YOU STOP THE TRAIN IN GTA 5?! (100 Tanks Collision) #Shorts"
-                    tags = "#GTA5 #GTA6 #Gaming #Shorts #TrainChallenge #Physics"
+                    yt_title = "🚂 CAN YOU STOP THE TRAIN IN GTA 5?! (Speeding Train Collision) #Shorts"
+                    tags = "#GTA5 #GTA6 #GTA6Clips #Gaming #Shorts #TrainChallenge"
                 elif "jet" in fl or "5star" in fl or "military" in fl:
                     score = 95.2
                     creator = "VanossGaming"
                     lang = "English"
                     yt_title = "🚨 STEALING MILITARY JET WITH 5 STARS! (Fort Zancudo Infiltration) #Shorts"
-                    tags = "#GTA5 #GTA6 #MilitaryBase #5Stars #Shorts #Gaming"
+                    tags = "#GTA5 #GTA6 #GTA6Clips #MilitaryBase #5Stars #Shorts"
                 elif "chiliad" in fl or "stunt" in fl or "jump" in fl:
                     score = 94.0
                     creator = "RedKB"
                     lang = "English"
                     yt_title = "⛰️ INSANE MOUNT CHILIAD CLIFF JUMP! (Bike Parachute Escape) #Shorts"
-                    tags = "#GTA5 #GTA6 #StuntJump #MountChiliad #Shorts #Gaming"
+                    tags = "#GTA5 #GTA6 #GTA6Clips #StuntJump #MountChiliad #Shorts"
                 elif "police" in fl:
                     score = 78.5
                     creator = "theRadBrad"
                     lang = "English"
                     yt_title = "🚨 3-STAR POLICE ESCAPE! (theRadBrad GTA Gameplay) #Shorts"
-                    tags = "#GTA6 #GTA5 #PoliceChase #Shorts #Gaming"
+                    tags = "#GTA6 #GTA5 #GTA6Clips #PoliceChase #Shorts"
                 elif "loading" in fl or "artwork" in fl:
                     score = 93.5
                     creator = "GTA Series Videos"
                     lang = "English"
                     yt_title = "🔥 OFFICIAL CHARACTER ARTWORK REVEAL! #Shorts"
-                    tags = "#GTA6 #RockstarGames #GTAArtwork #Shorts"
+                    tags = "#GTA6 #GTA6Clips #RockstarGames #GTAArtwork #Shorts"
                 else:
                     score = 84.8
                     creator = "Techno Gamerz"
                     lang = "Hindi"
+                    channel = "GTA 6 CLIPS INDIA"
                     yt_title = "🚗 FIRST PERSON COCKPIT DRIVING! (Techno Gamerz) #Shorts"
-                    tags = "#TechnoGamerz #GTA6 #GTA5 #CockpitView #Shorts"
+                    tags = "#TechnoGamerz #GTA6ClipsIndia #GTA6 #GTA5 #CockpitView #Shorts"
 
                 clips.append({
                     "id": p.stem,
@@ -801,6 +807,7 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                     "creator": creator,
                     "platform": "youtube",
                     "language": lang,
+                    "channel": channel,
                     "virality_score": score,
                     "video_url": f"/video/tournament_winners/{urllib.parse.quote(fname)}",
                     "youtube_title": yt_title,

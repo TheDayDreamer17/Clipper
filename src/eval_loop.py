@@ -126,7 +126,10 @@ class TournamentEvaluator:
         input_video: str,
         candidates_def: List[Dict[str, Any]],
         target_prop: Dict[str, Any],
-        output_dir: str = "output/tournament_winners"
+        output_dir: str = "output/tournament_winners",
+        brand_name: str = "GTA 6 CLIPS",
+        creator_credit: Optional[str] = None,
+        hook_text: Optional[str] = "👀 WAIT TILL THE END..."
     ) -> Dict[str, Any]:
         """
         Builds multiple candidate cuts, evaluates all candidates,
@@ -140,6 +143,7 @@ class TournamentEvaluator:
 
         print(f"\n🏆 RUNNING TOURNAMENT: {event_name}")
         print(f"Prop Target: {target_prop['name']}")
+        print(f"Brand Channel: {brand_name} | Credit: @{creator_credit}")
         print("-" * 60)
 
         for c in candidates_def:
@@ -153,7 +157,10 @@ class TournamentEvaluator:
                 output_path=c_out,
                 banner_title=ui["title"],
                 banner_subtitle=ui["subtitle"],
-                banner_tag=ui["tag"]
+                banner_tag=ui["tag"],
+                brand_name=brand_name,
+                creator_credit=creator_credit,
+                hook_text=hook_text
             )
 
             # Evaluate Candidate
