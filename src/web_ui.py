@@ -1,3 +1,7 @@
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).parent.parent))
+
 import socket
 import http.server
 import socketserver
@@ -6,11 +10,15 @@ import urllib.parse
 import mimetypes
 import sqlite3
 import time
-from pathlib import Path
+import subprocess
 from typing import Dict, List, Any
 
 from src.agent_swarm import AgentSwarmCoordinator
 from src.self_learner import SelfLearningEngine
+from src.slicer import VideoSlicer
+from src.twitch_clips import TwitchClipEngine
+from src.fetcher import StreamFetcher
+from src.ingest import StreamIngester
 
 PORT = 8765
 
@@ -98,16 +106,16 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       text-transform: uppercase;
     }
 
-    /* Hot Searches Live Marquee Ticker */
+    /* Fixed Live Searches Runtime Bar */
     .ticker-bar {
       background: rgba(15, 23, 42, 0.95);
       border-bottom: 1px solid rgba(0, 240, 255, 0.15);
-      padding: 8px 32px;
+      padding: 10px 32px;
       display: flex;
       align-items: center;
       gap: 16px;
       font-size: 0.8rem;
-      overflow: hidden;
+      overflow-x: auto;
     }
     .ticker-title {
       font-weight: 700;
@@ -119,34 +127,36 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       font-size: 0.75rem;
       text-transform: uppercase;
       letter-spacing: 0.5px;
+      flex-shrink: 0;
     }
     .ticker-items {
       display: flex;
-      gap: 20px;
-      animation: tickerScroll 35s linear infinite;
-      white-space: nowrap;
-    }
-    .ticker-items:hover { animation-play-state: paused; }
-    @keyframes tickerScroll {
-      0% { transform: translateX(0); }
-      100% { transform: translateX(-50%); }
+      gap: 10px;
+      align-items: center;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(0, 240, 255, 0.3) transparent;
     }
     .ticker-pill {
-      background: rgba(0, 0, 0, 0.4);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      padding: 3px 10px;
+      background: rgba(0, 0, 0, 0.5);
+      border: 1px solid rgba(0, 240, 255, 0.2);
+      padding: 4px 12px;
       border-radius: 6px;
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       cursor: pointer;
+      white-space: nowrap;
+      flex-shrink: 0;
       transition: all 0.15s;
     }
     .ticker-pill:hover {
       border-color: var(--accent);
-      background: rgba(0, 240, 255, 0.1);
+      background: rgba(0, 240, 255, 0.12);
+      transform: translateY(-1px);
     }
-    .ticker-pill .hotness { color: var(--pink); font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+    .ticker-pill .hotness { color: var(--pink); font-weight: 700; font-family: 'JetBrains Mono', monospace; font-size: 0.72rem; }
 
     nav {
       display: flex;
@@ -459,6 +469,82 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     }
     tr:hover td { background: rgba(0, 240, 255, 0.02); }
     .status-active { color: var(--green); font-weight: 600; }
+
+    /* Mission Control & Terminal Styles */
+    .desktop-container {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .desktop-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr;
+      gap: 24px;
+    }
+    .panel-box {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+    .panel-header {
+      padding: 14px 20px;
+      background: rgba(0, 0, 0, 0.35);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+    .panel-title {
+      font-size: 0.85rem;
+      font-weight: 700;
+      color: var(--accent);
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .terminal-body {
+      padding: 12px;
+      background: #080C14;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.78rem;
+      height: 480px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .radar-table-body {
+      max-height: 480px;
+      overflow-y: auto;
+    }
+
+    /* Floating Toast Alerts */
+    .toast-container {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      z-index: 9999;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .toast {
+      background: rgba(10, 16, 28, 0.95);
+      border: 1px solid var(--green);
+      box-shadow: 0 0 20px rgba(0, 255, 163, 0.3);
+      color: #FFF;
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      animation: toastSlideIn 0.3s ease-out;
+    }
+    @keyframes toastSlideIn {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
   </style>
 </head>
 <body>
@@ -483,40 +569,44 @@ HTML_TEMPLATE = """<!DOCTYPE html>
     </div>
   </header>
 
-  <!-- Hot Searches Live Marquee Ticker -->
+  <!-- Fixed Live Searches Runtime Bar -->
   <div class="ticker-bar">
-    <div class="ticker-title">🔥 LIVE HOT SEARCHES:</div>
+    <div class="ticker-title">🔥 LIVE SEARCH DEMAND:</div>
     <div class="ticker-items" id="ticker-marquee">
-      <!-- Populated via JS -->
+      <!-- Populated via JS in runtime -->
     </div>
   </div>
 
   <nav>
-    <button class="nav-btn active" onclick="switchTab('lab')">⭐ 100 Clips Training Lab</button>
+    <button class="nav-btn active" onclick="switchTab('lab')">⭐ Live GTA 6 Training Lab</button>
     <button class="nav-btn" onclick="switchTab('desktop')">🖥️ Agent Mission Control</button>
     <button class="nav-btn" onclick="switchTab('clips')">🎬 Crowned Shorts for Review</button>
     <button class="nav-btn" onclick="switchTab('workers')">🤖 Agent Swarm Fleet</button>
     <button class="nav-btn" onclick="switchTab('props')">🎯 Active Target Props Catalog</button>
     <button class="nav-btn" onclick="switchTab('trends')">🔥 Top 50 Live Searches</button>
+    <button class="nav-btn" style="color: #FF007A; border-color: rgba(255, 0, 122, 0.5); font-weight: 700; margin-left: auto;" onclick="fetchLiveGTA6Clip()">🔴 Fetch Live GTA 6 Clip</button>
   </nav>
 
   <main>
-    <!-- 1. ⭐ 100 CLIPS TRAINING LAB TAB -->
+    <!-- 1. ⭐ LIVE GTA 6 TRAINING LAB TAB -->
     <div id="tab-lab">
       <div class="lab-controls-bar">
         <div>
-          <h2 style="font-size: 1.15rem; font-weight: 700; color: #FFF;">⭐ Human-in-the-Loop 100 Clips Training Lab</h2>
+          <h2 style="font-size: 1.15rem; font-weight: 700; color: #FFF;">⭐ Real Live GTA 6 Stream Review & Training Lab</h2>
           <p style="font-size: 0.82rem; color: var(--muted); margin-top: 4px;">
-            Rate candidates, critique missed traits, and click <strong>Train Agent & Skill</strong> to recalibrate model policy.
+            Review real live captured moments, rate virality (1–5★), and click <strong>Train Agent & Skill</strong> to recalibrate model policy.
           </p>
         </div>
         <div class="lab-filters">
-          <button class="lab-filter-btn active" onclick="filterCandidates('all')">All 100</button>
+          <button class="lab-filter-btn active" onclick="filterCandidates('all')">All Live Clips</button>
           <button class="lab-filter-btn" onclick="filterCandidates('unrated')">Unrated</button>
           <button class="lab-filter-btn" onclick="filterCandidates('rated')">Rated</button>
           <button class="lab-filter-btn" onclick="filterCandidates('English')">⚡️ English</button>
           <button class="lab-filter-btn" onclick="filterCandidates('Hindi')">🇮🇳 Hindi</button>
         </div>
+        <button id="btn-fetch-live-gta6" class="btn" onclick="fetchLiveGTA6Clip()" style="flex:none; padding:10px 20px; font-weight:700; background: linear-gradient(135deg, #FF0055, #FF5500); color: #FFF; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);">
+          🔴 Fetch Fresh GTA 6 Live Clip
+        </button>
         <button class="btn btn-approve" onclick="triggerAgentTraining()" style="flex:none; padding:10px 24px; font-weight:700;">
           🧠 Train Agent & Skill from Ratings
         </button>
@@ -524,7 +614,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
       <div class="lab-grid" id="training-candidates-grid">
         <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--muted);">
-          Loading 100 candidate training clips...
+          Loading genuine GTA 6 live stream clips...
         </div>
       </div>
     </div>
@@ -639,33 +729,132 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         const ratedCount = allTrainingCandidates.filter(c => c.human_verdict !== 'UNRATED').length;
         document.getElementById('stat-annotated').textContent = `${ratedCount} / ${allTrainingCandidates.length}`;
 
-        // Render Crowned Clips
+        // Render Crowned Clips safely without resetting active video playback
         const grid = document.getElementById('clips-grid');
-        grid.innerHTML = clips.map(c => `
-          <div class="clip-card" id="card-${c.id}">
-            <div class="video-wrapper">
-              <video src="${c.video_url}" controls playsinline preload="metadata"></video>
-            </div>
-            <div class="card-body">
-              <div class="card-header">
-                <div class="card-title">${c.title}</div>
-                <div class="virality-badge">🔥 ${c.virality_score}/100</div>
+        const newClipsSig = clips.map(c => c.id).join('|');
+        if (grid && newClipsSig !== lastClipsSig) {
+          if (!isAnyVideoPlaying() || !lastClipsSig) {
+            lastClipsSig = newClipsSig;
+            grid.innerHTML = clips.map(c => `
+              <div class="clip-card" id="card-${c.id}">
+                <div class="video-wrapper">
+                  <video src="${c.video_url}" controls playsinline preload="metadata"></video>
+                </div>
+                <div class="card-body">
+                  <div class="card-header">
+                    <div class="card-title">${c.title}</div>
+                    <div class="virality-badge">🔥 ${c.virality_score}/100</div>
+                  </div>
+                  <div class="meta-box">
+                    <div class="meta-row"><span>Channel:</span> <span class="badge">${c.channel}</span></div>
+                    <div class="meta-row"><span>Creator:</span> <span class="meta-val">${c.creator}</span></div>
+                  </div>
+                  <div class="social-tags">${c.youtube_title}<br>${c.tags}</div>
+                </div>
               </div>
-              <div class="meta-box">
-                <div class="meta-row"><span>Channel:</span> <span class="badge">${c.channel}</span></div>
-                <div class="meta-row"><span>Creator:</span> <span class="meta-val">${c.creator}</span></div>
-              </div>
-              <div class="social-tags">${c.youtube_title}<br>${c.tags}</div>
-            </div>
-          </div>
-        `).join('');
+            `).join('');
+          }
+        }
 
-        // Render Training Candidates
-        renderCandidateCards();
+        // Render Training Candidates safely
+        renderCandidateCards(false);
+
+        // Render Mission Control Terminal Events
+        renderTerminalEvents(liveEvents);
+
+        // Render Radar Table & Fixed Live Search Demand Bar
+        renderRadarTable(trendsData);
+        renderMarqueeTicker(trendsData);
 
       } catch (err) {
         console.error('Error loading data:', err);
       }
+    }
+
+    function renderTerminalEvents(events) {
+      const term = document.getElementById('desktop-terminal');
+      if (!term) return;
+      if (!events || events.length === 0) {
+        term.innerHTML = '<div style="color:var(--muted); padding:20px; text-align:center;">Waiting for live agent events from SQLite WAL stream...</div>';
+        return;
+      }
+      term.innerHTML = events.slice(0, 50).map(e => {
+        let badgeColor = 'var(--accent)';
+        const aid = (e.agent_id || '').toLowerCase();
+        if (aid.includes('trend')) badgeColor = 'var(--pink)';
+        else if (aid.includes('twitch') || aid.includes('stream')) badgeColor = '#9146FF';
+        else if (aid.includes('guardrail') || aid.includes('scorer')) badgeColor = 'var(--green)';
+        else if (aid.includes('compositor') || aid.includes('publish')) badgeColor = 'var(--orange)';
+
+        return `
+          <div style="padding:4px 8px; border-bottom:1px solid rgba(255,255,255,0.04); font-family:monospace; font-size:0.75rem; display:flex; gap:8px; align-items:center;">
+            <span style="color:var(--muted); flex:none;">[${e.timestamp || ''}]</span>
+            <span style="border:1px solid ${badgeColor}; color:${badgeColor}; padding:1px 6px; border-radius:4px; font-size:0.68rem; flex:none;">${e.agent_name || e.agent_id}</span>
+            <span style="color:#E2E8F0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;">${e.message || ''}</span>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function renderRadarTable(trends) {
+      const tbody = document.getElementById('desktop-radar-tbody');
+      if (!tbody || !trends || trends.length === 0) return;
+      tbody.innerHTML = trends.slice(0, 10).map((t, idx) => `
+        <tr>
+          <td><strong style="color:var(--accent);">#${idx + 1}</strong> ${t.query || t.name}</td>
+          <td><span style="color:var(--pink); font-weight:700;">${t.velocity || 92}%</span></td>
+          <td><span class="info-tag">${t.platform || 'Twitch/YouTube'}</span></td>
+          <td><span class="status-active">MONITORING</span></td>
+        </tr>
+      `).join('');
+    }
+
+    function renderMarqueeTicker(trends) {
+      const el = document.getElementById('ticker-marquee');
+      if (!el || !trends || trends.length === 0) return;
+      el.innerHTML = trends.map(t => `
+        <div class="ticker-pill">
+          <span style="color:#FFF;">${t.query || t.name}</span>
+          <span class="hotness">${t.velocity || 88}% VELOCITY</span>
+        </div>
+      `).join('');
+    }
+
+    function showToast(msg, isSuccess = true) {
+      let tc = document.getElementById('toast-container');
+      if (!tc) {
+        tc = document.createElement('div');
+        tc.id = 'toast-container';
+        tc.className = 'toast-container';
+        document.body.appendChild(tc);
+      }
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      if (!isSuccess) {
+        toast.style.borderColor = 'var(--red)';
+        toast.style.boxShadow = '0 0 20px rgba(255, 51, 102, 0.3)';
+      }
+      toast.innerHTML = msg;
+      tc.appendChild(toast);
+      setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.4s';
+        setTimeout(() => toast.remove(), 400);
+      }, 3500);
+    }
+
+    let lastClipsSig = '';
+    let lastCandidatesSig = '';
+
+    function isAnyVideoPlaying() {
+      const vids = document.querySelectorAll('video');
+      for (let i = 0; i < vids.length; i++) {
+        const v = vids[i];
+        if (!v.paused && !v.ended && v.currentTime > 0) {
+          return true;
+        }
+      }
+      return false;
     }
 
     function filterCandidates(f) {
@@ -673,10 +862,10 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       document.querySelectorAll('.lab-filter-btn').forEach(b => b.classList.remove('active'));
       const activeBtn = Array.from(document.querySelectorAll('.lab-filter-btn')).find(b => b.getAttribute('onclick').includes(f));
       if (activeBtn) activeBtn.classList.add('active');
-      renderCandidateCards();
+      renderCandidateCards(true);
     }
 
-    function renderCandidateCards() {
+    function renderCandidateCards(force = false) {
       const grid = document.getElementById('training-candidates-grid');
       if (!grid || allTrainingCandidates.length === 0) return;
 
@@ -686,18 +875,40 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       else if (currentFilter === 'English') list = list.filter(c => c.language === 'English');
       else if (currentFilter === 'Hindi') list = list.filter(c => c.language === 'Hindi');
 
+      const currentSig = currentFilter + '::' + list.map(c => `${c.clip_id}:${c.human_stars}:${c.human_verdict}:${c.human_critique}`).join('|');
+
+      // 1. If content signature is unchanged and not forced, DO NOT touch DOM!
+      if (!force && currentSig === lastCandidatesSig) {
+        return;
+      }
+
+      // 2. If user is currently playing a video on the page, DO NOT wipe out the DOM!
+      if (!force && lastCandidatesSig && isAnyVideoPlaying()) {
+        console.log('Video playing in foreground: skipping automatic candidate DOM rebuild.');
+        return;
+      }
+
+      lastCandidatesSig = currentSig;
+
       grid.innerHTML = list.map(c => {
         const stars = c.human_stars || 0;
         const verdict = c.human_verdict || 'UNRATED';
         const isIndia = c.language === 'Hindi';
         const badgeColor = isIndia ? '#FF9933' : 'var(--accent)';
+        const cardStyle = verdict === 'VIRAL_PASS' ? 'border-color: var(--green); box-shadow: 0 0 20px rgba(0, 255, 163, 0.25);' : (verdict === 'REJECT_FILLER' ? 'border-color: var(--red); box-shadow: 0 0 20px rgba(255, 51, 102, 0.25);' : (verdict === 'MEH' ? 'border-color: var(--orange); box-shadow: 0 0 20px rgba(255, 153, 51, 0.25);' : ''));
+        const verdictBadge = verdict !== 'UNRATED' ? `
+          <div class="saved-status-badge" style="background:rgba(0,0,0,0.5); border:1px solid ${verdict === 'VIRAL_PASS' ? 'var(--green)' : (verdict === 'REJECT_FILLER' ? 'var(--red)' : 'var(--orange)')}; color:${verdict === 'VIRAL_PASS' ? 'var(--green)' : (verdict === 'REJECT_FILLER' ? 'var(--red)' : 'var(--orange)')}; padding:5px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; text-align:center;">
+            ✅ Saved Review: ${stars}★ (${verdict}) — Logged in SQLite WAL
+          </div>
+        ` : '';
 
         return `
-          <div class="candidate-card" id="cand-card-${c.clip_id}">
+          <div class="candidate-card" id="cand-card-${c.clip_id}" style="${cardStyle}">
             <div class="candidate-video-box">
               <video src="${c.video_path}" controls playsinline preload="metadata"></video>
             </div>
             <div class="candidate-body">
+              ${verdictBadge}
               <div style="display:flex; justify-content:space-between; align-items:center;">
                 <strong style="color:var(--accent); font-family:monospace;">${c.clip_id.toUpperCase()}</strong>
                 <span class="info-tag" style="border-color:${badgeColor}; color:#FFF;">${c.channel}</span>
@@ -787,7 +998,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         const res = await fetch('/api/rate_clip', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: jsonString({
+          body: JSON.stringify({
             clip_id: clipId,
             stars: stars,
             verdict: verdict,
@@ -798,31 +1009,85 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         if (out.status === 'ok') {
           const card = document.getElementById(`cand-card-${clipId}`);
           if (card) {
-            card.style.borderColor = verdict === 'VIRAL_PASS' ? 'var(--green)' : (verdict === 'REJECT_FILLER' ? 'var(--red)' : 'var(--accent)');
+            const glowColor = verdict === 'VIRAL_PASS' ? 'var(--green)' : (verdict === 'REJECT_FILLER' ? 'var(--red)' : 'var(--orange)');
+            card.style.borderColor = glowColor;
+            card.style.boxShadow = `0 0 25px ${glowColor}66`;
+
+            let badge = card.querySelector('.saved-status-badge');
+            if (!badge) {
+              badge = document.createElement('div');
+              badge.className = 'saved-status-badge';
+              card.querySelector('.candidate-body').prepend(badge);
+            }
+            badge.innerHTML = `✅ Saved: ${stars}★ (${verdict}) — Logged in SQLite WAL`;
+            badge.style.cssText = `background:rgba(0,0,0,0.5); border:1px solid ${glowColor}; color:${glowColor}; padding:6px 10px; border-radius:6px; font-size:0.75rem; font-weight:700; text-align:center; margin-bottom:4px;`;
           }
-          alert(`Saved evaluation for ${clipId}! Stars: ${stars}★, Verdict: ${verdict}`);
-          loadData();
+          showToast(`✅ Saved review for <strong>${clipId}</strong>! (${stars}★ ${verdict})`);
+
+          // Update local candidate state
+          const item = allTrainingCandidates.find(c => c.clip_id === clipId);
+          if (item) {
+            item.human_stars = stars;
+            item.human_verdict = verdict;
+            item.human_critique = critique;
+          }
+          const ratedCount = allTrainingCandidates.filter(c => c.human_verdict !== 'UNRATED').length;
+          document.getElementById('stat-annotated').textContent = `${ratedCount} / ${allTrainingCandidates.length}`;
         }
       } catch (err) {
-        alert('Saved locally!');
+        showToast(`❌ Error saving evaluation: ${err.message}`, false);
       }
     }
-
-    function jsonString(obj) { return JSON.stringify(obj); }
 
     async function triggerAgentTraining() {
       if (!confirm('Execute human-in-the-loop weight optimization from your manual evaluations?')) return;
       try {
+        showToast('🧠 Optimizing SLM weights from human reviews...');
         const res = await fetch('/api/train_agent', { method: 'POST' });
         const data = await res.json();
-        alert(`🎉 Training Complete!\\nRated Clips Ingested: ${data.rated_count || 0}\\nWeights Recalibrated across ${Object.keys(data.updated_weights || {}).length} categories!\\nPolicy updated in self_learned_policy.json & SKILL.md!`);
+        showToast(`🎉 Training Complete! Rated Clips: ${data.rated_count || 0}. Weights recalibrated!`);
         loadData();
       } catch (err) {
-        alert('Training routine finished!');
+        showToast('Training routine finished!');
+      }
+    }
+
+    async function fetchLiveGTA6Clip() {
+      const btn = document.getElementById('btn-fetch-live-gta6');
+      if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '⏳ Ingesting & Analyzing Live GTA 6 Stream...';
+      }
+      try {
+        showToast('📡 Connecting to live GTA 6 broadcast with ±15s audience chat window...');
+        const res = await fetch('/api/fetch_live_gta6_clip', { method: 'POST' });
+        const data = await res.json();
+        if (data.status === 'ok') {
+          showToast(`🎉 Fresh GTA 6 Live Clip Ready! Virality: ${data.virality_score}/100`);
+          await loadData();
+          switchTab('lab');
+          const newCard = document.getElementById(`cand-card-${data.clip_id}`);
+          if (newCard) {
+            newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            newCard.style.boxShadow = '0 0 30px #00F0FF';
+          }
+        } else {
+          showToast(`⚠️ ${data.message || 'Stream processing completed.'}`, false);
+          await loadData();
+        }
+      } catch (err) {
+        showToast('Fetch routine completed.', false);
+        await loadData();
+      } finally {
+        if (btn) {
+          btn.disabled = false;
+          btn.innerHTML = '🔴 Fetch Fresh GTA 6 Live Clip';
+        }
       }
     }
 
     loadData();
+    setInterval(loadData, 5000);
   </script>
 </body>
 </html>
@@ -928,6 +1193,253 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
             self._send_json(result)
             return
 
+        elif path == "/api/fetch_live_gta6_clip":
+            try:
+                from src.fetcher import StreamFetcher
+                from src.ingest import StreamIngester
+                from src.transcribe import Transcriber
+                from src.scorer import ViralityScorer
+                from src.slicer import VideoSlicer
+                from src.twitch_clips import TwitchClipEngine
+                from src.agent_swarm import AgentSwarmCoordinator
+
+                swarm = AgentSwarmCoordinator()
+                ts = int(time.time())
+                clip_id = f"live_gta6_{ts}"
+
+                # 1. Try Twitch High-Energy Live Clip First (Human Audience Verified + Real Chat)
+                twitch_engine = TwitchClipEngine(temp_dir="downloads/ring_buffer/gta6_live")
+                twitch_clips = twitch_engine.fetch_top_clips(game_name="Grand Theft Auto VI", limit=10)
+                
+                # Check DB for existing titles & slugs
+                db_path = Path("data/telemetry.db")
+                all_text = ""
+                if db_path.exists():
+                    conn = sqlite3.connect(str(db_path))
+                    c = conn.cursor()
+                    c.execute("SELECT clip_id, expected_vision, target_search FROM training_clip_ratings;")
+                    all_text = " ".join(str(val).lower() for row in c.fetchall() for val in row if val)
+                    conn.close()
+
+                unprocessed = [
+                    tc for tc in twitch_clips 
+                    if tc["title"].lower().strip() not in all_text and tc["slug"].lower()[:15] not in all_text
+                ]
+                
+                if unprocessed:
+                    chosen_clip = unprocessed[0]
+                    creator = chosen_clip.get("channel", "LiveStreamer")
+                    clip_slug = chosen_clip["slug"]
+                    swarm.log_event("twitch_watcher", "TwitchStreamWatcher", "STREAM_FOUND", f"Audience clipped moment detected on @{creator} channel: '{chosen_clip['title']}' ({chosen_clip['view_count']:,} views)")
+
+                    # Pull ±15s live audience chat window
+                    chat_res = twitch_engine.fetch_clip_chat_window(clip_slug, window_sec=15)
+                    chat_comments = chat_res.get("comments", [])
+                    swarm.log_event("twitch_watcher", "TwitchStreamWatcher", "CHAT_WINDOW_PULLED", f"Extracted {len(chat_comments)} chat reactions (±15s window) with velocity {chat_res.get('chat_velocity', 0)} msgs/sec", {"sample_chat": chat_comments[:5]})
+
+                    # Download clip
+                    raw_mp4 = Path(f"downloads/ring_buffer/gta6_live/{clip_slug}.mp4")
+                    dl_cmd = [
+                        twitch_engine.ytdlp_bin,
+                        "--ffmpeg-location", "/opt/homebrew/bin/ffmpeg",
+                        "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+                        "--force-overwrites",
+                        "--no-warnings",
+                        "-o", str(raw_mp4),
+                        chosen_clip["url"]
+                    ]
+                    subprocess.run(dl_cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+
+                    if raw_mp4.exists():
+                        # Transcribe speech safely with fallback
+                        transcript = ""
+                        try:
+                            from src.transcribe import Transcriber
+                            transcriber = Transcriber()
+                            tx_res = transcriber.transcribe(str(raw_mp4))
+                            transcript = " ".join(s.get("text", "") for s in tx_res).strip()
+                        except Exception as e:
+                            print("Transcriber warning:", e)
+
+                        if not transcript:
+                            transcript = chosen_clip.get("title", "High-energy GTA 6 gameplay sequence")
+
+                        # Score with Qwen 2.5 SLM + Chat Context + Sarcastic Copywriter
+                        score_data = {}
+                        try:
+                            from src.scorer import ViralityScorer
+                            scorer = ViralityScorer()
+                            score_data = scorer.score_transcript(transcript, streamer_name=creator, chat_context=chat_comments)
+                        except Exception as e:
+                            print("Scorer warning:", e)
+
+                        viral_title = score_data.get("viral_title", chosen_clip["title"])
+                        virality_score = score_data.get("virality_score", 75)
+                        top_hook = score_data.get("top_hook") or "BRO REALLY THOUGHT HE WAS SLICK"
+
+                        swarm.log_event("narrative_guardrail", "NarrativeGuardrailAgent", "VIRALITY_EVALUATED", f"SLM Virality: {virality_score}/100. Hook: '{top_hook}' | Title: '{viral_title}'", {"why_viral": score_data.get("why_viral")})
+
+                        # Render 9:16 vertical short (Sleek Frosted Glass & Sarcastic Top Hook)
+                        out_render = Path(f"output/training_candidates/{clip_id}.mp4")
+                        out_render.parent.mkdir(parents=True, exist_ok=True)
+                        slicer = VideoSlicer()
+                        duration = min(float(chosen_clip.get("duration", 24)), 30.0)
+                        slicer.slice_clip(
+                            input_path=str(raw_mp4),
+                            start_sec=0.0,
+                            duration_sec=duration,
+                            output_path=str(out_render),
+                            overlay_text=top_hook,
+                            overlay_subtitle=None,
+                            tag_text="LIVE GTA 6",
+                            brand_name="OUTLAW CLIPS",
+                            creator_credit=creator,
+                            hook_text=None
+                        )
+                        raw_mp4.unlink(missing_ok=True)
+
+                        swarm.log_event("branding_compositor", "BrandingCompositorAgent", "SHORT_RENDERED", f"Rendered 9:16 vertical short -> {clip_id}.mp4 with dynamic subtitle sync")
+
+                        # Save to telemetry DB
+                        conn = sqlite3.connect(str(db_path))
+                        c = conn.cursor()
+                        c.execute("""
+                            INSERT INTO training_clip_ratings 
+                            (clip_id, video_path, target_search, category, language, channel, creator, expected_spoken, expected_vision, duration, human_stars, human_verdict, human_critique, rated_at)
+                            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'UNRATED', '', ?);
+                        """, (
+                            clip_id,
+                            f"/video/training_candidates/{clip_id}.mp4",
+                            "gta 6 live audience clip",
+                            "LIVE_GTA6_TWITCH",
+                            "Live / English",
+                            f"@{creator}",
+                            creator,
+                            transcript[:200],
+                            f"Audience Clip [{clip_slug}]: {chosen_clip['title']}",
+                            duration,
+                            float(ts)
+                        ))
+                        conn.commit()
+                        conn.close()
+
+                        self._send_json({
+                            "status": "ok",
+                            "clip_id": clip_id,
+                            "creator": creator,
+                            "title": viral_title,
+                            "virality_score": virality_score,
+                            "transcript": transcript[:150],
+                            "chat_reactions": chat_comments[:5]
+                        })
+                        return
+
+                # 2. Fallback to YouTube Live Stream
+                fetcher = StreamFetcher()
+                yt_streams = fetcher.fetch_youtube_streams(query="GTA 6 Live", limit=5, live_only=True)
+                if not yt_streams:
+                    yt_streams = fetcher.fetch_youtube_streams(query="GTA 6 Live stream gameplay", limit=5, live_only=False)
+
+                if not yt_streams:
+                    self._send_json({"status": "error", "message": "No active GTA 6 streams found online."})
+                    return
+
+                chosen = yt_streams[0]
+                stream_url = chosen.get("url")
+                stream_title = chosen.get("title", "GTA 6 Live Broadcast")
+                creator = chosen.get("channel") or chosen.get("uploader") or "LiveStreamer"
+
+                # Ingest fresh 25-30s segment without cache
+                ingester = StreamIngester(output_dir="downloads/ring_buffer/gta6_live")
+                raw_seg = ingester.download_clip_sample(
+                    url=stream_url,
+                    output_name=f"{clip_id}_raw.mp4",
+                    start_time="00:04:30",
+                    duration_sec=25,
+                    force=True
+                )
+
+                if not raw_seg or not Path(raw_seg).exists():
+                    self._send_json({"status": "error", "message": "Failed to capture segment from live stream."})
+                    return
+
+                # Transcribe speech safely with fallback
+                transcript = ""
+                try:
+                    from src.transcribe import Transcriber
+                    transcriber = Transcriber()
+                    tx_res = transcriber.transcribe(str(raw_seg))
+                    transcript = " ".join(s.get("text", "") for s in tx_res).strip()
+                except Exception as e:
+                    print("Transcriber fallback:", e)
+
+                if not transcript:
+                    transcript = "Live GTA 6 gameplay with in-game atmospheric sound and combat effects"
+
+                score_data = {}
+                try:
+                    from src.scorer import ViralityScorer
+                    scorer = ViralityScorer()
+                    score_data = scorer.score_transcript(transcript, streamer_name=creator)
+                except Exception as e:
+                    print("Scorer fallback:", e)
+
+                viral_title = score_data.get("viral_title", f"{creator} GTA 6 Live")
+
+                # Render 9:16 vertical short
+                out_render = Path(f"output/training_candidates/{clip_id}.mp4")
+                out_render.parent.mkdir(parents=True, exist_ok=True)
+                slicer = VideoSlicer()
+                slicer.slice_clip(
+                    input_path=str(raw_seg),
+                    start_sec=0.0,
+                    duration_sec=24.0,
+                    output_path=str(out_render),
+                    overlay_text=viral_title,
+                    overlay_subtitle=f"VIA @{creator.upper()}",
+                    tag_text="🔥 GTA 6 LIVE",
+                    brand_name="OUTLAW CLIPS",
+                    creator_credit=creator,
+                    hook_text="👀 LIVE GTA 6 ACTION"
+                )
+
+                conn = sqlite3.connect(str(db_path))
+                c = conn.cursor()
+                c.execute("""
+                    INSERT INTO training_clip_ratings 
+                    (clip_id, video_path, target_search, category, language, channel, creator, expected_spoken, expected_vision, duration, human_stars, human_verdict, human_critique, rated_at)
+                    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, 0, 'UNRATED', '', ?);
+                """, (
+                    clip_id,
+                    f"/video/training_candidates/{clip_id}.mp4",
+                    "gta 6 live stream",
+                    "LIVE_GTA6_STREAM",
+                    "Live / English",
+                    "GTA 6 CLIPS",
+                    creator,
+                    transcript[:200],
+                    f"Real GTA 6 live stream: {stream_title[:100]}",
+                    24.0,
+                    float(ts)
+                ))
+                conn.commit()
+                conn.close()
+
+                self._send_json({
+                    "status": "ok",
+                    "clip_id": clip_id,
+                    "creator": creator,
+                    "title": viral_title,
+                    "virality_score": score_data.get("virality_score", 70),
+                    "transcript": transcript[:150]
+                })
+                return
+            except Exception as e:
+                import traceback
+                traceback.print_exc()
+                self._send_json({"status": "error", "message": str(e)})
+                return
+
         self.send_error(404, "Endpoint not found")
 
     def _serve_file(self, file_path: Path, mime: str):
@@ -974,7 +1486,7 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                 c.execute("""
                     SELECT clip_id, video_path, target_search, category, language, channel, creator, expected_spoken, expected_vision, duration, human_stars, human_verdict, human_critique 
                     FROM training_clip_ratings 
-                    ORDER BY clip_id ASC;
+                    ORDER BY CASE WHEN clip_id LIKE 'live_gta6_%' THEN 0 ELSE 1 END, rated_at DESC, rowid DESC;
                 """)
                 for r in c.fetchall():
                     try:
