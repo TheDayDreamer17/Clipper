@@ -1,0 +1,141 @@
+{
+  "version": "2.0",
+  "language": "English",
+  "target_channel": "GTA 6 CLIPS",
+  "last_updated": "2026-11-19",
+  "properties": [
+    {
+      "prop_id": "PROP_EN_STORE_HEIST_STICKUP",
+      "category": "HEIST_AND_ROBBERY",
+      "name": "Lucia & Jason Armed Convenience Store Stickup & Register Grab",
+      "search_queries": ["gta 6 lucia robbery", "gta 6 store heist", "gta 6 armed stickup"],
+      "spoken_exclamations": [
+        "Hands in the air!", "Empty the register!", "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!", "Let's get out of here!", "Open the register now!"
+      ],
+      "visual_traits": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "negative_disqualifiers": ["walking peacefully down aisle", "buying soda quietly", "pause settings menu"],
+      "hud_trigger_rule": "Aim reticle on NPC + cash drawer particle + double-door exit",
+      "learned_weight": 1.25
+    },
+    {
+      "prop_id": "PROP_EN_OCEAN_DRIVE_SUNSET",
+      "category": "GRAPHICS_FIDELITY",
+      "name": "Vice City Ocean Drive Ray-Traced Sunset & Palm Tree Cruising",
+      "search_queries": ["gta 6 vice city graphics", "gta 6 ocean drive sunset", "gta 6 ray tracing"],
+      "spoken_exclamations": [
+        "Look at those reflections!", "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!", "Look at the water and palm trees!", "Rockstar outdid themselves!"
+      ],
+      "visual_traits": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "negative_disqualifiers": ["dark indoor corridor", "black loading screen", "dialogue cutscene menu"],
+      "hud_trigger_rule": "Ocean Drive landmark + volumetric sunset lighting + RT reflections",
+      "learned_weight": 1.20
+    },
+    {
+      "prop_id": "PROP_EN_150MPH_CRASH_DEFORMATION",
+      "category": "PHYSICS_DEFORMATION",
+      "name": "150 MPH Highway Head-On Crash & Soft-Body Panel Warping",
+      "search_queries": ["gta 6 car crash physics", "gta 6 soft body deformation", "gta 6 150 mph crash"],
+      "spoken_exclamations": [
+        "Oh my god look at that crumple!", "150 miles per hour right into the wall!",
+        "The engine block flew out!", "That bent like an accordion!", "Did you see that deformation?!"
+      ],
+      "visual_traits": [
+        "high speed vehicular impact against concrete barrier or oncoming semi truck",
+        "soft body chassis accordion compression and detached bumper",
+        "radiator steam cloud burst and shattered windshield web cracks",
+        "sparks showering from metal rim dragging on asphalt"
+      ],
+      "negative_disqualifiers": ["low speed bumper tap", "normal straight highway driving", "parked vehicle"],
+      "hud_trigger_rule": "Sudden deceleration > 50 px/frame + metallic impact peak audio (-4dB)",
+      "learned_weight": 1.28
+    },
+    {
+      "prop_id": "PROP_EN_VCPD_5STAR_ROADBLOCK",
+      "category": "POLICE_PURSUIT",
+      "name": "Vice City Police 5-Star SWAT Armored Roadblock & Spike Strips",
+      "search_queries": ["gta 6 5 star police chase", "gta 6 police ai", "gta 6 swat roadblock"],
+      "spoken_exclamations": [
+        "Five stars already!", "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!", "Police helicopter spotlight is blinding me!", "They're attempting a PIT maneuver!"
+      ],
+      "visual_traits": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "negative_disqualifiers": ["one cruiser stationary at light", "walking on sidewalk", "clothing store"],
+      "hud_trigger_rule": "5 flashing wanted stars on minimap + siren audio acoustic spike",
+      "learned_weight": 1.26
+    },
+    {
+      "prop_id": "PROP_EN_LEONIDA_EVERGLADES_AIRBOAT",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "name": "Leonida Everglades Swamp Airboat Drift & Alligator Encounter",
+      "search_queries": ["gta 6 everglades airboat", "gta 6 alligator swamp", "gta 6 leonida mud"],
+      "spoken_exclamations": [
+        "Watch out for the gator!", "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!", "Swamp physics are unreal!", "Don't fall in the water!"
+      ],
+      "visual_traits": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "negative_disqualifiers": ["walking in hotel room", "paved city highway", "pause menu"],
+      "hud_trigger_rule": "Airboat rear propeller fan + wetland water ripple optical flow",
+      "learned_weight": 1.22
+    },
+    {
+      "prop_id": "PROP_EN_COCKPIT_FPV_DRIVING",
+      "category": "CAMERA_POV",
+      "name": "First-Person Cockpit View with Functional Mirrors & Dashboard Gauges",
+      "search_queries": ["gta 6 first person driving", "gta 6 1st person cockpit", "gta 6 interior view"],
+      "spoken_exclamations": [
+        "The interior details are crazy!", "The rearview mirrors actually reflect real-time traffic!",
+        "Hands on the steering wheel shifting gears!", "Look at the digital speedometer needle!"
+      ],
+      "visual_traits": [
+        "first person camera positioned in driver seat behind leather steering wheel",
+        "functional digital dashboard displaying illuminated speedometer and tachometer",
+        "real-time ray traced reflections visible in driver side and rearview mirrors",
+        "character hands physically turning wheel and operating paddle shifters"
+      ],
+      "negative_disqualifiers": ["third person chase camera hovering behind bumper", "walking on foot", "cutscene"],
+      "hud_trigger_rule": "Visible steering wheel bounding box + interior windshield frame",
+      "learned_weight": 1.15
+    },
+    {
+      "prop_id": "PROP_EN_TRAIN_STOP_PHYSICS",
+      "category": "VIRAL_CHALLENGES",
+      "name": "Stopping the Speeding Freight Train with 50 Tank Obstacles",
+      "search_queries": ["can you stop the train in gta 6", "gta 6 train physics", "stopping the train challenge"],
+      "spoken_exclamations": [
+        "Can we finally stop the train in GTA 6?!", "It just plowed right through 20 cars!",
+        "Look at the sparks on the railroad tracks!", "Massive explosive train derailment!", "Unstoppable momentum!"
+      ],
+      "visual_traits": [
+        "high speed freight locomotive hurtling down steel tracks into barricaded vehicles",
+        "metal on metal sparks spraying in continuous shower from undercarriage",
+        "chain reaction vehicular explosions and flying chassis debris",
+        "massive momentum displacement pushing obstacle line without slowing"
+      ],
+      "negative_disqualifiers": ["passenger waiting at station", "calm highway commute", "indoor shop"],
+      "hud_trigger_rule": "Train engine front grill + multiple explosion fire particles",
+      "learned_weight": 1.29
+    }
+  ]
+}

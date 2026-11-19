@@ -1,0 +1,2580 @@
+{
+  "total": 100,
+  "candidates": [
+    {
+      "clip_id": "clip_001",
+      "video_url": "/video/training_candidates/clip_001.mp4",
+      "target_search": "gta 6 lucia robbery",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_002",
+      "video_url": "/video/training_candidates/clip_002.mp4",
+      "target_search": "gta 6 store heist",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_003",
+      "video_url": "/video/training_candidates/clip_003.mp4",
+      "target_search": "gta 6 armed stickup",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_004",
+      "video_url": "/video/training_candidates/clip_004.mp4",
+      "target_search": "gta 6 lucia robbery",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_005",
+      "video_url": "/video/training_candidates/clip_005.mp4",
+      "target_search": "gta 6 store heist",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_006",
+      "video_url": "/video/training_candidates/clip_006.mp4",
+      "target_search": "gta 6 armed stickup",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_007",
+      "video_url": "/video/training_candidates/clip_007.mp4",
+      "target_search": "gta 6 lucia robbery",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_008",
+      "video_url": "/video/training_candidates/clip_008.mp4",
+      "target_search": "gta 6 store heist",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_009",
+      "video_url": "/video/training_candidates/clip_009.mp4",
+      "target_search": "gta 6 armed stickup",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_010",
+      "video_url": "/video/training_candidates/clip_010.mp4",
+      "target_search": "gta 6 lucia robbery",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_011",
+      "video_url": "/video/training_candidates/clip_011.mp4",
+      "target_search": "gta 6 store heist",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_012",
+      "video_url": "/video/training_candidates/clip_012.mp4",
+      "target_search": "gta 6 armed stickup",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_013",
+      "video_url": "/video/training_candidates/clip_013.mp4",
+      "target_search": "gta 6 lucia robbery",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_014",
+      "video_url": "/video/training_candidates/clip_014.mp4",
+      "target_search": "gta 6 store heist",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_015",
+      "video_url": "/video/training_candidates/clip_015.mp4",
+      "target_search": "gta 6 armed stickup",
+      "category": "HEIST_AND_ROBBERY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Hands in the air!",
+        "Empty the register!",
+        "Grab the cash duffel bag!",
+        "Watch the cashier he's reaching!",
+        "Let's get out of here!",
+        "Open the register now!"
+      ],
+      "expected_vision": [
+        "lucia wearing bandana mask holding 9mm handgun",
+        "store cashier raising trembling hands behind counter",
+        "cash drawer open with paper bills being grabbed",
+        "kicking open glass double doors into getaway muscle car"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_016",
+      "video_url": "/video/training_candidates/clip_016.mp4",
+      "target_search": "gta 6 vice city graphics",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_017",
+      "video_url": "/video/training_candidates/clip_017.mp4",
+      "target_search": "gta 6 ocean drive sunset",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_018",
+      "video_url": "/video/training_candidates/clip_018.mp4",
+      "target_search": "gta 6 ray tracing",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_019",
+      "video_url": "/video/training_candidates/clip_019.mp4",
+      "target_search": "gta 6 vice city graphics",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_020",
+      "video_url": "/video/training_candidates/clip_020.mp4",
+      "target_search": "gta 6 ocean drive sunset",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_021",
+      "video_url": "/video/training_candidates/clip_021.mp4",
+      "target_search": "gta 6 ray tracing",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_022",
+      "video_url": "/video/training_candidates/clip_022.mp4",
+      "target_search": "gta 6 vice city graphics",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_023",
+      "video_url": "/video/training_candidates/clip_023.mp4",
+      "target_search": "gta 6 ocean drive sunset",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_024",
+      "video_url": "/video/training_candidates/clip_024.mp4",
+      "target_search": "gta 6 ray tracing",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_025",
+      "video_url": "/video/training_candidates/clip_025.mp4",
+      "target_search": "gta 6 vice city graphics",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_026",
+      "video_url": "/video/training_candidates/clip_026.mp4",
+      "target_search": "gta 6 ocean drive sunset",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_027",
+      "video_url": "/video/training_candidates/clip_027.mp4",
+      "target_search": "gta 6 ray tracing",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_028",
+      "video_url": "/video/training_candidates/clip_028.mp4",
+      "target_search": "gta 6 vice city graphics",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_029",
+      "video_url": "/video/training_candidates/clip_029.mp4",
+      "target_search": "gta 6 ocean drive sunset",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_030",
+      "video_url": "/video/training_candidates/clip_030.mp4",
+      "target_search": "gta 6 ray tracing",
+      "category": "GRAPHICS_FIDELITY",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Look at those reflections!",
+        "The sunset in Vice City is breathtaking!",
+        "Next-gen lighting is insane!",
+        "Look at the water and palm trees!",
+        "Rockstar outdid themselves!"
+      ],
+      "expected_vision": [
+        "luxury convertible cruising along coastal boulevard lined with royal palm trees",
+        "ray traced screen space reflections on wet asphalt and vehicle chrome",
+        "magenta and cyan neon hotel signs glowing under dusk skyline",
+        "speedboats cutting through turquoise coastal water leaving foam wake"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_031",
+      "video_url": "/video/training_candidates/clip_031.mp4",
+      "target_search": "gta 6 everglades airboat",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_032",
+      "video_url": "/video/training_candidates/clip_032.mp4",
+      "target_search": "gta 6 alligator swamp",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_033",
+      "video_url": "/video/training_candidates/clip_033.mp4",
+      "target_search": "gta 6 leonida mud",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_034",
+      "video_url": "/video/training_candidates/clip_034.mp4",
+      "target_search": "gta 6 everglades airboat",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_035",
+      "video_url": "/video/training_candidates/clip_035.mp4",
+      "target_search": "gta 6 alligator swamp",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_036",
+      "video_url": "/video/training_candidates/clip_036.mp4",
+      "target_search": "gta 6 leonida mud",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_037",
+      "video_url": "/video/training_candidates/clip_037.mp4",
+      "target_search": "gta 6 everglades airboat",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_038",
+      "video_url": "/video/training_candidates/clip_038.mp4",
+      "target_search": "gta 6 alligator swamp",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_039",
+      "video_url": "/video/training_candidates/clip_039.mp4",
+      "target_search": "gta 6 leonida mud",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_040",
+      "video_url": "/video/training_candidates/clip_040.mp4",
+      "target_search": "gta 6 everglades airboat",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_041",
+      "video_url": "/video/training_candidates/clip_041.mp4",
+      "target_search": "gta 6 alligator swamp",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_042",
+      "video_url": "/video/training_candidates/clip_042.mp4",
+      "target_search": "gta 6 leonida mud",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_043",
+      "video_url": "/video/training_candidates/clip_043.mp4",
+      "target_search": "gta 6 everglades airboat",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_044",
+      "video_url": "/video/training_candidates/clip_044.mp4",
+      "target_search": "gta 6 alligator swamp",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_045",
+      "video_url": "/video/training_candidates/clip_045.mp4",
+      "target_search": "gta 6 leonida mud",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RockstarGames",
+      "expected_spoken": [
+        "Watch out for the gator!",
+        "This airboat handles like a hovercraft!",
+        "Look at the mud spraying everywhere!",
+        "Swamp physics are unreal!",
+        "Don't fall in the water!"
+      ],
+      "expected_vision": [
+        "twin rudder swamp airboat drifting through dense sawgrass and mangrove marsh",
+        "viscous brown mud flinging from vehicle tires onto quarter panels",
+        "eight-foot alligator lunging off muddy riverbank into murky water",
+        "water mist and volumetric swamp fog rising under afternoon heat"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_046",
+      "video_url": "/video/training_candidates/clip_046.mp4",
+      "target_search": "gta 6 gameplay techno gamerz",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_047",
+      "video_url": "/video/training_candidates/clip_047.mp4",
+      "target_search": "techno gamerz police chase gta 6",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_048",
+      "video_url": "/video/training_candidates/clip_048.mp4",
+      "target_search": "techno gamerz gta 6 reaction",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_049",
+      "video_url": "/video/training_candidates/clip_049.mp4",
+      "target_search": "gta 6 gameplay techno gamerz",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_050",
+      "video_url": "/video/training_candidates/clip_050.mp4",
+      "target_search": "techno gamerz police chase gta 6",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_051",
+      "video_url": "/video/training_candidates/clip_051.mp4",
+      "target_search": "techno gamerz gta 6 reaction",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_052",
+      "video_url": "/video/training_candidates/clip_052.mp4",
+      "target_search": "gta 6 gameplay techno gamerz",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_053",
+      "video_url": "/video/training_candidates/clip_053.mp4",
+      "target_search": "techno gamerz police chase gta 6",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_054",
+      "video_url": "/video/training_candidates/clip_054.mp4",
+      "target_search": "techno gamerz gta 6 reaction",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_055",
+      "video_url": "/video/training_candidates/clip_055.mp4",
+      "target_search": "gta 6 gameplay techno gamerz",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_056",
+      "video_url": "/video/training_candidates/clip_056.mp4",
+      "target_search": "techno gamerz police chase gta 6",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_057",
+      "video_url": "/video/training_candidates/clip_057.mp4",
+      "target_search": "techno gamerz gta 6 reaction",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_058",
+      "video_url": "/video/training_candidates/clip_058.mp4",
+      "target_search": "gta 6 gameplay techno gamerz",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_059",
+      "video_url": "/video/training_candidates/clip_059.mp4",
+      "target_search": "techno gamerz police chase gta 6",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_060",
+      "video_url": "/video/training_candidates/clip_060.mp4",
+      "target_search": "techno gamerz gta 6 reaction",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "TechnoGamerz",
+      "expected_spoken": [
+        "Arre bhai bhai police aa gayi!",
+        "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!",
+        "Ye shortcut se nikalte hain!",
+        "Oye hoye kya drift maari bhai!"
+      ],
+      "expected_vision": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_061",
+      "video_url": "/video/training_candidates/clip_061.mp4",
+      "target_search": "carryminati gta 6",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_062",
+      "video_url": "/video/training_candidates/clip_062.mp4",
+      "target_search": "carryminati gta 6 live",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_063",
+      "video_url": "/video/training_candidates/clip_063.mp4",
+      "target_search": "carryminati gta 6 gameplay",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_064",
+      "video_url": "/video/training_candidates/clip_064.mp4",
+      "target_search": "carryminati gta 6",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_065",
+      "video_url": "/video/training_candidates/clip_065.mp4",
+      "target_search": "carryminati gta 6 live",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_066",
+      "video_url": "/video/training_candidates/clip_066.mp4",
+      "target_search": "carryminati gta 6 gameplay",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_067",
+      "video_url": "/video/training_candidates/clip_067.mp4",
+      "target_search": "carryminati gta 6",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_068",
+      "video_url": "/video/training_candidates/clip_068.mp4",
+      "target_search": "carryminati gta 6 live",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_069",
+      "video_url": "/video/training_candidates/clip_069.mp4",
+      "target_search": "carryminati gta 6 gameplay",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_070",
+      "video_url": "/video/training_candidates/clip_070.mp4",
+      "target_search": "carryminati gta 6",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_071",
+      "video_url": "/video/training_candidates/clip_071.mp4",
+      "target_search": "carryminati gta 6 live",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_072",
+      "video_url": "/video/training_candidates/clip_072.mp4",
+      "target_search": "carryminati gta 6 gameplay",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_073",
+      "video_url": "/video/training_candidates/clip_073.mp4",
+      "target_search": "carryminati gta 6",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_074",
+      "video_url": "/video/training_candidates/clip_074.mp4",
+      "target_search": "carryminati gta 6 live",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_075",
+      "video_url": "/video/training_candidates/clip_075.mp4",
+      "target_search": "carryminati gta 6 gameplay",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "language": "Hindi",
+      "channel": "GTA 6 CLIPS INDIA",
+      "creator": "CarryMinati",
+      "expected_spoken": [
+        "Kaha se goli maar rahe ho be!",
+        "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!",
+        "Headshot mara seedha!",
+        "Aisi taisi kar di inki!"
+      ],
+      "expected_vision": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_076",
+      "video_url": "/video/training_candidates/clip_076.mp4",
+      "target_search": "gta 6 5 star police chase",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_077",
+      "video_url": "/video/training_candidates/clip_077.mp4",
+      "target_search": "gta 6 police ai",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_078",
+      "video_url": "/video/training_candidates/clip_078.mp4",
+      "target_search": "gta 6 swat roadblock",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_079",
+      "video_url": "/video/training_candidates/clip_079.mp4",
+      "target_search": "gta 6 5 star police chase",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_080",
+      "video_url": "/video/training_candidates/clip_080.mp4",
+      "target_search": "gta 6 police ai",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_081",
+      "video_url": "/video/training_candidates/clip_081.mp4",
+      "target_search": "gta 6 swat roadblock",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_082",
+      "video_url": "/video/training_candidates/clip_082.mp4",
+      "target_search": "gta 6 5 star police chase",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_083",
+      "video_url": "/video/training_candidates/clip_083.mp4",
+      "target_search": "gta 6 police ai",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_084",
+      "video_url": "/video/training_candidates/clip_084.mp4",
+      "target_search": "gta 6 swat roadblock",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_085",
+      "video_url": "/video/training_candidates/clip_085.mp4",
+      "target_search": "gta 6 5 star police chase",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_086",
+      "video_url": "/video/training_candidates/clip_086.mp4",
+      "target_search": "gta 6 police ai",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_087",
+      "video_url": "/video/training_candidates/clip_087.mp4",
+      "target_search": "gta 6 swat roadblock",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_088",
+      "video_url": "/video/training_candidates/clip_088.mp4",
+      "target_search": "gta 6 5 star police chase",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_089",
+      "video_url": "/video/training_candidates/clip_089.mp4",
+      "target_search": "gta 6 police ai",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_090",
+      "video_url": "/video/training_candidates/clip_090.mp4",
+      "target_search": "gta 6 swat roadblock",
+      "category": "POLICE_PURSUIT",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "theRadBrad",
+      "expected_spoken": [
+        "Five stars already!",
+        "They set up a full tactical roadblock!",
+        "Spike strips ahead watch out!",
+        "Police helicopter spotlight is blinding me!",
+        "They're attempting a PIT maneuver!"
+      ],
+      "expected_vision": [
+        "v-formation police cruiser barricade with flashing red and blue strobe lights",
+        "SWAT armored BearCat deploying tactical officers with shields",
+        "police helicopter searchlight cone tracking vehicle on bridge",
+        "spiked metal tire deflation strip laid across roadway lanes"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_091",
+      "video_url": "/video/training_candidates/clip_091.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_092",
+      "video_url": "/video/training_candidates/clip_092.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_093",
+      "video_url": "/video/training_candidates/clip_093.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_094",
+      "video_url": "/video/training_candidates/clip_094.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_095",
+      "video_url": "/video/training_candidates/clip_095.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_096",
+      "video_url": "/video/training_candidates/clip_096.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 8.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_097",
+      "video_url": "/video/training_candidates/clip_097.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 10.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_098",
+      "video_url": "/video/training_candidates/clip_098.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 13.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_099",
+      "video_url": "/video/training_candidates/clip_099.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 15.5,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    },
+    {
+      "clip_id": "clip_100",
+      "video_url": "/video/training_candidates/clip_100.mp4",
+      "target_search": "gta 6 gameplay",
+      "category": "NEGATIVE_FILLER",
+      "language": "English",
+      "channel": "GTA 6 CLIPS",
+      "creator": "RandomPlayer",
+      "expected_spoken": [
+        "Walking down the hall...",
+        "Just checking this door..."
+      ],
+      "expected_vision": [
+        "character walking in empty corridor",
+        "closed door",
+        "no action"
+      ],
+      "duration": 18.0,
+      "human_stars": 0,
+      "human_verdict": "UNRATED",
+      "human_critique": ""
+    }
+  ]
+}

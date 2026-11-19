@@ -272,3 +272,99 @@ class SelfLearningEngine:
             "policy": policy,
             "report_path": str(report_p)
         }
+
+    def train_from_human_feedback(self) -> Dict[str, Any]:
+        """
+        Ingests user ratings from SQLite table `training_clip_ratings`,
+        recalibrates category prompt weights, updates duration heuristics,
+        and saves learned feedback to policy and skill!
+        """
+        import sqlite3
+        db_path = Path("data/telemetry.db")
+        if not db_path.exists():
+            return {"status": "error", "message": "Telemetry DB not found"}
+
+        conn = sqlite3.connect(str(db_path))
+        c = conn.cursor()
+        c.execute("""
+            SELECT clip_id, target_search, category, language, human_stars, human_verdict, human_critique 
+            FROM training_clip_ratings 
+            WHERE human_verdict != 'UNRATED';
+        """)
+        rows = c.fetchall()
+        conn.close()
+
+        if not rows:
+            return {"status": "no_data", "message": "No human ratings submitted yet. Rate clips first!"}
+
+        policy = self.load_policy()
+        if "human_heuristics" not in policy:
+            policy["human_heuristics"] = []
+
+        cat_ratings = {}
+        new_heuristics = []
+
+        for r in rows:
+            cid, search_q, cat, lang, stars, verdict, critique = r
+            if cat not in cat_ratings:
+                cat_ratings[cat] = []
+            cat_ratings[cat].append(stars)
+
+            if critique and critique.strip():
+                new_heuristics.append({
+                    "clip_id": cid,
+                    "search": search_q,
+                    "verdict": verdict,
+                    "stars": stars,
+                    "critique": critique.strip()
+                })
+
+        # Recalibrate policy weights based on human stars
+        updated_weights = {}
+        for cat, stars_list in cat_ratings.items():
+            avg_stars = sum(stars_list) / len(stars_list)
+            prop_key = f"PROP_{cat}"
+            old_w = policy["prompt_weights"].get(prop_key, 1.0)
+
+            # RL delta adjustment
+            if avg_stars >= 4.0:
+                delta = 0.08 * (avg_stars - 3.5)
+                new_w = round(min(1.50, old_w + delta), 2)
+            elif avg_stars <= 2.5:
+                delta = 0.10 * (3.0 - avg_stars)
+                new_w = round(max(0.60, old_w - delta), 2)
+            else:
+                new_w = old_w
+
+            policy["prompt_weights"][prop_key] = new_w
+            updated_weights[prop_key] = {"old": old_w, "new": new_w, "avg_stars": round(avg_stars, 1)}
+
+        policy["human_heuristics"].extend(new_heuristics)
+        # Keep last 50 heuristics
+        policy["human_heuristics"] = policy["human_heuristics"][-50:]
+        self.save_policy(policy)
+
+        # Update SKILL.md with learned rules
+        skill_p = Path(".agent/skills/autonomous-stream-clipper/SKILL.md")
+        if skill_p.exists():
+            try:
+                skill_content = skill_p.read_text(encoding="utf-8")
+                heuristic_summary = f"\n\n### 🧠 Active Learned Human Heuristics (Updated {time.strftime('%Y-%m-%d %H:%M')})\n"
+                for h in new_heuristics[-5:]:
+                    heuristic_summary += f"- **[{h['verdict']}]** Query: `{h['search']}` -> Critique: *\"{h['critique']}\"*\n"
+                if "### 🧠 Active Learned Human Heuristics" in skill_content:
+                    base_content = skill_content[:skill_content.find("### 🧠 Active Learned Human Heuristics")]
+                    skill_p.write_text(base_content + heuristic_summary, encoding="utf-8")
+                else:
+                    skill_p.write_text(skill_content + heuristic_summary, encoding="utf-8")
+            except Exception as e:
+                print("Error updating SKILL.md:", e)
+
+        print(f"🎉 Successfully retrained agent from {len(rows)} human evaluations!")
+        return {
+            "status": "success",
+            "rated_count": len(rows),
+            "updated_weights": updated_weights,
+            "heuristics_learned": len(new_heuristics)
+        }
+

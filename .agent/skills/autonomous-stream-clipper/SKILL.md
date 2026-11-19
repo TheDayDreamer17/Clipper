@@ -79,3 +79,7 @@ This skill guides the autonomous monitoring, clipping, and publishing pipeline f
   - Automatically promotes high-accuracy prompts.
   - Adds newly discovered false positives to negative anchors.
   - Refines optimal boundary pre-roll/post-roll heuristics.
+
+
+### 🧠 Active Learned Human Heuristics (Updated 2026-11-19 13:05)
+- **[VIRAL_PASS]** Query: `gta 6 lucia robbery` -> Critique: *"Perfect robbery timing! Handgun aimed right at cashier."*

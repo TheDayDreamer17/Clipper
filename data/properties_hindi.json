@@ -1,0 +1,122 @@
+{
+  "version": "2.0",
+  "language": "Hindi / Hinglish",
+  "target_channel": "GTA 6 CLIPS INDIA",
+  "last_updated": "2026-11-19",
+  "properties": [
+    {
+      "prop_id": "PROP_HI_TECHNO_CHASE_BHASAD",
+      "category": "CREATOR_GAMEPLAY_REACTION",
+      "name": "Techno Gamerz High-Speed 3-Star Police Chase & Bhasad Reaction",
+      "search_queries": ["gta 6 gameplay techno gamerz", "techno gamerz police chase gta 6", "techno gamerz gta 6 reaction"],
+      "spoken_exclamations": [
+        "Arre bhai bhai police aa gayi!", "Bhasad mach gayi poori city mein!",
+        "Peeche dekho cop car aa rahi hai!", "Ye shortcut se nikalte hain!", "Oye hoye kya drift maari bhai!"
+      ],
+      "visual_traits": [
+        "techno gamerz webcam facecam showing mouth open wide in energetic shock",
+        "red and blue police siren reflections flashing across sports car body",
+        "high speed tactical drift around vice city intersection dodging cruisers",
+        "active minimap displaying three flashing wanted stars"
+      ],
+      "negative_disqualifiers": ["unattended gaming chair", "blank black screen", "pause settings menu"],
+      "hud_trigger_rule": "Creator webcam detected + 3 wanted stars + Hindi acoustic RMS > 0.40",
+      "learned_weight": 1.35
+    },
+    {
+      "prop_id": "PROP_HI_STORE_LOOT_ROBBERY",
+      "category": "HEIST_AND_ROBBERY",
+      "name": "Supermarket Gun Loot & Cash Register Robbery in Hindi",
+      "search_queries": ["gta 6 heist in hindi", "gta 6 dukan robbery", "gta 6 lucia heist hindi"],
+      "spoken_exclamations": [
+        "Chal hath upar kar jaldi!", "Saara cash bag mein bhar!",
+        "Police ko phone mat karna!", "Jaldi bhag muscle car start kar!", "Loot liya bhai poora store!"
+      ],
+      "visual_traits": [
+        "lucia pointing black pistol at convenience store shopkeeper",
+        "cashier hurriedly throwing paper currency stacks into duffel bag",
+        "glass door kicking open with glass reflection of city traffic",
+        "muscle car burnout getaway tire smoke in parking lot"
+      ],
+      "negative_disqualifiers": ["walking quietly in room", "peaceful driving", "character sleeping"],
+      "hud_trigger_rule": "Weapon reticle aimed + cash register drawer open + rapid sprint",
+      "learned_weight": 1.28
+    },
+    {
+      "prop_id": "PROP_HI_GADI_CRASH_PHYSICS",
+      "category": "PHYSICS_DEFORMATION",
+      "name": "Extreme 150 MPH Gadi Ka Kachra Car Crash Deformation",
+      "search_queries": ["gta 6 car crash in hindi", "gta 6 gadi accident", "gta 6 physics reaction hindi"],
+      "spoken_exclamations": [
+        "Arre gadi ka kachra ho gaya!", "Ye kya physics banayi hai Rockstar ne!",
+        "Chithde udd gaye car ke!", "Engine hi bahar nikal gaya yaar!", "150 ki speed pe seedha deewar mein!"
+      ],
+      "visual_traits": [
+        "high speed sports car head on collision folding front hood like paper",
+        "sparks showering as bare metal alloy wheel grinds against asphalt",
+        "radiator steam cloud billowing upwards across camera view",
+        "streamer facecam laughing hysterically pointing at vehicle wreckage"
+      ],
+      "negative_disqualifiers": ["light bumper tap", "slow speed driving in traffic", "parked vehicle"],
+      "hud_trigger_rule": "Abrupt velocity drop > 45 px/frame + metallic crunch audio spike",
+      "learned_weight": 1.30
+    },
+    {
+      "prop_id": "PROP_HI_GRAPHICS_VICE_CITY",
+      "category": "GRAPHICS_FIDELITY",
+      "name": "Vice City Sunset & Ocean Drive Graphics Shock in Hindi",
+      "search_queries": ["gta 6 graphics hindi reaction", "gta 6 vice city graphics hindi", "gta 6 ps5 pro gameplay hindi"],
+      "spoken_exclamations": [
+        "Bhai ye graphics dekho ek baar!", "Paani ka reflection dekho asli lag raha hai!",
+        "Vice City kitna sundar banaya hai!", "Next-gen lighting ka kamaal hai bhai!", "Rockstar ne dil jeet liya!"
+      ],
+      "visual_traits": [
+        "luxury convertible cruising down ocean drive flanked by vibrant palm trees",
+        "ray traced sunset water reflections on coastal road and yacht harbor",
+        "warm orange and magenta sunset glow bathing skyscrapers",
+        "streamer facecam expressing genuine awe and clapping hands"
+      ],
+      "negative_disqualifiers": ["dark closed hallway", "loading screen", "pause menu"],
+      "hud_trigger_rule": "Ocean Drive landmark + volumetric lighting + facecam active",
+      "learned_weight": 1.25
+    },
+    {
+      "prop_id": "PROP_HI_CARRY_SHOOTOUT_ACTION",
+      "category": "GUNFIGHT_AND_COMBAT",
+      "name": "CarryMinati High-Energy Heist Shootout & Ranting Reaction",
+      "search_queries": ["carryminati gta 6", "carryminati gta 6 live", "carryminati gta 6 gameplay"],
+      "spoken_exclamations": [
+        "Kaha se goli maar rahe ho be!", "Ruk tera abhi intezaam karta hu!",
+        "Abe cover lo jaldi!", "Headshot mara seedha!", "Aisi taisi kar di inki!"
+      ],
+      "visual_traits": [
+        "carryminati facecam screaming into studio condenser microphone",
+        "assault rifle muzzle flashes firing rapidly from concrete pillar cover",
+        "bullet impact sparks and concrete chips flying off wall surface",
+        "red damage vignette flashing at screen edges indicating low health"
+      ],
+      "negative_disqualifiers": ["walking around shop", "calm driving", "standing still"],
+      "hud_trigger_rule": "Continuous weapon muzzle flash + damage vignette + acoustic loudness > -6dB",
+      "learned_weight": 1.32
+    },
+    {
+      "prop_id": "PROP_HI_EVERGLADES_MAGARMACCH",
+      "category": "ENVIRONMENT_AND_PHYSICS",
+      "name": "Swamp Airboat Drifting & Alligator (Magarmacch) Attack in Hindi",
+      "search_queries": ["gta 6 alligator attack hindi", "gta 6 swamp airboat hindi", "gta 6 jungle gameplay hindi"],
+      "spoken_exclamations": [
+        "Arre magarmacch aa gaya bachao!", "Gator ne gadi pe hamla kar diya!",
+        "Ye daldal mein phas gaye bhai!", "Airboat ko full speed pe bhagao!", "Mud physics dekho kitna asli hai!"
+      ],
+      "visual_traits": [
+        "swamp airboat drifting sideways spraying mud and marsh water",
+        "large alligator snapping jaws near water edge of Everglades swamp",
+        "dense tropical wetlands vegetation flexing under vehicle momentum",
+        "streamer jumping out of chair in surprise"
+      ],
+      "negative_disqualifiers": ["walking in city pavement", "safehouse apartment", "pause menu"],
+      "hud_trigger_rule": "Airboat wake particles + animal entity bounding box + streamer reaction",
+      "learned_weight": 1.26
+    }
+  ]
+}

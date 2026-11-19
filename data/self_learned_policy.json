@@ -6,7 +6,8 @@
     "PROP_POLICE_PURSUIT": 1.16,
     "PROP_CAMERA_POV": 0.9,
     "PROP_WEAPON_COMBAT": 1.16,
-    "PROP_AERIAL_FLIGHT": 1.16
+    "PROP_AERIAL_FLIGHT": 1.16,
+    "PROP_HEIST_AND_ROBBERY": 1.12
   },
   "learned_optimal_durations": {
     "LOADING_ARTWORK": 16.0,
@@ -22,5 +23,14 @@
     "dark black screen with no artwork",
     "third person camera hovering behind bumper"
   ],
-  "performance_history": []
+  "performance_history": [],
+  "human_heuristics": [
+    {
+      "clip_id": "clip_001",
+      "search": "gta 6 lucia robbery",
+      "verdict": "VIRAL_PASS",
+      "stars": 5,
+      "critique": "Perfect robbery timing! Handgun aimed right at cashier."
+    }
+  ]
 }
