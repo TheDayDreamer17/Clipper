@@ -34,7 +34,7 @@ class TwitchClipEngine:
 
     def fetch_top_clips(
         self,
-        game_name: str = "Grand Theft Auto V",
+        game_name: str = "Grand Theft Auto VI",
         limit: int = 5,
         period: str = "LAST_DAY"
     ) -> List[Dict[str, Any]]:
@@ -72,26 +72,101 @@ class TwitchClipEngine:
                 return []
 
             data = r.json()
-            edges = data.get("data", {}).get("game", {}).get("clips", {}).get("edges", [])
+            game_data = (data.get("data") or {}).get("game") or {}
+            edges = (game_data.get("clips") or {}).get("edges") or []
             clips = []
 
             for edge in edges:
-                node = edge.get("node", {})
-                broadcaster = node.get("broadcaster", {})
+                if not edge:
+                    continue
+                node = edge.get("node") or {}
+                broadcaster = node.get("broadcaster") or {}
+                slug = node.get("slug")
                 clips.append({
                     "id": node.get("id"),
-                    "slug": node.get("slug"),
-                    "title": node.get("title"),
+                    "slug": slug,
+                    "title": node.get("title") or "GTA 6 Live Moment",
                     "view_count": node.get("viewCount", 0),
                     "duration": node.get("durationSeconds", 0),
                     "url": node.get("url"),
-                    "channel": broadcaster.get("displayName") or broadcaster.get("login")
+                    "channel": broadcaster.get("displayName") or broadcaster.get("login") or "LiveStreamer"
                 })
 
             return sorted(clips, key=lambda x: x["view_count"], reverse=True)
         except Exception as e:
-            print(f"Twitch clips fetch error: {e}")
+            print(f"Twitch clips fetch warning: {e}")
             return []
+
+    def fetch_clip_chat_window(self, slug: str, window_sec: int = 15) -> Dict[str, Any]:
+        """
+        Pulls real-time Twitch audience chat comments in the [t - window_sec, t + window_sec]
+        window around the clip timestamp to capture crowd memes, inside jokes, and roasts.
+        """
+        headers = {"Client-ID": self.TWITCH_PUBLIC_CLIENT_ID}
+        query_clip = f"""
+        query {{
+          clip(slug: "{slug}") {{
+            id
+            title
+            videoOffsetSeconds
+            durationSeconds
+            video {{
+              id
+            }}
+          }}
+        }}
+        """
+        try:
+            r = requests.post(self.TWITCH_GQL_URL, headers=headers, json={"query": query_clip}, timeout=6)
+            c_json = r.json()
+            clip_data = (c_json.get("data") or {}).get("clip")
+            if not clip_data or not clip_data.get("video"):
+                return {"comments": [], "keywords": [], "chat_velocity": 0}
+
+            video_data = clip_data.get("video") or {}
+            video_id = video_data.get("id")
+            if not video_id:
+                return {"comments": [], "keywords": [], "chat_velocity": 0}
+
+            offset = clip_data.get("videoOffsetSeconds", 0) or 0
+
+            query_comments = f"""
+            query {{
+              video(id: "{video_id}") {{
+                comments(contentOffsetSeconds: {offset}) {{
+                  edges {{
+                    node {{
+                      contentOffsetSeconds
+                      commenter {{ displayName }}
+                      message {{ fragments {{ text }} }}
+                    }}
+                  }}
+                }}
+              }}
+            }}
+            """
+            rc = requests.post(self.TWITCH_GQL_URL, headers=headers, json={"query": query_comments}, timeout=6)
+            rc_json = rc.json()
+            video_node = ((rc_json.get("data") or {}).get("video") or {})
+            edges = ((video_node.get("comments") or {}).get("edges")) or []
+
+            comments = []
+            for e in edges:
+                node = e.get("node", {})
+                coff = node.get("contentOffsetSeconds", 0)
+                if abs(coff - offset) <= window_sec:
+                    frags = node.get("message", {}).get("fragments", [])
+                    txt = " ".join(f.get("text", "") for f in frags).strip()
+                    if txt:
+                        comments.append(txt)
+
+            return {
+                "comments": comments[:25],
+                "count": len(comments),
+                "chat_velocity": round(len(comments) / max(window_sec * 2, 1), 2)
+            }
+        except Exception as e:
+            return {"comments": [], "error": str(e), "chat_velocity": 0}
 
     def process_clip_to_short(self, clip: Dict[str, Any]) -> Optional[Path]:
         """
@@ -141,7 +216,7 @@ if __name__ == "__main__":
     print("🔥 Twitch Clip Virality Engine (Human-Verified Clips)")
     print("=" * 60)
 
-    clips = engine.fetch_top_clips(game_name="Grand Theft Auto V", limit=3)
+    clips = engine.fetch_top_clips(game_name="Grand Theft Auto VI", limit=3)
     for i, c in enumerate(clips, 1):
         print(f"\n[{i}] {c['channel']} - \"{c['title']}\" ({c['view_count']:,} views | {c['duration']}s)")
         print(f"    URL: {c['url']}")

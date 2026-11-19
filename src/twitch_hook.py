@@ -24,7 +24,7 @@ class TwitchClipSpikeHook:
 
     def __init__(
         self,
-        game_name: str = "Grand Theft Auto V",
+        game_name: str = "Grand Theft Auto VI",
         cache_file: str = "cache/seen_twitch_clips.json",
         output_dir: str = "output"
     ):

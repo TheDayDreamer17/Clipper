@@ -19,7 +19,7 @@ class StreamFetcher:
     # ==========================================
     def fetch_youtube_streams(
         self,
-        query: str = "GTA 5 Live Hindi",
+        query: str = "GTA 6 Live",
         limit: int = 5,
         live_only: bool = False
     ) -> List[Dict[str, Any]]:
@@ -73,7 +73,7 @@ class StreamFetcher:
     # ==========================================
     def fetch_twitch_streams(
         self,
-        game_name: str = "Grand Theft Auto V",
+        game_name: str = "Grand Theft Auto VI",
         limit: int = 5
     ) -> List[Dict[str, Any]]:
         """
@@ -135,33 +135,36 @@ class StreamFetcher:
     def get_best_stream(
         self,
         platform: str = "all",
-        query: str = "GTA 5 Hindi",
-        game_name: str = "Grand Theft Auto V"
+        query: str = "GTA 6 Live",
+        game_name: str = "Grand Theft Auto VI"
     ) -> Optional[Dict[str, Any]]:
         """
-        Returns the single best performing stream across YouTube/Twitch.
+        Returns the single best performing GTA 6 stream across YouTube/Twitch.
         """
         candidates = []
+
+        if platform in ["all", "youtube"]:
+            yt_streams = self.fetch_youtube_streams(query=query, limit=5, live_only=True)
+            if not yt_streams:
+                # Fallback to general recent GTA 6 streams
+                yt_streams = self.fetch_youtube_streams(query=query, limit=5, live_only=False)
+            candidates.extend(yt_streams)
 
         if platform in ["all", "twitch"]:
             twitch_streams = self.fetch_twitch_streams(game_name=game_name, limit=3)
             candidates.extend(twitch_streams)
 
-        if platform in ["all", "youtube"]:
-            yt_streams = self.fetch_youtube_streams(query=query, limit=5, live_only=False)
-            candidates.extend(yt_streams)
-
         if not candidates:
             return None
 
-        # Return top candidate (Twitch live streams sorted by viewers, or first YouTube hit)
+        # Return top candidate (Live streams first)
         return candidates[0]
 
 if __name__ == "__main__":
     import argparse
-    parser = argparse.ArgumentParser(description="Fetch top performing GTA streams.")
+    parser = argparse.ArgumentParser(description="Fetch top performing GTA 6 streams.")
     parser.add_argument("--platform", choices=["youtube", "twitch", "all"], default="all")
-    parser.add_argument("--query", default="GTA 5 Live Hindi")
+    parser.add_argument("--query", default="GTA 6 Live")
     parser.add_argument("--limit", type=int, default=3)
     args = parser.parse_args()
 

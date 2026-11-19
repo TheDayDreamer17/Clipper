@@ -19,16 +19,21 @@ class StreamIngester:
     def download_clip_sample(
         self,
         url: str,
-        output_name: str = "sample.mp4",
+        output_name: Optional[str] = None,
         start_time: str = "00:03:00",
-        duration_sec: int = 90
+        duration_sec: int = 90,
+        force: bool = False
     ) -> Optional[Path]:
         """
         Uses yt-dlp and ffmpeg to grab a concise sample segment
         without downloading a 10-hour full stream.
         """
+        import time
+        if not output_name:
+            output_name = f"gta6_live_{int(time.time())}.mp4"
+
         target_path = self.output_dir / output_name
-        if target_path.exists() and target_path.stat().st_size > 100000:
+        if not force and target_path.exists() and target_path.stat().st_size > 100000:
             print(f"⚡ Chunk already cached on disk: {target_path}")
             return target_path
         start_s = self._to_seconds(start_time)
