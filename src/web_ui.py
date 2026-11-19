@@ -606,7 +606,9 @@ HTML_TEMPLATE = """<!DOCTYPE html>
           </p>
         </div>
         <div class="lab-filters">
-          <button class="lab-filter-btn active" onclick="filterCandidates('all')">All Clips</button>
+          <button class="lab-filter-btn active" onclick="filterCandidates('all')">All Clips (30)</button>
+          <button class="lab-filter-btn" style="border: 1px solid #00F0FF; color: #00F0FF;" onclick="filterCandidates('non_nsfw')">🎮 Non-NSFW / Action (21)</button>
+          <button class="lab-filter-btn" style="border: 1px solid #FF2A6D; color: #FF2A6D;" onclick="filterCandidates('nsfw')">🔞 NSFW / Mature (9)</button>
           <button class="lab-filter-btn" onclick="filterCandidates('unrated')">Unrated</button>
           <button class="lab-filter-btn" onclick="filterCandidates('rated')">Rated</button>
           <button class="lab-filter-btn" onclick="filterCandidates('English')">⚡️ English</button>
@@ -880,6 +882,8 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       let list = allTrainingCandidates;
       if (currentFilter === 'unrated') list = list.filter(c => c.human_verdict === 'UNRATED');
       else if (currentFilter === 'rated') list = list.filter(c => c.human_verdict !== 'UNRATED');
+      else if (currentFilter === 'non_nsfw') list = list.filter(c => c.category !== 'MATURE_SCENE');
+      else if (currentFilter === 'nsfw') list = list.filter(c => c.category === 'MATURE_SCENE');
       else if (currentFilter === 'English') list = list.filter(c => c.language === 'English');
       else if (currentFilter === 'Hindi') list = list.filter(c => c.language === 'Hindi');
 
@@ -922,7 +926,12 @@ HTML_TEMPLATE = """<!DOCTYPE html>
                   <img src="/brand/outlaw_clips_dp_branded.jpg" style="width:22px; height:22px; border-radius:50%; border:1px solid #FF2A6D; object-fit:cover;">
                   <strong style="color:var(--accent); font-family:monospace; font-size:0.82rem;">${c.clip_id.toUpperCase()}</strong>
                 </div>
-                <div style="display:flex; gap:6px;">
+                <div style="display:flex; gap:6px; align-items:center;">
+                  ${c.category === 'MATURE_SCENE' ? `
+                    <span style="background:rgba(255,42,109,0.22); border:1px solid #FF2A6D; color:#FF2A6D; font-weight:800; font-size:0.7rem; padding:2px 7px; border-radius:4px; letter-spacing:0.5px;">🔞 NSFW (Censored)</span>
+                  ` : `
+                    <span style="background:rgba(0,240,255,0.18); border:1px solid #00F0FF; color:#00F0FF; font-weight:800; font-size:0.7rem; padding:2px 7px; border-radius:4px; letter-spacing:0.5px;">🎮 SFW ACTION</span>
+                  `}
                   <span class="info-tag" style="border-color:${badgeColor}; color:#FFF;">${c.creator}</span>
                   <span class="info-tag">${c.duration}s</span>
                 </div>
@@ -1719,6 +1728,8 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
             for p in sorted(winner_dir.glob("*.mp4")):
                 fname = p.name
                 base_id = fname.replace("_WINNER_9x16.mp4", "").replace(".mp4", "")
+                if db_meta and base_id not in db_meta:
+                    continue
                 meta = db_meta.get(base_id, {})
                 title = meta.get("headline") or base_id.replace("_", " ").title()
                 creator = meta.get("creator") or "@outlawclipshindi"
