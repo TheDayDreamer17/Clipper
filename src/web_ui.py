@@ -295,6 +295,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
   <nav>
     <button class="nav-btn active" onclick="switchTab('clips')">🎬 Crowned Shorts for Review</button>
+    <button class="nav-btn" onclick="switchTab('trends')">🔥 Top 50 Live Searches</button>
     <button class="nav-btn" onclick="switchTab('props')">🎯 Active Target Props Catalog</button>
     <button class="nav-btn" onclick="switchTab('streams')">📡 Monitored Live Streams</button>
     <button class="nav-btn" onclick="switchTab('audit')">🛑 Rejection Analytics (Audit)</button>
@@ -306,6 +307,22 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--muted);">
           Loading generated clips...
         </div>
+      </div>
+    </div>
+
+    <div id="tab-trends" style="display: none;">
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th style="width: 80px;">Rank</th>
+              <th>High-Velocity Search Query</th>
+              <th>Synthesized Gameplay Archetype</th>
+              <th>Target Channel Routing</th>
+            </tr>
+          </thead>
+          <tbody id="trends-tbody"></tbody>
+        </table>
       </div>
     </div>
 
@@ -365,6 +382,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
       document.querySelectorAll('nav .nav-btn').forEach(b => b.classList.remove('active'));
       event.target.classList.add('active');
       document.getElementById('tab-clips').style.display = tab === 'clips' ? 'block' : 'none';
+      document.getElementById('tab-trends').style.display = tab === 'trends' ? 'block' : 'none';
       document.getElementById('tab-props').style.display = tab === 'props' ? 'block' : 'none';
       document.getElementById('tab-streams').style.display = tab === 'streams' ? 'block' : 'none';
       document.getElementById('tab-audit').style.display = tab === 'audit' ? 'block' : 'none';
@@ -372,16 +390,18 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
     async function loadData() {
       try {
-        const [statsRes, clipsRes, streamsRes, propsRes] = await Promise.all([
+        const [statsRes, clipsRes, streamsRes, propsRes, trendsRes] = await Promise.all([
           fetch('/api/stats'),
           fetch('/api/clips'),
           fetch('/api/streams'),
-          fetch('/api/props')
+          fetch('/api/props'),
+          fetch('/api/trends')
         ]);
         const stats = await statsRes.json();
         const clips = await clipsRes.json();
         const streams = await streamsRes.json();
         const props = await propsRes.json();
+        const trendsData = await trendsRes.json();
 
         document.getElementById('stat-streams').textContent = stats.total_streams;
         document.getElementById('stat-clips').textContent = clips.length;
@@ -419,6 +439,31 @@ HTML_TEMPLATE = """<!DOCTYPE html>
               </div>
             </div>
           `).join('');
+        }
+
+        // Render Top 50 Trends
+        const trendsBody = document.getElementById('trends-tbody');
+        if (trendsBody && trendsData && trendsData.searches) {
+          trendsBody.innerHTML = trendsData.searches.map((s, idx) => {
+            const isIndia = s.includes('techno') || s.includes('hindi') || s.includes('tamil') || s.includes('telugu') || s.includes('mythpat') || s.includes('malayalam');
+            const channel = isIndia ? 'GTA 6 CLIPS INDIA' : 'GTA 6 CLIPS';
+            const badgeColor = isIndia ? '#FF9933' : 'var(--accent)';
+            let archetype = 'GENERAL_GAMEPLAY';
+            if (s.includes('crash') || s.includes('car')) archetype = 'PHYSICS_DEFORMATION';
+            else if (s.includes('first person') || s.includes('1st person')) archetype = 'CAMERA_POV_FPV';
+            else if (s.includes('graphics')) archetype = 'GRAPHICS_FIDELITY';
+            else if (s.includes('ending') || s.includes('mission')) archetype = 'STORY_MISSION_ARC';
+            else if (s.includes('police')) archetype = 'POLICE_PURSUIT';
+
+            return `
+              <tr>
+                <td><strong style="color: var(--accent); font-family: monospace;">#${idx + 1}</strong></td>
+                <td><strong>${s}</strong></td>
+                <td><code style="background: rgba(0,0,0,0.4); padding: 4px 8px; border-radius: 6px; font-size: 0.75rem;">${archetype}</code></td>
+                <td><span class="badge" style="border-color: ${badgeColor}; color: #FFF; font-weight: 700;">${channel}</span></td>
+              </tr>
+            `;
+          }).join('');
         }
 
         // Render Props Catalog
@@ -518,6 +563,10 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
 
         elif path == "/api/props":
             self._handle_api_props()
+            return
+
+        elif path == "/api/trends":
+            self._handle_api_trends()
             return
 
         elif path == "/api/clips":
@@ -751,6 +800,18 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
         ]
         self._send_json(props)
 
+    def _handle_api_trends(self):
+        trends_p = Path("data/top_50_live_gta6_searches.json")
+        if trends_p.exists():
+            try:
+                with open(trends_p, "r") as f:
+                    data = json.load(f)
+                self._send_json(data)
+                return
+            except Exception:
+                pass
+        self._send_json({"total": 0, "searches": []})
+
     def _handle_api_clips(self):
         clips = []
         winner_dir = Path("output/tournament_winners")
@@ -764,10 +825,32 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                 if "techno" in fl or "carry" in fl or "india" in fl:
                     channel = "GTA 6 CLIPS INDIA"
 
-                if "train" in fl:
+                if "convenience" in fl or "heist" in fl and "carry" not in fl:
+                    score = 97.5
+                    creator = "theRadBrad"
+                    lang = "English"
+                    channel = "GTA 6 CLIPS"
+                    yt_title = "💰 CONVENIENCE STORE HEIST! (theRadBrad Gameplay) #Shorts"
+                    tags = "#GTA6 #GTA6Clips #Heist #Gaming #Shorts"
+                elif "crash" in fl:
+                    score = 97.5
+                    creator = "PewDiePie"
+                    lang = "English"
+                    channel = "GTA 6 CLIPS"
+                    yt_title = "💥 INSANE CAR CRASH PHYSICS! (150 MPH Soft Body Deformation) #Shorts"
+                    tags = "#GTA6 #GTA6Clips #CrashPhysics #Gaming #Shorts"
+                elif "carry" in fl:
+                    score = 90.0
+                    creator = "CarryMinati"
+                    lang = "Hindi"
+                    channel = "GTA 6 CLIPS INDIA"
+                    yt_title = "🔫 CARRYMINATI HEIST FIREFIGHT! (Intense Shootout) #Shorts"
+                    tags = "#CarryMinati #GTA6ClipsIndia #GTA6 #Combat #Shorts"
+                elif "train" in fl:
                     score = 98.4
                     creator = "NoughtPointFourLIVE"
                     lang = "English"
+                    channel = "GTA 6 CLIPS"
                     yt_title = "🚂 CAN YOU STOP THE TRAIN IN GTA 5?! (Speeding Train Collision) #Shorts"
                     tags = "#GTA5 #GTA6 #GTA6Clips #Gaming #Shorts #TrainChallenge"
                 elif "jet" in fl or "5star" in fl or "military" in fl:
