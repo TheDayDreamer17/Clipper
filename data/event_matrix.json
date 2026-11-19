@@ -1,0 +1,20 @@
+{
+  "captured_events": {
+    "POLICE_PURSUIT_police_pursuit": {
+      "creator": "theRadBrad",
+      "timestamp": 1794973775.267267,
+      "output": "output/tournament_winners/theradbrad_-_los_santos_high-speed_3-star_police_pursuit_with_cruisers_&_sirens_WINNER_9x16.mp4"
+    },
+    "LOADING_ARTWORK_loading_intro": {
+      "creator": "GTA Series Videos",
+      "timestamp": 1794973909.046599,
+      "output": "output/tournament_winners/gta_series_videos_-_complete_character_artwork_rotation_(michael,_franklin,_trevor,_bikini_girl)_WINNER_9x16.mp4"
+    },
+    "CAMERA_POV_cockpit_pov": {
+      "creator": "Techno Gamerz",
+      "timestamp": 1794973909.04963,
+      "output": "output/tournament_winners/techno_gamerz_-_in-car_cockpit_driving_with_steering_wheel_&_dashboard_toggle_WINNER_9x16.mp4"
+    }
+  },
+  "channel_queues": {}
+}
