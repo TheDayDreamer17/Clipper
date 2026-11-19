@@ -32,3 +32,11 @@ huggingface/
 *.db-shm
 data/*.db
 carry_transcript.json
+
+# Auth Credentials & Session Caches (Never commit to Git)
+config/instagram_credentials*.json
+config/youtube_credentials*.json
+config/token*.json
+config/*session*
+config/*.env
+scratch/

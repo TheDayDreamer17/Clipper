@@ -199,7 +199,7 @@ class TwitchClipEngine:
             start_sec=0.0,
             duration_sec=float(clip["duration"]),
             output_path=str(out_short),
-            style="blur_bg"
+            style="split_screen"
         )
 
         # Cleanup raw clip

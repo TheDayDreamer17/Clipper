@@ -46,9 +46,12 @@ class ViralityScorer:
             "   - 36 to 65: Moderately interesting gameplay talk, casual humor, mild action.\n"
             "   - 66 to 100: Extreme screaming, catastrophic fails, peak viral chaos, iconic punchlines.\n"
             "5. Chat Reaction Context: When audience live chat comments are provided in the ±15s window, analyze the crowd reaction to identify inside jokes, memes, creator roasts, or punchlines (e.g. chat spamming a meme, comparing someone to Johnny Sins, laughing at awkward situations). Weave that audience context directly into why_viral, top_hook, and viral_title!\n"
-            "6. Witty & Sarcastic Copywriting: Write with dry, funny, sarcastic Gen-Z gaming humor. Avoid generic corporate titles. Write top_hook as a hilarious, punchy 1-line hook (4-8 words, plain text) to display on top of the video (e.g. 'Bro really thought he was slick', 'Intrusive thoughts took the wheel', 'Hired a plumber got Johnny Sins').\n\n"
+            f"6. Action-Driven Copywriting: ALWAYS describe specifically WHAT HAPPENED using the creator's actual name '{streamer_name.upper()}' or 'THIS GUY'. "
+            f"NEVER use the generic word 'STREAMER' (e.g. write '{streamer_name.upper()} CRASHED HIS BOAT' or 'THIS GUY MISCLICKED AND BOUGHT A VIP DANCE', NEVER 'STREAMER CRASHED...'). "
+            "Write what_happened and top_hook as a punchy, witty 4-8 word capitalized action headline without emojis describing what they did.\n\n"
             "You MUST respond ONLY with valid JSON following this exact schema:\n"
             "{\n"
+            '  "what_happened": "<5-8 words in ALL CAPS describing specifically what literal physical incident, mistake, or stunt happened in the gameplay>",\n'
             '  "hook_critique": "<step-by-step reasoning on first 3 seconds>",\n'
             '  "energy_critique": "<critique of vocal adrenaline and streamer emotion>",\n'
             '  "payoff_critique": "<critique of comedic or action climax>",\n'
@@ -56,8 +59,8 @@ class ViralityScorer:
             '  "hype_or_humor": <int 0-100>,\n'
             '  "payoff": <int 0-100>,\n'
             '  "why_viral": "<1 concise summary sentence>",\n'
-            '  "top_hook": "<sarcastic 1-liner for top of video, 4-8 words, plain text without emojis>",\n'
-            '  "viral_title": "<witty sarcastic title>",\n'
+            '  "top_hook": "<4-8 words in ALL CAPS stating what the streamer did>",\n'
+            '  "viral_title": "<situational title describing the incident>",\n'
             '  "witty_description": "<1-2 sarcastic sentences for Instagram Reels/Shorts caption + 4 hashtags>"\n'
             "}"
         )
@@ -183,15 +186,37 @@ class ViralityScorer:
         payoff = parsed.get("payoff", 30)
 
         # Strict Mathematical Virality Formula
-        # Must have BOTH strong hook AND high hype/humor to pass
         composite_score = int(0.4 * hook + 0.4 * hype + 0.2 * payoff)
         is_viral = (hook >= 60 and hype >= 65 and composite_score >= 65)
 
-        raw_top_hook = parsed.get("top_hook") or parsed.get("viral_title") or f"When {streamer_name} goes crazy"
-        # Strip emoji codepoints for TrueType font safety
-        clean_top_hook = re.sub(r'[\U00010000-\U0010ffff]', '', raw_top_hook).strip()
-        if not clean_top_hook:
-            clean_top_hook = f"BRO REALLY THOUGHT HE WAS SLICK"
+        # 100% Dynamic Inference: Extract situational action headline from the SLM
+        action_headline = parsed.get("what_happened") or parsed.get("top_hook") or parsed.get("viral_title")
+        
+        # If parsing was empty, run a focused zero-shot SLM generation on the transcript circumstances
+        if not action_headline or len(str(action_headline).strip()) < 3:
+            direct_messages = [
+                {"role": "system", "content": "You are an AI video editor. In 4 to 8 words in ALL CAPS, describe specifically what physical incident, mistake, or stunt happened in this transcript. Respond ONLY with the headline, nothing else."},
+                {"role": "user", "content": f"Streamer: {streamer_name}\nTranscript: \"{transcript_text[:300]}\""}
+            ]
+            direct_prompt = self._tokenizer.apply_chat_template(direct_messages, tokenize=False, add_generation_prompt=True)
+            action_headline = generate(self._model, self._tokenizer, prompt=direct_prompt, max_tokens=25, verbose=False).strip()
+
+        # Clean formatting and TrueType font safety
+        clean_headline = re.sub(r'[\U00010000-\U0010ffff]', '', str(action_headline)).split('\n')[0].replace('"', '').strip().upper()
+        # Ensure generic word STREAMER is replaced with actual creator name or THIS GUY
+        creator_name = streamer_name.lstrip('@').strip().upper()
+        if "STREAMER" in clean_headline:
+            clean_headline = clean_headline.replace("STREAMER'S", f"{creator_name}'S").replace("STREAMER", creator_name)
+
+        # Collapse duplicate/repeated entity phrases (e.g. PAPAPLATTE'S PAPAPLATTE'S...)
+        if creator_name:
+            clean_headline = re.sub(rf'\b({re.escape(creator_name)}(\'S)?\b)(\s+\1)+', r'\1', clean_headline)
+            clean_headline = re.sub(rf'\b{re.escape(creator_name)}\b(?:\s+.*?\s+BY\s+)\b{re.escape(creator_name)}\b', f'{creator_name} GETS HIT IN GAMEPLAY', clean_headline)
+
+        # Enforce concise headline constraint (max 8-10 words, punchy 1-2 lines)
+        words = clean_headline.split()
+        if len(words) > 10:
+            clean_headline = " ".join(words[:10])
 
         return {
             "hook_score": hook,
@@ -199,13 +224,14 @@ class ViralityScorer:
             "payoff": payoff,
             "virality_score": composite_score,
             "should_clip": is_viral,
-            "hook_critique": parsed.get("hook_critique", "N/A"),
-            "energy_critique": parsed.get("energy_critique", "N/A"),
-            "payoff_critique": parsed.get("payoff_critique", "N/A"),
-            "why_viral": parsed.get("why_viral", "Evaluated by SLM"),
-            "top_hook": clean_top_hook,
-            "viral_title": parsed.get("viral_title", f"{streamer_name} Highlight"),
-            "witty_description": parsed.get("witty_description", f"When @{streamer_name} loses control in GTA 6. #GTA6 #Gaming #Reels #Funny")
+            "what_happened": clean_headline,
+            "hook_critique": parsed.get("hook_critique", "Evaluated dynamically by SLM"),
+            "energy_critique": parsed.get("energy_critique", "Evaluated dynamically by SLM"),
+            "payoff_critique": parsed.get("payoff_critique", "Evaluated dynamically by SLM"),
+            "why_viral": parsed.get("why_viral", f"Situational moment dynamically analyzed from @{streamer_name}"),
+            "top_hook": clean_headline,
+            "viral_title": parsed.get("viral_title", clean_headline),
+            "witty_description": parsed.get("witty_description", f"Watch @{streamer_name} in GTA 6. #GTA6 #Gaming #Reels #OutlawClips")
         }
 
 if __name__ == "__main__":

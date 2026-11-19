@@ -252,8 +252,8 @@ class AutonomousClipperDaemon:
         # 4. Score virality with Qwen-2.5 SLM + ±15s Chat Context + Sarcastic Copywriter
         score_res = self.scorer.score_transcript(transcript, streamer_name=creator, chat_context=comments)
         virality_score = score_res.get("virality_score", 70)
-        viral_title = score_res.get("viral_title", target["title"])
-        top_hook = score_res.get("top_hook") or "BRO REALLY THOUGHT HE WAS SLICK"
+        viral_title = score_res.get("viral_title", target.get("title", ""))
+        top_hook = score_res.get("what_happened") or score_res.get("top_hook") or viral_title
         witty_desc = score_res.get("witty_description") or ""
         side_meme = score_res.get("side_meme_text")
 

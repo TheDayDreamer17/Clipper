@@ -548,15 +548,23 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </style>
 </head>
 <body>
-  <header>
-    <div class="brand">
-      <h1>ANTIGRAVITY CLIPPER</h1>
-      <span class="badge">AGENT MISSION CONTROL & TRAINING LAB</span>
+  <header style="display:flex; justify-content:space-between; align-items:center; padding:18px 32px; background:rgba(10,15,26,0.85); backdrop-filter:blur(20px); border-bottom:1px solid rgba(255,42,109,0.3);">
+    <div class="brand" style="display:flex; align-items:center; gap:16px;">
+      <img src="/brand/outlaw_clips_dp_branded.jpg" alt="Outlaw Clips Logo" style="width:52px; height:52px; border-radius:50%; border:2px solid #FF2A6D; box-shadow:0 0 18px rgba(255,42,109,0.6); object-fit:cover;">
+      <div>
+        <div style="display:flex; align-items:center; gap:12px;">
+          <h1 style="margin:0; font-size:1.6rem; font-weight:900; letter-spacing:1px; background:linear-gradient(135deg, #FFFFFF 0%, #05D9E8 100%); -webkit-background-clip:text; -webkit-text-fill-color:transparent;">OUTLAW CLIPS</h1>
+          <span style="background:rgba(255,42,109,0.2); border:1px solid #FF2A6D; color:#FF2A6D; font-size:0.75rem; font-weight:800; padding:3px 10px; border-radius:14px; letter-spacing:0.5px;">@outlawclipshindi</span>
+        </div>
+        <div style="font-size:0.75rem; color:var(--muted); font-weight:600; margin-top:2px;">
+          GTA VI AUTONOMOUS ENGINE • AI VIRAL ALIGNMENT LAB
+        </div>
+      </div>
     </div>
     <div class="stats-bar">
       <div class="stat-item">
         <div class="stat-num" id="stat-streams">0</div>
-        <div class="stat-label">Streams Monitored</div>
+        <div class="stat-label">Clips Processed</div>
       </div>
       <div class="stat-item">
         <div class="stat-num" id="stat-clips">0</div>
@@ -578,34 +586,34 @@ HTML_TEMPLATE = """<!DOCTYPE html>
   </div>
 
   <nav>
-    <button class="nav-btn active" onclick="switchTab('lab')">⭐ Live GTA 6 Training Lab</button>
+    <button class="nav-btn active" onclick="switchTab('lab')">⭐ Outlaw Clips Alignment Lab</button>
     <button class="nav-btn" onclick="switchTab('desktop')">🖥️ Agent Mission Control</button>
     <button class="nav-btn" onclick="switchTab('clips')">🎬 Crowned Shorts for Review</button>
     <button class="nav-btn" onclick="switchTab('workers')">🤖 Agent Swarm Fleet</button>
     <button class="nav-btn" onclick="switchTab('props')">🎯 Active Target Props Catalog</button>
     <button class="nav-btn" onclick="switchTab('trends')">🔥 Top 50 Live Searches</button>
-    <button class="nav-btn" style="color: #FF007A; border-color: rgba(255, 0, 122, 0.5); font-weight: 700; margin-left: auto;" onclick="fetchLiveGTA6Clip()">🔴 Fetch Live GTA 6 Clip</button>
+    <button class="nav-btn" style="color: #FF007A; border-color: rgba(255, 0, 122, 0.5); font-weight: 700; margin-left: auto;" onclick="fetchLiveGTA6Clip()">🔴 Ingest Fresh Clip</button>
   </nav>
 
   <main>
-    <!-- 1. ⭐ LIVE GTA 6 TRAINING LAB TAB -->
+    <!-- 1. ⭐ OUTLAW CLIPS ALIGNMENT LAB TAB -->
     <div id="tab-lab">
       <div class="lab-controls-bar">
         <div>
-          <h2 style="font-size: 1.15rem; font-weight: 700; color: #FFF;">⭐ Real Live GTA 6 Stream Review & Training Lab</h2>
+          <h2 style="font-size: 1.15rem; font-weight: 700; color: #FFF;">⭐ Outlaw Clips Viral Review & Training Lab</h2>
           <p style="font-size: 0.82rem; color: var(--muted); margin-top: 4px;">
-            Review real live captured moments, rate virality (1–5★), and click <strong>Train Agent & Skill</strong> to recalibrate model policy.
+            Review real captured viral moments, rate virality (1–5★), and click <strong>Train Agent & Skill</strong> to recalibrate model policy.
           </p>
         </div>
         <div class="lab-filters">
-          <button class="lab-filter-btn active" onclick="filterCandidates('all')">All Live Clips</button>
+          <button class="lab-filter-btn active" onclick="filterCandidates('all')">All Clips</button>
           <button class="lab-filter-btn" onclick="filterCandidates('unrated')">Unrated</button>
           <button class="lab-filter-btn" onclick="filterCandidates('rated')">Rated</button>
           <button class="lab-filter-btn" onclick="filterCandidates('English')">⚡️ English</button>
           <button class="lab-filter-btn" onclick="filterCandidates('Hindi')">🇮🇳 Hindi</button>
         </div>
         <button id="btn-fetch-live-gta6" class="btn" onclick="fetchLiveGTA6Clip()" style="flex:none; padding:10px 20px; font-weight:700; background: linear-gradient(135deg, #FF0055, #FF5500); color: #FFF; border: none; border-radius: 8px; cursor: pointer; display: flex; align-items: center; gap: 8px; box-shadow: 0 0 15px rgba(255, 0, 85, 0.4);">
-          🔴 Fetch Fresh GTA 6 Live Clip
+          🔴 Ingest Fresh Clip
         </button>
         <button class="btn btn-approve" onclick="triggerAgentTraining()" style="flex:none; padding:10px 24px; font-weight:700;">
           🧠 Train Agent & Skill from Ratings
@@ -614,7 +622,7 @@ HTML_TEMPLATE = """<!DOCTYPE html>
 
       <div class="lab-grid" id="training-candidates-grid">
         <div style="grid-column: 1/-1; text-align: center; padding: 60px; color: var(--muted);">
-          Loading genuine GTA 6 live stream clips...
+          Loading Outlaw Clips for review...
         </div>
       </div>
     </div>
@@ -905,21 +913,34 @@ HTML_TEMPLATE = """<!DOCTYPE html>
         return `
           <div class="candidate-card" id="cand-card-${c.clip_id}" style="${cardStyle}">
             <div class="candidate-video-box">
-              <video src="${c.video_path}" controls playsinline preload="metadata"></video>
+              <video src="${c.video_path}?t=${c.rated_at || Date.now()}" controls playsinline preload="metadata"></video>
             </div>
             <div class="candidate-body">
               ${verdictBadge}
               <div style="display:flex; justify-content:space-between; align-items:center;">
-                <strong style="color:var(--accent); font-family:monospace;">${c.clip_id.toUpperCase()}</strong>
-                <span class="info-tag" style="border-color:${badgeColor}; color:#FFF;">${c.channel}</span>
-                <span class="info-tag">${c.duration}s</span>
+                <div style="display:flex; align-items:center; gap:8px;">
+                  <img src="/brand/outlaw_clips_dp_branded.jpg" style="width:22px; height:22px; border-radius:50%; border:1px solid #FF2A6D; object-fit:cover;">
+                  <strong style="color:var(--accent); font-family:monospace; font-size:0.82rem;">${c.clip_id.toUpperCase()}</strong>
+                </div>
+                <div style="display:flex; gap:6px;">
+                  <span class="info-tag" style="border-color:${badgeColor}; color:#FFF;">${c.creator}</span>
+                  <span class="info-tag">${c.duration}s</span>
+                </div>
+              </div>
+
+              <!-- High-Impact Action Hook Box (What happened / what the streamer did) -->
+              <div style="background:rgba(255,42,109,0.12); border-left:3px solid #FF2A6D; padding:8px 12px; border-radius:6px; margin:4px 0;">
+                <span style="font-size:0.68rem; color:#FF2A6D; font-weight:800; text-transform:uppercase; letter-spacing:0.5px;">⚡ WHAT HAPPENED:</span>
+                <div style="font-size:0.92rem; font-weight:800; color:#FFF; line-height:1.25; margin-top:2px;">
+                  ${c.target_search}
+                </div>
               </div>
 
               <div class="meta-box-inner">
-                <div><span style="color:var(--muted);">Target Demand:</span> <strong style="color:#FFF;">"${c.target_search}"</strong></div>
                 <div><span style="color:var(--muted);">Category:</span> <code>${c.category}</code></div>
-                <div><span style="color:var(--muted);">Expected Spoken:</span> <span style="color:#CBD5E1;">${Array.isArray(c.expected_spoken) ? c.expected_spoken.slice(0, 2).join(' | ') : c.expected_spoken}</span></div>
-                <div><span style="color:var(--muted);">Expected Vision:</span> <span style="color:#CBD5E1;">${Array.isArray(c.expected_vision) ? c.expected_vision.slice(0, 2).join(' | ') : c.expected_vision}</span></div>
+                <div><span style="color:var(--muted);">Language:</span> <strong style="color:#05D9E8;">${c.language}</strong></div>
+                <div><span style="color:var(--muted);">Target Archetype:</span> <strong style="color:#00F0FF;">${c.target_search}</strong></div>
+                <div><span style="color:var(--muted);">Visual Gameplay Action:</span> <span style="color:#CBD5E1;">${Array.isArray(c.expected_vision) ? c.expected_vision.slice(0, 2).join(' | ') : c.expected_vision}</span></div>
               </div>
 
               <!-- Interactive 5-Star Rating -->
@@ -1150,6 +1171,25 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                 self.send_error(404, "Video not found")
             return
 
+        elif path.startswith("/training_candidates/") or path.startswith("/tournament_winners/"):
+            rel_file = urllib.parse.unquote(path.lstrip("/"))
+            file_path = Path("output") / rel_file
+            if file_path.exists():
+                self._serve_file(file_path, "video/mp4")
+            else:
+                self.send_error(404, "Video not found")
+            return
+
+        elif path.startswith("/brand/"):
+            rel_file = urllib.parse.unquote(path.replace("/brand/", ""))
+            file_path = Path("downloads/brand_assets") / rel_file
+            if file_path.exists():
+                ctype = "image/png" if rel_file.lower().endswith(".png") else "image/jpeg"
+                self._serve_file(file_path, ctype)
+            else:
+                self.send_error(404, "Brand asset not found")
+            return
+
         self.send_error(404, "Not Found")
 
     def do_POST(self):
@@ -1275,7 +1315,7 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
 
                         viral_title = score_data.get("viral_title", chosen_clip["title"])
                         virality_score = score_data.get("virality_score", 75)
-                        top_hook = score_data.get("top_hook") or "BRO REALLY THOUGHT HE WAS SLICK"
+                        top_hook = score_data.get("what_happened") or score_data.get("top_hook") or score_data.get("viral_title") or chosen_clip.get("title", "")
 
                         swarm.log_event("narrative_guardrail", "NarrativeGuardrailAgent", "VIRALITY_EVALUATED", f"SLM Virality: {virality_score}/100. Hook: '{top_hook}' | Title: '{viral_title}'", {"why_viral": score_data.get("why_viral")})
 
@@ -1443,38 +1483,88 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
         self.send_error(404, "Endpoint not found")
 
     def _serve_file(self, file_path: Path, mime: str):
-        file_size = file_path.stat().st_size
+        try:
+            file_size = file_path.stat().st_size
+        except Exception:
+            self.send_error(404, "File not found")
+            return
+
         range_header = self.headers.get("Range")
+        chunk_size = 64 * 1024
 
-        if range_header:
+        if range_header and range_header.startswith("bytes="):
             try:
-                ranges = range_header.replace("bytes=", "").split("-")
-                start = int(ranges[0]) if ranges[0] else 0
-                end = int(ranges[1]) if ranges[1] else file_size - 1
-                length = end - start + 1
+                range_val = range_header[6:].strip()
+                if "," in range_val:
+                    range_val = range_val.split(",")[0].strip()
+                parts = range_val.split("-")
+                if parts[0] == "":
+                    # suffix range: bytes=-500 (last 500 bytes)
+                    suffix = int(parts[1])
+                    start = max(0, file_size - suffix)
+                    end = file_size - 1
+                elif parts[1] == "":
+                    # prefix range: bytes=500- (from 500 to end)
+                    start = int(parts[0])
+                    end = file_size - 1
+                else:
+                    start = int(parts[0])
+                    end = min(int(parts[1]), file_size - 1)
 
+                if start > end or start >= file_size:
+                    self.send_response(416)
+                    self.send_header("Content-Range", f"bytes */{file_size}")
+                    self.end_headers()
+                    return
+
+                length = end - start + 1
                 self.send_response(206)
                 self.send_header("Content-Type", mime)
                 self.send_header("Content-Range", f"bytes {start}-{end}/{file_size}")
                 self.send_header("Content-Length", str(length))
                 self.send_header("Accept-Ranges", "bytes")
+                self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+                self.send_header("Pragma", "no-cache")
+                self.send_header("Expires", "0")
                 self.end_headers()
 
+                bytes_remaining = length
                 with open(file_path, "rb") as f:
                     f.seek(start)
-                    self.wfile.write(f.read(length))
+                    while bytes_remaining > 0:
+                        read_amt = min(chunk_size, bytes_remaining)
+                        data = f.read(read_amt)
+                        if not data:
+                            break
+                        self.wfile.write(data)
+                        bytes_remaining -= len(data)
+                return
+            except (BrokenPipeError, ConnectionResetError):
                 return
             except Exception:
                 pass
 
-        self.send_response(200)
-        self.send_header("Content-Type", mime)
-        self.send_header("Content-Length", str(file_size))
-        self.send_header("Accept-Ranges", "bytes")
-        self.end_headers()
+        # Fallback: full 200 response
+        try:
+            self.send_response(200)
+            self.send_header("Content-Type", mime)
+            self.send_header("Content-Length", str(file_size))
+            self.send_header("Accept-Ranges", "bytes")
+            self.send_header("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
+            self.send_header("Pragma", "no-cache")
+            self.send_header("Expires", "0")
+            self.end_headers()
 
-        with open(file_path, "rb") as f:
-            self.wfile.write(f.read())
+            with open(file_path, "rb") as f:
+                while True:
+                    data = f.read(chunk_size)
+                    if not data:
+                        break
+                    self.wfile.write(data)
+        except (BrokenPipeError, ConnectionResetError):
+            return
+        except Exception:
+            pass
 
     def _handle_api_training_clips(self):
         db_path = Path("data/telemetry.db")
@@ -1486,7 +1576,7 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                 c.execute("""
                     SELECT clip_id, video_path, target_search, category, language, channel, creator, expected_spoken, expected_vision, duration, human_stars, human_verdict, human_critique 
                     FROM training_clip_ratings 
-                    ORDER BY CASE WHEN clip_id LIKE 'live_gta6_%' THEN 0 ELSE 1 END, rated_at DESC, rowid DESC;
+                    ORDER BY CASE WHEN clip_id LIKE 'fresh_gta6_%' THEN 0 WHEN clip_id LIKE 'live_gta6_%' THEN 1 ELSE 2 END, rated_at DESC, rowid DESC;
                 """)
                 for r in c.fetchall():
                     try:
@@ -1498,9 +1588,12 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                     except Exception:
                         vision = [r[8]]
 
+                    raw_vpath = r[1] or ""
+                    clean_vpath = raw_vpath if raw_vpath.startswith("/video/") else f"/video/{raw_vpath.lstrip('/')}"
+
                     clips.append({
                         "clip_id": r[0],
-                        "video_path": r[1],
+                        "video_path": clean_vpath,
                         "target_search": r[2],
                         "category": r[3],
                         "language": r[4],
@@ -1602,46 +1695,38 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
     def _handle_api_clips(self):
         clips = []
         winner_dir = Path("output/tournament_winners")
+        db_path = Path("data/telemetry.db")
+        db_meta = {}
+        if db_path.exists():
+            try:
+                conn = sqlite3.connect(str(db_path))
+                c = conn.cursor()
+                c.execute("SELECT clip_id, target_search, creator, channel, language, human_stars, human_critique FROM training_clip_ratings;")
+                for r in c.fetchall():
+                    db_meta[r[0]] = {
+                        "headline": r[1],
+                        "creator": r[2],
+                        "channel": r[3],
+                        "language": r[4],
+                        "score": (r[5] or 4) * 20.0,
+                        "critique": r[6]
+                    }
+                conn.close()
+            except Exception:
+                pass
+
         if winner_dir.exists():
             for p in sorted(winner_dir.glob("*.mp4")):
                 fname = p.name
-                title = fname.replace("_WINNER_9x16.mp4", "").replace("_", " ").title()
-                score = 92.0
-                fl = fname.lower()
-                channel = "GTA 6 CLIPS"
-                creator = "Rockstar Games"
-                lang = "English"
-
-                if "techno" in fl:
-                    channel = "GTA 6 CLIPS INDIA"
-                    creator = "Techno Gamerz"
-                    lang = "Hindi"
-                    score = 97.2
-                    title = "Techno Gamerz GTA 6 Gameplay Reaction"
-                    yt_title = "🇮🇳 TECHNO GAMERZ FIRST GTA 6 GAMEPLAY! (Insane Reaction) #Shorts"
-                    tags = "#TechnoGamerz #GTA6ClipsIndia #GTA6 #GTA6Gameplay #Shorts"
-                elif "carry" in fl:
-                    channel = "GTA 6 CLIPS INDIA"
-                    creator = "CarryMinati"
-                    lang = "Hindi"
-                    score = 96.5
-                    title = "CarryMinati Heist Firefight"
-                    yt_title = "🔫 CARRYMINATI HEIST FIREFIGHT! (Intense Shootout) #Shorts"
-                    tags = "#CarryMinati #GTA6ClipsIndia #GTA6 #Gaming #Shorts"
-                elif "pewdiepie" in fl or "crash" in fl:
-                    channel = "GTA 6 CLIPS"
-                    creator = "PewDiePie"
-                    lang = "English"
-                    score = 98.2
-                    title = "150 MPH Car Crash Physics"
-                    yt_title = "💥 INSANE CAR CRASH PHYSICS! (150 MPH Soft Body Deformation) #Shorts"
-                    tags = "#GTA6 #GTA6Clips #PewDiePie #CrashPhysics #Shorts"
-                else:
-                    score = 91.0
-                    channel = "GTA 6 CLIPS"
-                    creator = "theRadBrad"
-                    yt_title = f"🔥 {title} #Shorts"
-                    tags = "#GTA6 #GTA6Clips #Gaming #Shorts"
+                base_id = fname.replace("_WINNER_9x16.mp4", "").replace(".mp4", "")
+                meta = db_meta.get(base_id, {})
+                title = meta.get("headline") or base_id.replace("_", " ").title()
+                creator = meta.get("creator") or "@outlawclipshindi"
+                channel = meta.get("channel") or "OUTLAW CLIPS"
+                lang = meta.get("language") or "English"
+                score = meta.get("score") or 95.0
+                yt_title = f"{title} | Outlaw Clips #Shorts"
+                tags = "#GTA6 #GTA6Clips #OutlawClips #Gaming #Shorts"
 
                 clips.append({
                     "id": p.stem,
