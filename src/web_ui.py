@@ -1108,25 +1108,26 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
                     title = "Techno Gamerz GTA 6 Gameplay Reaction"
                     yt_title = "🇮🇳 TECHNO GAMERZ FIRST GTA 6 GAMEPLAY! (Insane Reaction) #Shorts"
                     tags = "#TechnoGamerz #GTA6ClipsIndia #GTA6 #GTA6Gameplay #Shorts"
-                elif "heist" in fl or "lucia" in fl or "robbery" in fl:
+                elif "carry" in fl:
+                    channel = "GTA 6 CLIPS INDIA"
+                    creator = "CarryMinati"
+                    lang = "Hindi"
+                    score = 96.5
+                    title = "CarryMinati Heist Firefight"
+                    yt_title = "🔫 CARRYMINATI HEIST FIREFIGHT! (Intense Shootout) #Shorts"
+                    tags = "#CarryMinati #GTA6ClipsIndia #GTA6 #Gaming #Shorts"
+                elif "pewdiepie" in fl or "crash" in fl:
                     channel = "GTA 6 CLIPS"
-                    creator = "Rockstar Games"
+                    creator = "PewDiePie"
                     lang = "English"
-                    score = 98.5
-                    title = "Lucia & Jason Store Heist"
-                    yt_title = "💰 LUCIA & JASON STORE HEIST! (Armed Robbery Getaway) #Shorts"
-                    tags = "#GTA6 #GTA6Clips #LuciaJason #GTA6Heist #Shorts"
-                elif "vice_city" in fl or "driving" in fl or "cruise" in fl:
-                    channel = "GTA 6 CLIPS"
-                    creator = "Rockstar Games"
-                    lang = "English"
-                    score = 96.8
-                    title = "Vice City Next-Gen Sunset Driving"
-                    yt_title = "🌴 VICE CITY NEXT-GEN GRAPHICS! (Ocean Drive Sunset Cruise) #Shorts"
-                    tags = "#GTA6 #GTA6Clips #ViceCity #GTA6Graphics #Shorts"
+                    score = 98.2
+                    title = "150 MPH Car Crash Physics"
+                    yt_title = "💥 INSANE CAR CRASH PHYSICS! (150 MPH Soft Body Deformation) #Shorts"
+                    tags = "#GTA6 #GTA6Clips #PewDiePie #CrashPhysics #Shorts"
                 else:
                     score = 91.0
                     channel = "GTA 6 CLIPS"
+                    creator = "theRadBrad"
                     yt_title = f"🔥 {title} #Shorts"
                     tags = "#GTA6 #GTA6Clips #Gaming #Shorts"
 
