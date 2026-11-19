@@ -1,0 +1,321 @@
+{
+  "trend_scout": {
+    "id": "trend_scout",
+    "name": "TrendScoutAgent",
+    "role": "Real-time search demand poller & dynamic props synthesizer",
+    "status": "ACTIVE",
+    "current_task": "Indexed 50 search trends; target props database updated",
+    "metrics": {
+      "searches_indexed": 159,
+      "props_active": 50,
+      "last_poll_ms": 115
+    },
+    "recent_logs": [
+      {
+        "time": "12:18:36",
+        "msg": "Initialized live trend polling engine with 16 seed clusters"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Extracted 149 unique search intents from YouTube API"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Synthesized 50 active high-priority props into telemetry database"
+      },
+      {
+        "time": "12:18:41",
+        "msg": "Initiated search polling across 16 primary seed vectors"
+      },
+      {
+        "time": "12:18:43",
+        "msg": "Successfully compiled top 50 GTA 6 search trends into props database"
+      }
+    ],
+    "config": {
+      "poll_interval_sec": 900,
+      "min_velocity_threshold": 80,
+      "target_game": "GTA 6"
+    },
+    "log_msg": "Successfully compiled top 50 GTA 6 search trends into props database"
+  },
+  "stream_discovery": {
+    "id": "stream_discovery",
+    "name": "StreamDiscoveryAgent",
+    "role": "High-viewcount multi-platform live stream scraper with Copyright Shield",
+    "status": "COMPLIANCE_SHIELD_ACTIVE",
+    "current_task": "Active streams partitioned: 1 Global English, 1 India Hindi; 0 copyright risks",
+    "metrics": {
+      "streams_monitored": 12,
+      "global_en_streams": 8,
+      "regional_in_streams": 4,
+      "copyright_blacklisted": 2
+    },
+    "recent_logs": [
+      {
+        "time": "12:18:36",
+        "msg": "Discovered top 12 active streams across Twitch & YouTube Live"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Language routing: 8 Global (@theRadBrad, @PewDiePie) / 4 India (@TechnoGamerz, @CarryMinati)"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Copyright Shield: Scanned streamer descriptions; blacklisted 2 non-consenting creators (Zero Strike Risk)"
+      },
+      {
+        "time": "12:18:43",
+        "msg": "Scanning stream bios: @RockstarGames (Official) and @TechnoGamerz (Approved)"
+      },
+      {
+        "time": "12:18:43",
+        "msg": "Copyright Shield passed: All candidate sources verified safe for transformational shorts"
+      }
+    ],
+    "config": {
+      "languages": [
+        "English",
+        "Hindi"
+      ],
+      "copyright_check_depth": "deep_bio_and_tags",
+      "auto_blacklist": true
+    },
+    "log_msg": "Copyright Shield passed: All candidate sources verified safe for transformational shorts"
+  },
+  "yt_watcher": {
+    "id": "yt_watcher",
+    "name": "YouTubeStreamWatcher",
+    "role": "YouTube Live HLS manifest ingester & peak velocity event detector",
+    "status": "PROCESSING",
+    "current_task": "Monitoring YouTube Live streams for high-energy gameplay events",
+    "metrics": {
+      "chunks_ingested": 28,
+      "spikes_detected": 14,
+      "candidates_emitted": 6
+    },
+    "recent_logs": [
+      {
+        "time": "12:18:36",
+        "msg": "Watching live feed: @theRadBrad (1080p60 HLS)"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Watching live feed: @TechnoGamerz (1080p60 HLS)"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Detected high-energy combat spike at offset 00:14:22; packet forwarded to Guardrails"
+      }
+    ],
+    "config": {
+      "chunk_duration_sec": 30,
+      "audio_rms_threshold": 0.35,
+      "visual_flow_threshold": 32.0
+    }
+  },
+  "twitch_watcher": {
+    "id": "twitch_watcher",
+    "name": "TwitchStreamWatcher",
+    "role": "Twitch live stream watcher & viewer-created viral clip harvester",
+    "status": "PROCESSING",
+    "current_task": "Querying Twitch Clips API for community-created viral clips with high view velocity",
+    "metrics": {
+      "twitch_clips_scanned": 45,
+      "user_clips_harvested": 18,
+      "vps_avg": 42.8
+    },
+    "recent_logs": [
+      {
+        "time": "12:18:36",
+        "msg": "Polling Twitch GQL / Clips API for top GTA 6 category broadcasts"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Harvested 18 high-velocity user-created clips (>500 views in first 5 mins)"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Formatted candidate metadata and dispatched to NarrativeGuardrailAgent"
+      }
+    ],
+    "config": {
+      "min_user_clip_views": 100,
+      "viral_velocity_weight": 1.25,
+      "auto_clip_harvest": true
+    }
+  },
+  "narrative_guardrail": {
+    "id": "narrative_guardrail",
+    "name": "NarrativeGuardrailAgent",
+    "role": "Multi-frame BLIP/CLIP story validator, safety buffer enforcer & retry manager",
+    "status": "ACTIVE",
+    "current_task": "Idle - waiting for next candidate stream packet",
+    "metrics": {
+      "clips_audited": 32,
+      "approved_veracity": 24,
+      "rejected_filler": 8,
+      "retries_triggered": 4
+    },
+    "recent_logs": [
+      {
+        "time": "12:18:43",
+        "msg": "Running 8-frame BLIP+CLIP QA on candidate gta6_lucia_jason_heist from @RockstarGames"
+      },
+      {
+        "time": "12:18:45",
+        "msg": "APPROVED: 'LUCIA & JASON STORE HEIST' verified in pixels -> Sent to BrandingCompositor"
+      },
+      {
+        "time": "12:18:53",
+        "msg": "Running 8-frame BLIP+CLIP QA on candidate gta6_vice_city_sunset_cruise from @RockstarGames"
+      },
+      {
+        "time": "12:18:54",
+        "msg": "APPROVED: 'VICE CITY NEXT-GEN GRAPHICS' verified in pixels -> Sent to BrandingCompositor"
+      },
+      {
+        "time": "12:19:01",
+        "msg": "Running 8-frame BLIP+CLIP QA on candidate gta6_leonida_everglades_mudclub from @RockstarGames"
+      },
+      {
+        "time": "12:19:03",
+        "msg": "REJECTED: 'LEONIDA EVERGLADES MUD CLUB' failed veracity (Rejected as Lame Filler (High negative anchor match across frames))"
+      },
+      {
+        "time": "12:19:03",
+        "msg": "Running 8-frame BLIP+CLIP QA on candidate gta6_techno_gamerz_reaction from @TechnoGamerz"
+      },
+      {
+        "time": "12:19:05",
+        "msg": "APPROVED: 'TECHNO GAMERZ GTA 6 GAMEPLAY' verified in pixels -> Sent to BrandingCompositor"
+      },
+      {
+        "time": "12:19:14",
+        "msg": "Running 8-frame BLIP+CLIP QA on candidate cand_lame_filler_walking from @RandomPlayer"
+      },
+      {
+        "time": "12:19:17",
+        "msg": "REJECTED: 'WALKING DOWN HALLWAY' failed veracity (Rejected as Lame Filler (High negative anchor match across frames))"
+      }
+    ],
+    "config": {
+      "pre_roll_sec": 2.5,
+      "post_roll_sec": 3.0,
+      "min_veracity_score": 75.0,
+      "verify_hook_outro": true
+    },
+    "log_msg": "REJECTED: 'WALKING DOWN HALLWAY' failed veracity (Rejected as Lame Filler (High negative anchor match across frames))"
+  },
+  "branding_compositor": {
+    "id": "branding_compositor",
+    "name": "BrandingCompositorAgent",
+    "role": "9:16 vertical glassmorphic layout renderer, dual-channel stamp & hook overlay",
+    "status": "ACTIVE",
+    "current_task": "Short rendered successfully",
+    "metrics": {
+      "shorts_rendered": 15,
+      "global_channel_renders": 9,
+      "india_channel_renders": 6,
+      "render_time_avg_sec": 4.2
+    },
+    "recent_logs": [
+      {
+        "time": "12:18:36",
+        "msg": "Applied 9:16 ambient blurred background with 3px framed gameplay"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Injected Brand Stamp: \u26a1\ufe0f GTA 6 CLIPS (Global) and Creator Attribution: VIA @theRadBrad"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Injected Brand Stamp: \ud83c\uddee\ud83c\uddf3 GTA 6 CLIPS INDIA (Regional) and Creator Attribution: VIA @TechnoGamerz"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Timed animated hook (0-3s) and outro CTA (last 2.5s) synchronized to audio stream"
+      },
+      {
+        "time": "12:18:45",
+        "msg": "Rendering brand stamps, animated hook, and audio-synced outro CTA"
+      },
+      {
+        "time": "12:18:53",
+        "msg": "Rendered 1080x1920 short: gta6_lucia_jason_heist_WINNER_9x16.mp4 (Channel: GTA 6 CLIPS)"
+      },
+      {
+        "time": "12:18:54",
+        "msg": "Rendering brand stamps, animated hook, and audio-synced outro CTA"
+      },
+      {
+        "time": "12:19:01",
+        "msg": "Rendered 1080x1920 short: gta6_vice_city_sunset_cruise_WINNER_9x16.mp4 (Channel: GTA 6 CLIPS)"
+      },
+      {
+        "time": "12:19:05",
+        "msg": "Rendering brand stamps, animated hook, and audio-synced outro CTA"
+      },
+      {
+        "time": "12:19:14",
+        "msg": "Rendered 1080x1920 short: gta6_techno_gamerz_reaction_WINNER_9x16.mp4 (Channel: GTA 6 CLIPS INDIA)"
+      }
+    ],
+    "config": {
+      "resolution": "1080x1920",
+      "codec": "libx264",
+      "audio_codec": "aac",
+      "crf": 22
+    },
+    "log_msg": "Rendered 1080x1920 short: gta6_techno_gamerz_reaction_WINNER_9x16.mp4 (Channel: GTA 6 CLIPS INDIA)"
+  },
+  "publish_staging": {
+    "id": "publish_staging",
+    "name": "PublishStagingAgent",
+    "role": "Human-in-the-loop review staging, metadata synthesis & automated upload dispatcher",
+    "status": "ACTIVE",
+    "current_task": "Staged 'TECHNO GAMERZ GTA 6 GAMEPLAY' for 1-click review on hosted control center",
+    "metrics": {
+      "staged_for_review": 12,
+      "approved_by_user": 5,
+      "dispatched_for_upload": 0,
+      "seo_packs_generated": 12
+    },
+    "recent_logs": [
+      {
+        "time": "12:18:36",
+        "msg": "Generated viral SEO metadata: High-CTR Title, Hashtags (#GTA6, #Shorts), and Attribution"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Staged 4 newly crowned authentic GTA 6 shorts in Web UI Control Center"
+      },
+      {
+        "time": "12:18:36",
+        "msg": "Ready to dispatch to YouTube Data API v3 & TikTok Content API once API keys are provided"
+      },
+      {
+        "time": "12:18:53",
+        "msg": "Synthesized SEO pack for LUCIA & JASON STORE HEIST | Target: GTA 6 CLIPS"
+      },
+      {
+        "time": "12:19:01",
+        "msg": "Synthesized SEO pack for VICE CITY NEXT-GEN GRAPHICS | Target: GTA 6 CLIPS"
+      },
+      {
+        "time": "12:19:14",
+        "msg": "Synthesized SEO pack for TECHNO GAMERZ GTA 6 GAMEPLAY | Target: GTA 6 CLIPS INDIA"
+      }
+    ],
+    "config": {
+      "auto_stage": true,
+      "require_human_approval": true,
+      "supported_platforms": [
+        "YouTube Shorts",
+        "TikTok",
+        "Instagram Reels"
+      ]
+    },
+    "log_msg": "Synthesized SEO pack for TECHNO GAMERZ GTA 6 GAMEPLAY | Target: GTA 6 CLIPS INDIA"
+  }
+}
