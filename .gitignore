@@ -25,3 +25,10 @@ Thumbs.db
 # Model caches
 huggingface/
 .cache/
+
+# Databases and transient logs
+*.db
+*.db-wal
+*.db-shm
+data/*.db
+carry_transcript.json
