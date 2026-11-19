@@ -1,0 +1,82 @@
+{
+  "confusion_matrix": {
+    "TP": 2,
+    "TN": 3,
+    "FP": 0,
+    "FN": 0
+  },
+  "metrics": {
+    "precision": 100.0,
+    "recall": 100.0,
+    "accuracy": 100.0,
+    "f1_score": 100.0,
+    "avg_latency_s": 1.17
+  },
+  "cases": [
+    {
+      "case_id": "CASE_01",
+      "name": "High Action Police Pursuit (True Positive)",
+      "creator": "CarryisLive",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "outcome": "\u2705 TRUE POSITIVE",
+      "virality_score": 94,
+      "hook_score": 94,
+      "hype_score": 96,
+      "reason": "Passed Visual & Transcript Virality Gates",
+      "latency_s": 1.87
+    },
+    {
+      "case_id": "CASE_02",
+      "name": "Story Cutscene & Character Reveal (True Positive)",
+      "creator": "Xyaa",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "outcome": "\u2705 TRUE POSITIVE",
+      "virality_score": 25,
+      "hook_score": 28,
+      "hype_score": 25,
+      "reason": "Architecture V2 Signal A Story-Critical Cutscene Bypass (High Search Demand)",
+      "latency_s": 0.99
+    },
+    {
+      "case_id": "CASE_03",
+      "name": "Menu & Graphics Calibration (True Negative)",
+      "creator": "Mortal",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "outcome": "\u2705 TRUE NEGATIVE",
+      "virality_score": 17,
+      "hook_score": 18,
+      "hype_score": 15,
+      "reason": "Visual Cue-Graph Gatekeeper Disqualified: REJECT_MENU",
+      "latency_s": 0.97
+    },
+    {
+      "case_id": "CASE_04",
+      "name": "Casual Highway Cruising (True Negative - Filler)",
+      "creator": "TechnoGamerz",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "outcome": "\u2705 TRUE NEGATIVE",
+      "virality_score": 18,
+      "hook_score": 20,
+      "hype_score": 15,
+      "reason": "Transcript Virality Below Threshold (<65)",
+      "latency_s": 0.95
+    },
+    {
+      "case_id": "CASE_05",
+      "name": "Audio Hype over Static Inventory (Multi-Modal Conflict)",
+      "creator": "Scout",
+      "expected": "REJECT",
+      "actual": "REJECT",
+      "outcome": "\u2705 TRUE NEGATIVE",
+      "virality_score": 78,
+      "hook_score": 95,
+      "hype_score": 90,
+      "reason": "Visual Cue-Graph Gatekeeper Disqualified: REJECT_MENU",
+      "latency_s": 1.06
+    }
+  ]
+}
