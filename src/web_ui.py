@@ -1,3 +1,4 @@
+import socket
 import http.server
 import socketserver
 import json
@@ -830,11 +831,26 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(json.dumps(data).encode("utf-8"))
 
+class DualStackHTTPServer(http.server.ThreadingHTTPServer):
+    address_family = socket.AF_INET6
+    daemon_threads = True
+
+    def server_bind(self):
+        try:
+            self.socket.setsockopt(socket.IPPROTO_IPV6, socket.IPV6_V6ONLY, 0)
+        except Exception:
+            pass
+        return super().server_bind()
+
 def run_server(port: int = PORT):
-    socketserver.TCPServer.allow_reuse_address = True
-    with socketserver.TCPServer(("", port), ClipperHTTPHandler) as httpd:
-        print(f"🚀 Clipper Web UI Control Center running at: http://localhost:{port}")
-        httpd.serve_forever()
+    try:
+        httpd = DualStackHTTPServer(("::", port), ClipperHTTPHandler)
+    except Exception:
+        DualStackHTTPServer.address_family = socket.AF_INET
+        httpd = DualStackHTTPServer(("0.0.0.0", port), ClipperHTTPHandler)
+
+    print(f"🚀 Clipper Web UI Control Center running at: http://localhost:{port}")
+    httpd.serve_forever()
 
 if __name__ == "__main__":
     run_server()
