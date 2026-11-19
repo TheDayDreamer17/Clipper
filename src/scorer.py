@@ -20,36 +20,142 @@ class ViralityScorer:
             print(f"🧠 Loading Local SLM Virality Evaluator ({self.model_name})...")
             self._model, self._tokenizer = load(self.model_name)
 
-    def score_transcript(self, transcript_text: str, streamer_name: str = "Streamer") -> Dict[str, Any]:
+    def score_transcript(
+        self,
+        transcript_text: str,
+        streamer_name: str = "Streamer",
+        chat_context: Optional[List[str]] = None
+    ) -> Dict[str, Any]:
         """
-        Evaluates a transcript snippet (English, Hindi, or Hinglish)
-        for short-form virality, hook strength, and entertainment value.
+        Evaluates a transcript snippet (English, Hindi, or Hinglish) and optional audience
+        live chat context (±15s window) for short-form virality, hook strength, and entertainment value.
+        Uses Few-Shot In-Context Learning (ICL) and Chain-of-Thought (CoT)
+        to prevent score compression and hallucinated ratings.
         """
         self._ensure_loaded()
         
         system_prompt = (
-            "You are a strict viral YouTube Shorts and TikTok editor. "
-            "Evaluate speech from a gaming stream (English, Hindi, or Hinglish). "
-            "Score from 0 to 100 on:\n"
-            "1. hook_score: Curiosity gap, shock, loud opening in the first sentence.\n"
-            "2. hype_or_humor: Intense screaming, laughing, unexpected fail, or extreme chaos.\n"
-            "3. payoff: Funny punchline or situation resolution.\n"
-            "Strict Rule: Give low scores (<40) to mundane chatter (driving around, pencil talk, checking inventory, low energy).\n"
-            "Respond ONLY with a valid JSON object matching this schema:\n"
+            "You are a strict, skeptical YouTube Shorts and TikTok viral gaming editor. "
+            "Your job is to REJECT mundane, low-energy, or routine commentary, and only approve genuine viral moments.\n\n"
+            "Evaluation Rules:\n"
+            "1. hook_critique: Analyze the first 3 seconds. Is there immediate shock, high stakes, or curiosity gap?\n"
+            "2. energy_critique: Assess vocal volume, scream, laughter, or panic. Low vocal energy = LOW SCORE.\n"
+            "3. payoff_critique: Did an unexpected fail, hilarious punchline, or chaotic climax occur?\n"
+            "4. Score ranges:\n"
+            "   - 0 to 35: Mundane chatter, navigation, checking settings/store, quiet exploration.\n"
+            "   - 36 to 65: Moderately interesting gameplay talk, casual humor, mild action.\n"
+            "   - 66 to 100: Extreme screaming, catastrophic fails, peak viral chaos, iconic punchlines.\n"
+            "5. Chat Reaction Context: When audience live chat comments are provided in the ±15s window, analyze the crowd reaction to identify inside jokes, memes, creator roasts, or punchlines (e.g. chat spamming a meme, comparing someone to Johnny Sins, laughing at awkward situations). Weave that audience context directly into why_viral, top_hook, and viral_title!\n"
+            "6. Witty & Sarcastic Copywriting: Write with dry, funny, sarcastic Gen-Z gaming humor. Avoid generic corporate titles. Write top_hook as a hilarious, punchy 1-line hook (4-8 words, plain text) to display on top of the video (e.g. 'Bro really thought he was slick', 'Intrusive thoughts took the wheel', 'Hired a plumber got Johnny Sins').\n\n"
+            "You MUST respond ONLY with valid JSON following this exact schema:\n"
             "{\n"
+            '  "hook_critique": "<step-by-step reasoning on first 3 seconds>",\n'
+            '  "energy_critique": "<critique of vocal adrenaline and streamer emotion>",\n'
+            '  "payoff_critique": "<critique of comedic or action climax>",\n'
             '  "hook_score": <int 0-100>,\n'
             '  "hype_or_humor": <int 0-100>,\n'
             '  "payoff": <int 0-100>,\n'
-            '  "why_viral": "<1 sentence explanation>",\n'
-            '  "viral_title": "<catchy title with emoji>"\n'
+            '  "why_viral": "<1 concise summary sentence>",\n'
+            '  "top_hook": "<sarcastic 1-liner for top of video, 4-8 words, plain text without emojis>",\n'
+            '  "viral_title": "<witty sarcastic title>",\n'
+            '  "witty_description": "<1-2 sarcastic sentences for Instagram Reels/Shorts caption + 4 hashtags>"\n'
             "}"
         )
 
-        user_content = f"Streamer: {streamer_name}\nTranscript:\n\"{transcript_text}\""
-
         messages = [
             {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_content}
+            # Few-shot Exemplar 1 (Negative - Low Virality Mundane Chatter)
+            {
+                "role": "user",
+                "content": 'Streamer: CarryMinati\nTranscript:\n"Let\'s open the map. Where do we have to go now? Okay, 2 kilometers straight. Let me check the car engine sound."'
+            },
+            {
+                "role": "assistant",
+                "content": json.dumps({
+                    "hook_critique": "Streamer starts with boring navigational check; no curiosity gap or urgency in opening seconds.",
+                    "energy_critique": "Monotone, relaxed low vocal energy, routine driving setup.",
+                    "payoff_critique": "No twist, crash, or funny incident occurs.",
+                    "hook_score": 18,
+                    "hype_or_humor": 15,
+                    "payoff": 20,
+                    "why_viral": "Mundane navigation and routine driving with zero comedic or action hook.",
+                    "viral_title": "Carry Checks The Map"
+                })
+            },
+            # Few-shot Exemplar 2 (Positive - High Virality Hindi Screaming/Fail)
+            {
+                "role": "user",
+                "content": 'Streamer: CarryisLive\nTranscript:\n"ओ तेरी! भाई ये क्या हो गया?! टैंक हवा में उड़ गया और सीधा मेरे सिर पे गिरा! अरे भागो 5 स्टार पुलिस आ गई भाई!"'
+            },
+            {
+                "role": "assistant",
+                "content": json.dumps({
+                    "hook_critique": "Immediate shock opening in first 2 words ('ओ तेरी!') with maximum vocal urgency.",
+                    "energy_critique": "Peak screaming adrenaline, hysterical laughter, intense emotional panic.",
+                    "payoff_critique": "Absurd physics fail followed by escalating threat level (5-star police arrive).",
+                    "hook_score": 94,
+                    "hype_or_humor": 96,
+                    "payoff": 90,
+                    "why_viral": "Explosive vocal hook with tank explosion fail and 5-star police panic.",
+                    "viral_title": "TANK CRUSHED MY HEAD?! 5 Star Police Escape 😱💥"
+                })
+            },
+            # Few-shot Exemplar 3 (Negative - Ambiguous/Mild Exploration)
+            {
+                "role": "user",
+                "content": 'Streamer: Xyaa\nTranscript:\n"What is behind the store now? Let\'s see. Okay one minute let me check this corner. Is there anything here? No nothing."'
+            },
+            {
+                "role": "assistant",
+                "content": json.dumps({
+                    "hook_critique": "Mild rhetorical question with no immediate tension or visual consequence.",
+                    "energy_critique": "Slow conversational pace, pauses with 'one minute', zero adrenaline.",
+                    "payoff_critique": "Anti-climactic ending ('No nothing') with no punchline.",
+                    "hook_score": 32,
+                    "hype_or_humor": 25,
+                    "payoff": 20,
+                    "why_viral": "Slow exploration with anti-climactic resolution and no viral tension.",
+                    "viral_title": "Exploring Behind The Store"
+                })
+            },
+            # Few-shot Exemplar 4 (Positive - Chat Meme & Inside Joke Payoff)
+            {
+                "role": "user",
+                "content": (
+                    'Streamer: KaiCenat\n'
+                    'Transcript:\n"Yo look at this NPC in the barbershop! Why does he have that exact haircut?!"\n\n'
+                    'Audience Live Chat (±15s window):\n'
+                    '- BRO GOT THE EDGAR CUT LMAOO\n'
+                    '- CUH DETECTED 💀💀\n'
+                    '- NAHHH NOT THE EDGAR CUT IN GTA 6\n'
+                    '- Chat is dying rn'
+                )
+            },
+            {
+                "role": "assistant",
+                "content": json.dumps({
+                    "hook_critique": "High vocal urgency and visual focus on ridiculous NPC appearance.",
+                    "energy_critique": "Excited laughter and rapid cadence.",
+                    "payoff_critique": "Chat amplifies the joke exponentially with the viral 'Edgar Cut' meme.",
+                    "hook_score": 82,
+                    "hype_or_humor": 89,
+                    "payoff": 85,
+                    "why_viral": "Streamer spots hilarious NPC and chat explodes with the viral Edgar cut meme.",
+                    "viral_title": "HE FOUND AN EDGAR CUT NPC IN GTA 6?! 💀💈"
+                })
+            },
+            # Actual Input
+            {
+                "role": "user",
+                "content": (
+                    f'Streamer: {streamer_name}\nTranscript:\n"{transcript_text}"'
+                    + (
+                        f'\n\nAudience Live Chat (±15s window):\n' + "\n".join(f"- {c}" for c in chat_context[:15])
+                        + "\n(Incorporate prominent audience memes, inside jokes, or creator roasts into why_viral and viral_title!)"
+                        if chat_context else ""
+                    )
+                )
+            }
         ]
 
         prompt = self._tokenizer.apply_chat_template(messages, tokenize=False, add_generation_prompt=True)
@@ -57,9 +163,11 @@ class ViralityScorer:
             self._model,
             self._tokenizer,
             prompt=prompt,
-            max_tokens=220,
+            max_tokens=350,
             verbose=False
         )
+        # Debug print
+        # print("DEBUG SLM RESPONSE:", response_text)
 
         # Parse JSON from response
         parsed = {}
@@ -79,14 +187,25 @@ class ViralityScorer:
         composite_score = int(0.4 * hook + 0.4 * hype + 0.2 * payoff)
         is_viral = (hook >= 60 and hype >= 65 and composite_score >= 65)
 
+        raw_top_hook = parsed.get("top_hook") or parsed.get("viral_title") or f"When {streamer_name} goes crazy"
+        # Strip emoji codepoints for TrueType font safety
+        clean_top_hook = re.sub(r'[\U00010000-\U0010ffff]', '', raw_top_hook).strip()
+        if not clean_top_hook:
+            clean_top_hook = f"BRO REALLY THOUGHT HE WAS SLICK"
+
         return {
             "hook_score": hook,
             "hype_or_humor": hype,
             "payoff": payoff,
             "virality_score": composite_score,
             "should_clip": is_viral,
+            "hook_critique": parsed.get("hook_critique", "N/A"),
+            "energy_critique": parsed.get("energy_critique", "N/A"),
+            "payoff_critique": parsed.get("payoff_critique", "N/A"),
             "why_viral": parsed.get("why_viral", "Evaluated by SLM"),
-            "viral_title": parsed.get("viral_title", f"{streamer_name} Highlight")
+            "top_hook": clean_top_hook,
+            "viral_title": parsed.get("viral_title", f"{streamer_name} Highlight"),
+            "witty_description": parsed.get("witty_description", f"When @{streamer_name} loses control in GTA 6. #GTA6 #Gaming #Reels #Funny")
         }
 
 if __name__ == "__main__":
