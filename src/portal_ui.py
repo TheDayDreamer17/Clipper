@@ -69,10 +69,17 @@ def get_ravi_candidate_clips() -> List[Dict[str, Any]]:
                 hashtags = f"#GTA6 #RavoOP #GamingClips #GTA6Shorts #GamingFails #ViceCity #GTA6Live"
                 full_copy_text = f"{clean_title}\n\n{description}\n\n{hashtags}"
 
+                wide_file = CANDIDATE_DIR / f"{cid}_wide.mp4"
+                short_file = CANDIDATE_DIR / f"{cid}_short.mp4"
+                v_wide = f"/video/training_candidates/{cid}_wide.mp4" if wide_file.exists() else vpath
+                v_short = f"/video/training_candidates/{cid}_short.mp4" if short_file.exists() else vpath
+
                 clips.append({
                     "clip_id": cid,
-                    "video_path": vpath,
-                    "download_url": vpath,
+                    "video_path": v_wide,
+                    "video_path_wide": v_wide,
+                    "video_path_short": v_short,
+                    "download_url": v_wide,
                     "target_search": search_q,
                     "category": cat,
                     "language": lang,
@@ -432,11 +439,33 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
     .video-container {
       position: relative;
       background: #000;
-      aspect-ratio: 9/16;
-      max-height: 440px;
+      aspect-ratio: 16/9;
+      max-height: 320px;
       display: flex;
       justify-content: center;
       align-items: center;
+      transition: all 0.25s ease;
+      overflow: hidden;
+    }
+    .video-container.vertical-mode {
+      aspect-ratio: 9/16;
+      max-height: 480px;
+    }
+    .fmt-pill {
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--card-border);
+      background: rgba(255,255,255,0.05);
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .fmt-pill.active {
+      background: var(--cyan);
+      color: #000;
+      border-color: var(--cyan);
     }
     video {
       width: 100%;
@@ -705,15 +734,18 @@ function renderClips(clips) {
     const card = document.createElement('div');
     card.className = 'card';
     card.innerHTML = `
-      <div class="video-container">
-        <video controls preload="metadata" playsinline>
-          <source src="${clip.video_path}" type="video/mp4">
+      <div class="video-container" id="vc_${clip.clip_id}">
+        <video id="vid_${clip.clip_id}" controls preload="metadata" playsinline>
+          <source src="${clip.video_path_wide || clip.video_path}" type="video/mp4">
         </video>
       </div>
       <div class="card-body">
         <div style="display: flex; justify-content: space-between; align-items: center;">
           <span class="chip chip-gold">${clip.archetype_name}</span>
-          <span style="font-size: 11px; font-family: 'JetBrains Mono'; color: var(--green);">⚡ ${clip.virality_score}% Viral</span>
+          <div style="display: flex; gap: 6px;">
+            <button class="fmt-pill active" id="btn_wide_${clip.clip_id}" onclick="setClipFormat('${clip.clip_id}', 'wide')">🖥️ 16:9 Wide</button>
+            <button class="fmt-pill" id="btn_short_${clip.clip_id}" onclick="setClipFormat('${clip.clip_id}', 'short')">📱 9:16 Short</button>
+          </div>
         </div>
         <div class="clip-title">${clip.copy_title}</div>
         
@@ -723,14 +755,17 @@ function renderClips(clips) {
           <div class="meta-tags">${clip.copy_hashtags}</div>
         </div>
 
-        <div style="display: flex; gap: 10px; margin-top: 4px;">
-          <a href="${clip.video_path}" download="${clip.clip_id}.mp4" class="btn btn-download" style="flex: 1; justify-content: center;">
-            ⬇️ Download MP4
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px;">
+          <a href="${clip.video_path_wide || clip.video_path}" download="${clip.clip_id}_wide_1080p.mp4" class="btn btn-download" style="justify-content: center; font-size: 12px; padding: 10px 6px;">
+            ⬇️ 16:9 Wide (1080p Raw)
           </a>
-          <button class="btn btn-cyan" onclick="copyPostingData('${clip.clip_id}')" style="flex: 1; justify-content: center;">
-            📋 Copy Tags & Title
-          </button>
+          <a href="${clip.video_path_short || clip.video_path}" download="${clip.clip_id}_short.mp4" class="btn btn-cyan" style="justify-content: center; font-size: 12px; padding: 10px 6px;">
+            📱 9:16 Short (Vertical)
+          </a>
         </div>
+        <button class="btn" onclick="copyPostingData('${clip.clip_id}')" style="justify-content: center; font-size: 12px; margin-top: 2px;">
+          📋 Copy Tags & Title
+        </button>
 
         <div class="revision-box">
           <label style="font-size: 11px; color: var(--text-muted);">Request Changes / Revision Notes:</label>
@@ -741,6 +776,28 @@ function renderClips(clips) {
     `;
     container.appendChild(card);
   });
+}
+
+function setClipFormat(clipId, fmt) {
+  const clip = allClips.find(c => c.clip_id === clipId);
+  if (!clip) return;
+  const vid = document.getElementById(`vid_${clipId}`);
+  const vc = document.getElementById(`vc_${clipId}`);
+  const btnWide = document.getElementById(`btn_wide_${clipId}`);
+  const btnShort = document.getElementById(`btn_short_${clipId}`);
+
+  if (fmt === 'short') {
+    vc.classList.add('vertical-mode');
+    vid.src = clip.video_path_short || clip.video_path;
+    btnShort.classList.add('active');
+    btnWide.classList.remove('active');
+  } else {
+    vc.classList.remove('vertical-mode');
+    vid.src = clip.video_path_wide || clip.video_path;
+    btnWide.classList.add('active');
+    btnShort.classList.remove('active');
+  }
+  vid.load();
 }
 
 function copyPostingData(clipId) {
