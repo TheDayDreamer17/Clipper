@@ -5,7 +5,7 @@ This rule file ensures that any agent session operating within this repository i
 For the complete project briefing and live memory map, refer to [AGENTS.md](../../AGENTS.md).
 
 ### Quick Reference:
-- **Web UI & Control Center**: [http://localhost:8765](http://localhost:8765) (`src/web_ui.py`)
+- **Web UI & Control Center**: [http://localhost:3000](http://localhost:3000) (`src/web_ui.py`)
 - **Database**: `data/telemetry.db` (SQLite WAL mode)
 - **100 Training Cuts**: `output/training_candidates/clip_001.mp4` through `clip_100.mp4`
 - **Dual Catalogs**: `data/properties_english.json` and `data/properties_hindi.json`

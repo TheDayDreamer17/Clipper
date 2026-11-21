@@ -17,9 +17,8 @@
 
 ## 🌐 2. Live Services, Daemons & Endpoints
 - **Web UI & Control Center**:
-  - Daemon command: `PYTHONPATH=. .venv/bin/python src/web_ui.py`
-  - Local URL: **[http://localhost:8765](http://localhost:8765)**
-  - Local Network / Mobile: **`http://100.92.253.90:8765`**
+  - Local URL: **[http://localhost:3000](http://localhost:3000)** (or fallback 8765)
+  - Local Network / Mobile: **`http://100.92.253.90:3000`**
   - Core API Routes:
     - `GET /`: Full Mission Control Desktop (Marquee, WAL terminal log feed, audit inspector)
     - `GET /api/training_clips`: Returns the 100 candidate cuts with rating status
