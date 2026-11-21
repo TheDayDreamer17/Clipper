@@ -94,6 +94,9 @@ Architecture for dedicated single-player end-to-end playthrough analysis, multi-
 - [ ] **Creator Review Portal UI** (`/portal/ravi` in `src/web_ui.py`):
   - [ ] Dedicated route with lightweight PIN/token authentication.
   - [ ] Interactive video player with timestamped feedback input (*"make this shorter"*, *"trim 3s from start"*, *"swap to phonk BGM"*).
+  - [ ] **Curator Rationale & Feedback Reason Submission**:
+    - Displays why the curator nominated this clip (*"Nominated because: Unscripted armed clerk counter-ambush during robbery [Confidence: 94%]"*).
+    - Structured "Reasons to Choose / Reject" feedback form (tag pills: *"Too routine"*, *"NPC dialogue hilarious"*, *"Unexpected twist was gold"*, *"Needs louder punchline"*) + freeform critique that directly recalibrates the Curator Profile.
   - [ ] Natural Language Clip Retrieval Bar: search bar querying the stream journal (*"get me the clip where I failed the bank heist 3 times"*, *"find my top speed drift through Vice Beach"*).
   - [ ] Bidirectional Telegram Bot Sync: Approve/revision buttons sync state between Telegram and `/portal/ravi`.
 
@@ -123,4 +126,12 @@ Architecture for dedicated single-player end-to-end playthrough analysis, multi-
     - *"Aura Entry vs. Instant Regret"*: Slow-mo cinematic letterboxed walk-in sharply cut to ragdoll death with comedic timing.
   - [ ] **Long-Form Episodic Walkthroughs (16:9 4K/1080p)**: Mission-by-mission complete story walkthroughs (`MISSION_START` -> `MISSION_PASSED`) with cutscenes and story dialogue intact and dead travel fast-forwarded.
   - [ ] **Extended Viral Activities (>60s)**: Any high-energy activity lasting beyond the 45s short threshold (e.g. 5-star military survival marathon, elaborate boat chases) packaged into 2–5 min dedicated showcase cuts if `viral_score >= 80`.
+
+### E. 🎭 Emergent Gameplay Curator Profile (`data/curator_profiles/ravi_curator_profile.json`)
+- [ ] **Unusual & Out-of-the-Ordinary Archetype Detectors**:
+  - [ ] **"Accidental Chaos & Instant Karma"**: Routine crash leading to unexpected chain reaction (secondary explosions, hit NPC landing on moving truck, instant karma ragdoll).
+  - [ ] **"Robbery & Rent Collection Gone Wrong"**: Intended shakedown meeting unexpected resistance (clerk pulling a shotgun, undercover cop behind door, empty register).
+  - [ ] **"Bizarre NPC Anomalies"**: Bizarre open-world pedestrian interactions (wildlife bursting into urban shops, NPCs stealing streamer's getaway car, hilarious bystander commentary).
+- [ ] **Continuous Closed-Loop Calibration Engine**:
+  - [ ] Updates category selection weights and appends learned heuristic rules to the curator profile whenever Ravi submits his reasons for choosing or rejecting clips in `/portal/ravi`.
 

@@ -1,0 +1,88 @@
+{
+  "creator_id": "ravi",
+  "channel_name": "Ravi Live / Outlaw Clips",
+  "curator_version": "1.0.0",
+  "last_calibrated_at": 1763730700.0,
+  "curation_directives": {
+    "focus": "High-emergence unexpected open-world moments, hilarious NPC anomalies, and comedic failures over routine gameplay.",
+    "min_viral_confidence": 75.0,
+    "prioritize_unexpected_twists": true
+  },
+  "content_archetypes": {
+    "UNEXPECTED_COLLISION_CHAOS": {
+      "name": "Accidental Chaos & Instant Karma",
+      "description": "Routine crash turns into an absurd or hilarious chain reaction.",
+      "triggers": [
+        "Car collision triggers secondary explosion (propane, gas pump, tanker)",
+        "Hit NPC flies through air into an impossible spot (rooftop, pool, moving truck)",
+        "Rear-ended driver gets out holding a rocket launcher or baseball bat",
+        "Streamer mocks someone and immediately experiences catastrophic ragdoll karma"
+      ],
+      "selection_weight": 1.45,
+      "preferred_sfx": "heavy_driver_phonk_or_crash_boom",
+      "learned_user_preferences": [
+        "Only pick car crashes if there is an unexpected escalation or extreme visual ragdoll.",
+        "Routine fender benders without high speed or drama should be discarded."
+      ]
+    },
+    "ROBBERY_AND_SHAKEDOWN_GONE_WRONG": {
+      "name": "Robbery & Rent Collection Gone Wrong",
+      "description": "Attempting to rob a store, collect money, or shakedown an NPC, but an unexpected twist ruins the plan.",
+      "triggers": [
+        "Store clerk secretly pulls combat shotgun or machete from under the counter",
+        "Off-duty police officer is standing in the aisle drinking coffee when hold-up starts",
+        "Cash register is completely empty or clerk faints on alarm button",
+        "Streamer flees store only to find their getaway car was towed or stolen by an NPC"
+      ],
+      "selection_weight": 1.50,
+      "preferred_sfx": "comedic_fail_record_scratch",
+      "learned_user_preferences": [
+        "Prioritize clips where Ravi's facecam/voice goes from ultra-confident to pure panic."
+      ]
+    },
+    "ABSURD_NPC_INTERACTIONS": {
+      "name": "Bizarre & Hilarious NPC Anomalies",
+      "description": "Unscripted open-world NPC interactions that produce peak comedic or unhinged content.",
+      "triggers": [
+        "Two random NPCs get into a brutal fistfight in the background while player is talking",
+        "Pedestrian delivers outrageous Hindi/English voice line right next to player mic",
+        "Florida wildlife (alligator, swamp panther) bursts into an urban store or car dealership",
+        "Pedestrian casually steals player car while player is buying armor"
+      ],
+      "selection_weight": 1.40,
+      "preferred_sfx": "anime_wow_or_bruh_sound",
+      "learned_user_preferences": [
+        "Prioritize clear voice lines from NPCs over quiet background movement."
+      ]
+    },
+    "AURA_ENTRY_INSTANT_REGRET": {
+      "name": "Aura Walk-In vs. Instant Regret",
+      "description": "Streamer tries to enter a combat zone with sigma / Bollywood hero aura, ending in instantaneous disaster.",
+      "triggers": [
+        "Slow confident walk through entrance doors interrupted by sniper headshot or shotgun blast",
+        "Epic vehicle jump into enemy camp landing upside down inside a dumpster",
+        "Challenging an enemy boss with confident trash talk and immediately getting one-tapped"
+      ],
+      "selection_weight": 1.35,
+      "preferred_sfx": "salman_khan_aura_cut_to_sad_trombone",
+      "learned_user_preferences": [
+        "Pacing must be sharp: build up aura for 5-8s, instant comedic cutoff within 1s of failure."
+      ]
+    },
+    "NOOB_MULTI_FAIL_TRIUMPH": {
+      "name": "The Noob Failure Arc",
+      "description": "Failing the same checkpoint 2-4 times with escalating frustration, finally beating it with ecstatic celebration.",
+      "triggers": [
+        "Same mission checkpoint reloaded >= 2 times within 10 minutes",
+        "Escalating voice frustration and comedic sighs",
+        "Final triumphant celebration scream"
+      ],
+      "selection_weight": 1.30,
+      "preferred_sfx": "robert_weide_on_fails_orchestral_win_on_pass",
+      "learned_user_preferences": [
+        "Keep each fail cut under 4 seconds in the montage to maintain rapid comedic tempo."
+      ]
+    }
+  },
+  "feedback_calibration_history": []
+}

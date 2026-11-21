@@ -81,7 +81,9 @@
   - Classifies mission states (`MISSION_START`, `MISSION_FAILED`, `MISSION_PASSED`, `FREE_ROAM`), vehicle telemetry (collisions, speed), and audio spikes.
 - **Narrative Meme Director (`src/narrative_curator.py`)**:
   - Curated SFX asset library (`assets/sfx/`): Bollywood hero aura, Phonk driving, comedic fail sounds (fart, trombone, Weide).
-  - Viral Patterns: "Noob Multi-Fail -> Win Arc", "Heavy Driver Meme", "Aura Entry vs. Instant Regret".
+  - Emergent Gameplay Curator Profile (`data/curator_profiles/ravi_curator_profile.json`):
+    - Archetypes: "Accidental Chaos & Instant Karma", "Robbery / Rent Collection Gone Wrong", "Bizarre NPC Anomalies", "Aura Entry vs. Instant Regret", "Noob Multi-Fail -> Win Arc".
+    - Closed-loop feedback calibration: Ravi submits reasons for choosing/rejecting clips in `/portal/ravi`, directly refining archetype weights and learned rules.
   - Dual-Format Export:
     - 9:16 Vertical Viral Shorts (15–45s).
     - 16:9 Long-Form Episodic Walkthroughs (mission-by-mission) & extended activities (>60s) passing the `viral_score >= 80` gate.
