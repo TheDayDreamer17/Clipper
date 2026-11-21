@@ -8,11 +8,15 @@
 ## 1. 🛡️ Instagram Account Restoration & Compliance (`@outlawclipshq`)
 
 - [x] **Full Profile Audit**: Audited all Reels on `@outlawclipshq` and identified root causes (Duplicate files, Burst Velocity, Sensitive title keywords).
-- [x] **Remove Flagged Duplicate Reel**: Deleted Reel 1 ([`Df_W18CM6sY`](https://www.instagram.com/reel/Df_W18CM6sY/)) via persistent Agent Brave Browser to eliminate the "Unoriginal Content" duplicate penalty.
-- [x] **Upload Verified Reel with Collaborator Invite**: Successfully uploaded fresh candidate [Kai Cenat Edgar Cut Reel](https://www.instagram.com/reel/Df_-OHUMv0Y/) (`Df_-OHUMv0Y`) with:
-  - Meta Originality Collaborator Tag: `@kaicenat`
-  - Sanitized Caption: 0 sensitive words, 11 hashtags, verified `@outlawclipshq` handle.
-  - Video Specs: 1080x1920 (9:16), 30s duration, clean audio.
+- [x] **Remove Flagged Duplicate & Un-collaborated Reels**: Deleted flagged Reels ([`Df_W18CM6sY`](https://www.instagram.com/reel/Df_W18CM6sY/), [`Df-fnjAMC2k`](https://www.instagram.com/reel/Df-fnjAMC2k/), [`DgADFcXMb2H`](https://www.instagram.com/reel/DgADFcXMb2H/), [`DgAF9dwMI6D`](https://www.instagram.com/reel/DgAF9dwMI6D/), [`Df-QHOrszIG`](https://www.instagram.com/reel/Df-QHOrszIG/)) via persistent Agent Brave Browser to clean the grid of un-attributed media.
+- [x] **Upload Verified Reels with Collaborator Invites & Fixed Account Branding**:
+  - [x] [CaseOh GTA 6 Police Reel](https://www.instagram.com/reel/DgAHnPBsRp-/) (`DgAHnPBsRp-`): Co-Author `@caseoh_games` (`55153794944`), `FOLLOW @OUTLAWCLIPSHQ` pill.
+  - [x] [IShowSpeed GTA 6 Drip Reel](https://www.instagram.com/reel/DgAN8BhMxnS/) (`DgAN8BhMxnS`): Co-Author `@ishowspeed` (`1541770582`), `FOLLOW @OUTLAWCLIPSHQ` pill, mapped handle `@ishowspeed`.
+- [x] **Overlay Generator & Asset Pipeline Upgrade**:
+  - Hardcoded middle divider updated to `FOLLOW @OUTLAWCLIPSHQ` in `src/slicer.py`.
+  - Dynamic streamer attribution mapping via `config/creator_handles.json`.
+  - Purged all 60 stale pre-rendered overlay assets from `data/brand_assets/`.
+  - Fixed residual `@OutlawClips` text in `src/web_ui.py` to `@outlawclipshq`.
 - [x] **Persistent Agent Browser Authentication**: Verified Brave profile (`~/.clipper_browser_profile`) logged in to Instagram & YouTube Studio. Live session synced to `config/instagram_credentials.json`.
 - [ ] **Submit Appeal Request**: Open Instagram on mobile $\to$ `Settings and privacy` $\to$ `Account Status` $\to$ `Recommendation Guidelines` $\to$ tap **Request a Review**. *(User Action)*
 - [ ] **Monitor Appeal Resolution**: Track restoration of Explore and Recommendation distribution (typically 24–48 hours).
@@ -86,31 +90,35 @@
 
 Architecture for dedicated single-player end-to-end playthrough analysis, multi-format content generation (Shorts + Long-form), dedicated creator portal, and comedic meme curation.
 
-### A. 🖥️ Dedicated Creator Portal & Feedback Loop
-- [ ] **Creator Review Portal UI** (`/portal/ravi`):
-  - [ ] Dedicated web interface for Ravi to review generated Shorts, Reels, and Long-form cuts.
-  - [ ] Integrated revision request system: timecoded commentary (*"make this shorter"*, *"trim the first 3 seconds"*, *"change banner hook"*).
-  - [ ] Interactive Stream Natural Language Query: prompt bar allowing the creator to request specific moments (*"Get me the clip where I failed the heist 3 times"*, *"Find my fastest sports car drift"*).
-- [ ] **Direct Multi-Channel Dispatch**:
-  - [ ] Telegram Bot delivery webhook with inline approve / request-edit buttons.
-  - [ ] Automatic syncing between Telegram actions and the Web Portal review queue.
+### A. 🖥️ Dedicated Creator Portal & Feedback Loop (`/portal/ravi`)
+- [ ] **Creator Review Portal UI** (`/portal/ravi` in `src/web_ui.py`):
+  - [ ] Dedicated route with lightweight PIN/token authentication.
+  - [ ] Interactive video player with timestamped feedback input (*"make this shorter"*, *"trim 3s from start"*, *"swap to phonk BGM"*).
+  - [ ] Natural Language Clip Retrieval Bar: search bar querying the stream journal (*"get me the clip where I failed the bank heist 3 times"*, *"find my top speed drift through Vice Beach"*).
+  - [ ] Bidirectional Telegram Bot Sync: Approve/revision buttons sync state between Telegram and `/portal/ravi`.
 
-### B. 🧠 Dense Gameplay Logging Engine (60-Frame Semantic Journal)
+### B. 🧠 Dense Gameplay Logging Engine (Fixed 60-Frame Cadence)
 - [ ] **Stream Perception Worker** (`src/creator_journal_engine.py`):
-  - [ ] Continuous windowed frame analysis (every 60 frames / ~2 sec) using Vision SLM + CLIP + OCR HUD parser.
-  - [ ] Structured session markdown journal (`docs/streams/ravi/session_{date}_journal.md`) tracking:
+  - [ ] **Fixed 60-Frame Sampling**: Strictly inspects 1 frame every 60 frames (~2.0s at 30fps) continuously throughout the entire stream.
+  - [ ] Uses local Vision SLM + CLIP + OCR HUD parser to classify game states and actions.
+  - [ ] Generates structured session markdown journal (`docs/streams/ravi/session_{date}_journal.md`) tracking:
     - **Mission State Machine**: `MISSION_START`, `CHECKPOINT`, `MISSION_FAILED`, `MISSION_PASSED`, `FREE_ROAM`.
     - **Telemetry & Physics Events**: Collision spikes, top-speed cruising, weapon crosshair hits, player death ragdoll.
     - **Audio Energy & Emotion**: Screams, laughter, frustration sighs, long silences (dead air).
 
-### C. 🎬 Narrative Director & Meme Curation Agent (`src/narrative_curator.py`)
-- [ ] **Multi-Format Assembly Engine**:
-  - [ ] **Long-Form Walkthroughs (16:9 4K/1080p)**: Auto-stitches complete story arcs (`MISSION_START` -> `MISSION_PASSED`) trimming out tedious dead travel while preserving cutscenes and story dialogue.
-  - [ ] **Short-Form Viral Moments (9:16 Shorts/Reels)**: Auto-cuts punchy 15–45s vertical clips optimized for retention.
-- [ ] **Comedic & Meme Pattern Synthesizer**:
-  - [ ] **"The Noob Arc" (Failure Montage -> Climax)**: Detects repeated `MISSION_FAILED` loops on the same checkpoint. Cuts rapid comedic failure cuts with meme SFX (fart sound, sad trombone, 'directed by robert b weide'), resolving into the final victory.
-  - [ ] **"Heavy Driver" vs. "Traffic God"**:
-    - *Smooth Operator*: High-speed city driving with 0 collisions over 20s -> pair with phonk / cool aura audio.
-    - *Heavy Driver Meme*: Streamer claims driving confidence -> immediate catastrophic collision chain -> meme punchline audio.
-  - [ ] **"Aura Entry vs. Instant Regret"**: Slow-motion cinematic zoom/letterbox of confident combat walk-in (Bollywood / Salman Khan / Sigma walk vibe), abruptly cut to instant ragdoll death with comedic cutoff audio.
-  - [ ] **SEO & Search-Trend Aligned Guides**: Matches gameplay moments against trending Google/YouTube searches (e.g. *"How to escape 5-star police in Vice City"*, *"Hidden weapon location"*).
+### C. 🎵 Curated SFX & Meme Asset Library (`assets/sfx/`)
+- [ ] **Pre-bundled Audio Library**:
+  - [ ] `assets/sfx/bollywood_aura/`: Hero walk-in BGMs (Salman Khan entry style, KGF/Vikram bass drops, Sigma phonk).
+  - [ ] `assets/sfx/comedic_fail/`: Fart sounds, sad trombone, squeaky toy, 'Directed by Robert B. Weide', record scratch.
+  - [ ] `assets/sfx/heavy_driver/`: High-energy driving phonk, tire screeches, catastrophic crash impact boom.
+  - [ ] `assets/sfx/punchline_accents/`: Anime 'wow', dramatic reverb thud, 'bruh' sound effect.
+
+### D. 🎬 Narrative Director & Dual-Format Viral Engine (`src/narrative_curator.py`)
+- [ ] **Dual-Format Output with Viral-Worthy Gate**:
+  - [ ] **Short-Form Viral Moments (9:16 Shorts/Reels)**: 15–45s punchy vertical edits.
+    - *"The Noob Arc"*: Multi-failure loops cut with comedic SFX resolving into final triumph.
+    - *"Heavy Driver Meme"*: Overconfident driving banter cut into instant multi-car pileup.
+    - *"Aura Entry vs. Instant Regret"*: Slow-mo cinematic letterboxed walk-in sharply cut to ragdoll death with comedic timing.
+  - [ ] **Long-Form Episodic Walkthroughs (16:9 4K/1080p)**: Mission-by-mission complete story walkthroughs (`MISSION_START` -> `MISSION_PASSED`) with cutscenes and story dialogue intact and dead travel fast-forwarded.
+  - [ ] **Extended Viral Activities (>60s)**: Any high-energy activity lasting beyond the 45s short threshold (e.g. 5-star military survival marathon, elaborate boat chases) packaged into 2–5 min dedicated showcase cuts if `viral_score >= 80`.
+

@@ -70,7 +70,24 @@
 
 ---
 
-## 🛠️ 5. Key Source Code Map
+## 👤 5. Single-Creator Dedicated Studio & Narrative Brain (Ravi Setup)
+- **Objective**: Full end-to-end playthrough clipping and episodic story packaging for single-creator streams.
+- **Dedicated Portal (`/portal/ravi`)**:
+  - Web UI route with token/PIN auth, revision notes, and natural-language moment retrieval (*"get the 3-fail heist clip"*).
+  - Bidirectional Telegram Bot sync for approvals and edit requests.
+- **Fixed 60-Frame Journal Engine (`src/creator_journal_engine.py`)**:
+  - Samples 1 frame every 60 frames (~2.0s) into structured markdown journals (`docs/streams/ravi/session_{date}_journal.md`).
+  - Classifies mission states (`MISSION_START`, `MISSION_FAILED`, `MISSION_PASSED`, `FREE_ROAM`), vehicle telemetry (collisions, speed), and audio spikes.
+- **Narrative Meme Director (`src/narrative_curator.py`)**:
+  - Curated SFX asset library (`assets/sfx/`): Bollywood hero aura, Phonk driving, comedic fail sounds (fart, trombone, Weide).
+  - Viral Patterns: "Noob Multi-Fail -> Win Arc", "Heavy Driver Meme", "Aura Entry vs. Instant Regret".
+  - Dual-Format Export:
+    - 9:16 Vertical Viral Shorts (15–45s).
+    - 16:9 Long-Form Episodic Walkthroughs (mission-by-mission) & extended activities (>60s) passing the `viral_score >= 80` gate.
+
+---
+
+## 🛠️ 6. Key Source Code Map
 - `src/web_ui.py`: Multi-threaded DualStack HTTP server serving Mission Control, video streaming, and REST APIs.
 - `src/live_stream_pipeline.py`: Ingests and slices verified live streams with PIL banner overlays.
 - `src/self_learner.py`: RLHF active learning engine updating weights and skill files.
