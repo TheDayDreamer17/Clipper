@@ -18,7 +18,7 @@
         "Rear-ended driver gets out holding a rocket launcher or baseball bat",
         "Streamer mocks someone and immediately experiences catastrophic ragdoll karma"
       ],
-      "selection_weight": 1.45,
+      "selection_weight": 1.5,
       "preferred_sfx": "heavy_driver_phonk_or_crash_boom",
       "learned_user_preferences": [
         "Only pick car crashes if there is an unexpected escalation or extreme visual ragdoll.",
@@ -34,7 +34,7 @@
         "Cash register is completely empty or clerk faints on alarm button",
         "Streamer flees store only to find their getaway car was towed or stolen by an NPC"
       ],
-      "selection_weight": 1.50,
+      "selection_weight": 1.5,
       "preferred_sfx": "comedic_fail_record_scratch",
       "learned_user_preferences": [
         "Prioritize clips where Ravi's facecam/voice goes from ultra-confident to pure panic."
@@ -49,7 +49,7 @@
         "Florida wildlife (alligator, swamp panther) bursts into an urban store or car dealership",
         "Pedestrian casually steals player car while player is buying armor"
       ],
-      "selection_weight": 1.40,
+      "selection_weight": 1.4,
       "preferred_sfx": "anime_wow_or_bruh_sound",
       "learned_user_preferences": [
         "Prioritize clear voice lines from NPCs over quiet background movement."
@@ -77,12 +77,25 @@
         "Escalating voice frustration and comedic sighs",
         "Final triumphant celebration scream"
       ],
-      "selection_weight": 1.30,
+      "selection_weight": 1.3,
       "preferred_sfx": "robert_weide_on_fails_orchestral_win_on_pass",
       "learned_user_preferences": [
         "Keep each fail cut under 4 seconds in the montage to maintain rapid comedic tempo."
       ]
     }
   },
-  "feedback_calibration_history": []
+  "feedback_calibration_history": [
+    {
+      "timestamp": 1795274020.685908,
+      "clip_id": "fresh_xyaa_chase_02",
+      "verdict": "VIRAL_GOLD",
+      "reason_tags": [
+        "Aura Fail",
+        "Audio Spike"
+      ],
+      "timecode_notes": "Cut 0.5s earlier",
+      "critique": "Elite physics collision at junction",
+      "stars": 5
+    }
+  ]
 }
