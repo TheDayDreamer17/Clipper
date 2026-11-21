@@ -75,8 +75,9 @@
 - **Dedicated Portal (`/portal/ravi`)**:
   - Web UI route with token/PIN auth, revision notes, and natural-language moment retrieval (*"get the 3-fail heist clip"*).
   - Bidirectional Telegram Bot sync for approvals and edit requests.
-- **Fixed 60-Frame Journal Engine (`src/creator_journal_engine.py`)**:
-  - Samples 1 frame every 60 frames (~2.0s) into structured markdown journals (`docs/streams/ravi/session_{date}_journal.md`).
+- **Continuous 1 FPS Journal Engine (`src/creator_journal_engine.py`)**:
+  - Streams live or archive streams directly via FFmpeg pipes at 1 frame per second (1 FPS), zero multi-GB video footprint on disk.
+  - Generates second-by-second chronological context journals (`docs/streams/ravi/session_{date}_journal.md`).
   - Classifies mission states (`MISSION_START`, `MISSION_FAILED`, `MISSION_PASSED`, `FREE_ROAM`), vehicle telemetry (collisions, speed), and audio spikes.
 - **Narrative Meme Director (`src/narrative_curator.py`)**:
   - Curated SFX asset library (`assets/sfx/`): Bollywood hero aura, Phonk driving, comedic fail sounds (fart, trombone, Weide).

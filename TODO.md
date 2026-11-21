@@ -97,14 +97,16 @@ Architecture for dedicated single-player end-to-end playthrough analysis, multi-
   - [ ] Natural Language Clip Retrieval Bar: search bar querying the stream journal (*"get me the clip where I failed the bank heist 3 times"*, *"find my top speed drift through Vice Beach"*).
   - [ ] Bidirectional Telegram Bot Sync: Approve/revision buttons sync state between Telegram and `/portal/ravi`.
 
-### B. 🧠 Dense Gameplay Logging Engine (Fixed 60-Frame Cadence)
+### B. 🧠 Dense Gameplay Logging Engine (Continuous 1 FPS Streaming Pipeline)
 - [ ] **Stream Perception Worker** (`src/creator_journal_engine.py`):
-  - [ ] **Fixed 60-Frame Sampling**: Strictly inspects 1 frame every 60 frames (~2.0s at 30fps) continuously throughout the entire stream.
-  - [ ] Uses local Vision SLM + CLIP + OCR HUD parser to classify game states and actions.
-  - [ ] Generates structured session markdown journal (`docs/streams/ravi/session_{date}_journal.md`) tracking:
+  - [ ] **Real-Time 1 FPS Direct Stream Pipe**: Inspects 1 frame per second (`fps=1`) directly from live streams (or VOD replays) via FFmpeg pipe without saving large master video dumps.
+  - [ ] Uses local Vision SLM + CLIP + OCR HUD parser to classify in-game states and actions for every single second.
+  - [ ] Emits a persistent chronological context journal (`docs/streams/ravi/session_{date}_journal.md`) recording:
+    - **Second-by-Second Telemetry**: `t=00:01:24`, HUD state, mission banner text, speedometer reading, minimap threat indicators.
     - **Mission State Machine**: `MISSION_START`, `CHECKPOINT`, `MISSION_FAILED`, `MISSION_PASSED`, `FREE_ROAM`.
-    - **Telemetry & Physics Events**: Collision spikes, top-speed cruising, weapon crosshair hits, player death ragdoll.
-    - **Audio Energy & Emotion**: Screams, laughter, frustration sighs, long silences (dead air).
+    - **Physical & Combat Events**: Collision impacts, weapon firing, police wanted star escalations, player death/ragdoll.
+    - **Audio Energy & Emotion**: Spoken exclamations, screams, laughter, frustration sighs, dead air silences.
+  - [ ] **Context Query API**: Serves full second-by-second context to the portal search bar for natural-language retrieval.
 
 ### C. 🎵 Curated SFX & Meme Asset Library (`assets/sfx/`)
 - [ ] **Pre-bundled Audio Library**:
