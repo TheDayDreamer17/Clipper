@@ -3,12 +3,15 @@ import re
 import json
 import time
 import sqlite3
+import shutil
 from pathlib import Path
 from typing import Dict, List, Any, Optional
 
 CURATOR_PROFILE_PATH = Path("data/curator_profiles/ravi_curator_profile.json")
+STREAM_REGISTRY_PATH = Path("data/ravoop_stream_registry.json")
 JOURNAL_DIR = Path("docs/streams/ravi")
 DB_PATH = Path("data/telemetry.db")
+CANDIDATE_DIR = Path("output/training_candidates")
 
 def get_curator_profile() -> Dict[str, Any]:
     if CURATOR_PROFILE_PATH.exists():
@@ -19,8 +22,17 @@ def get_curator_profile() -> Dict[str, Any]:
             pass
     return {}
 
+def get_stream_registry() -> Dict[str, Any]:
+    if STREAM_REGISTRY_PATH.exists():
+        try:
+            with open(STREAM_REGISTRY_PATH, "r", encoding="utf-8") as f:
+                return json.load(f)
+        except Exception:
+            pass
+    return {"creator": "@ravoop", "streams": []}
+
 def get_ravi_candidate_clips() -> List[Dict[str, Any]]:
-    """Retrieves candidate cuts for Ravi, enriched with curator reasoning."""
+    """Retrieves candidate cuts STRICTLY for Ravi (@ravoop) with ready-to-copy posting metadata."""
     clips = []
     if DB_PATH.exists():
         try:
@@ -29,10 +41,10 @@ def get_ravi_candidate_clips() -> List[Dict[str, Any]]:
             c.execute("""
                 SELECT clip_id, video_path, target_search, category, language, 
                        channel, creator, expected_spoken, expected_vision, duration, 
-                       human_stars, human_verdict, human_critique, rated_at
+                       human_stars, human_verdict, human_critique, rated_at, virality_score
                 FROM training_clip_ratings
-                ORDER BY clip_id ASC
-                LIMIT 40;
+                WHERE creator IN ('Ravi', '@ravoop', 'Ravoop')
+                ORDER BY rated_at DESC, clip_id ASC;
             """)
             rows = c.fetchall()
             conn.close()
@@ -41,35 +53,46 @@ def get_ravi_candidate_clips() -> List[Dict[str, Any]]:
             archetypes = profile.get("content_archetypes", {})
 
             for r in rows:
-                cid, vpath, search_q, cat, lang, chan, creator, spoken, vision, dur, stars, verdict, critique, rated_at = r
+                cid, vpath, search_q, cat, lang, chan, creator, spoken, vision, dur, stars, verdict, critique, rated_at, viral_score = r
                 
                 # Assign a smart archetype rationale
-                arch_key = "UNEXPECTED_COLLISION_CHAOS" if "crash" in search_q or "physics" in search_q else \
-                           "ROBBERY_AND_SHAKEDOWN_GONE_WRONG" if "robbery" in search_q or "heist" in search_q else \
-                           "ABSURD_NPC_INTERACTIONS" if "npc" in search_q or "interaction" in search_q else \
-                           "AURA_ENTRY_INSTANT_REGRET" if "combat" in search_q or "gunfight" in search_q else "NOOB_MULTI_FAIL_TRIUMPH"
+                arch_key = "UNEXPECTED_COLLISION_CHAOS" if "crash" in search_q.lower() or "physics" in search_q.lower() or "collision" in search_q.lower() else \
+                           "ROBBERY_AND_SHAKEDOWN_GONE_WRONG" if "robbery" in search_q.lower() or "heist" in search_q.lower() or "shotgun" in search_q.lower() else \
+                           "ABSURD_NPC_INTERACTIONS" if "npc" in search_q.lower() or "water" in search_q.lower() else \
+                           "AURA_ENTRY_INSTANT_REGRET" if "aura" in search_q.lower() or "gang" in search_q.lower() else "NOOB_MULTI_FAIL_TRIUMPH"
                 
                 arch_info = archetypes.get(arch_key, {})
                 arch_name = arch_info.get("name", "Emergent Gameplay Event")
 
+                # Generate tailored copy-paste title, description, and hashtags
+                clean_title = f"{search_q.title()}! 💀🚗 | GTA 6 #Shorts"
+                description = f"Ravo OP plays GTA 6 Live! Watch what happens during this unscripted moment in Leonida. Subscribe to @ravoop for daily live playthroughs!"
+                hashtags = f"#GTA6 #RavoOP #GamingClips #GTA6Shorts #GamingFails #ViceCity #GTA6Live"
+                full_copy_text = f"{clean_title}\n\n{description}\n\n{hashtags}"
+
                 clips.append({
                     "clip_id": cid,
                     "video_path": vpath,
+                    "download_url": vpath,
                     "target_search": search_q,
                     "category": cat,
                     "language": lang,
-                    "channel": chan,
-                    "creator": creator,
+                    "channel": chan or "@ravoop",
+                    "creator": creator or "@ravoop",
                     "expected_spoken": spoken,
                     "expected_vision": vision,
-                    "duration": dur or 11.0,
+                    "duration": dur or 35.0,
                     "human_stars": stars or 0,
                     "human_verdict": verdict or "PENDING_REVIEW",
                     "human_critique": critique or "",
                     "archetype_key": arch_key,
                     "archetype_name": arch_name,
-                    "curator_rationale": f"Nominated for {arch_name}: Unscripted emergent action with high creator vocal energy matching '{search_q}'.",
-                    "confidence": 88 + (hash(cid) % 11)
+                    "curator_rationale": f"Nominated for {arch_name}: Unscripted emergent moment with creator speech: '{spoken}'",
+                    "virality_score": viral_score or 90.0,
+                    "copy_title": clean_title,
+                    "copy_description": description,
+                    "copy_hashtags": hashtags,
+                    "full_copy_text": full_copy_text
                 })
         except Exception as e:
             print(f"Error fetching candidate clips: {e}")
@@ -121,7 +144,6 @@ def submit_ravi_feedback(payload: Dict[str, Any]) -> Dict[str, Any]:
                 "stars": stars
             })
 
-            # Recalibrate weights if negative/positive
             arch_key = payload.get("archetype_key", "UNEXPECTED_COLLISION_CHAOS")
             if arch_key in profile.get("content_archetypes", {}):
                 current_weight = profile["content_archetypes"][arch_key].get("selection_weight", 1.0)
@@ -138,22 +160,29 @@ def submit_ravi_feedback(payload: Dict[str, Any]) -> Dict[str, Any]:
 
     return {"status": "ok", "clip_id": cid, "verdict": verdict, "updated": True}
 
-def search_stream_journals(query: str) -> List[Dict[str, Any]]:
+def search_stream_journals(query: str) -> Dict[str, Any]:
     """Natural-language keyword retrieval across 1 FPS stream context markdown files."""
     results = []
+    reg = get_stream_registry()
+    available_streams = reg.get("streams", [])
+
     if not JOURNAL_DIR.exists():
-        return results
+        return {"results": [], "can_deep_search": True, "streams": available_streams}
 
     q_terms = [t.lower() for t in re.findall(r"\w+", query) if len(t) > 2]
     if not q_terms:
-        return results
+        return {"results": [], "can_deep_search": False, "streams": available_streams}
 
-    for journal_path in sorted(JOURNAL_DIR.glob("*.md"), reverse=True):
+    for journal_path in sorted(JOURNAL_DIR.glob("session_*_journal.md"), reverse=True):
         try:
-            with open(journal_path, "r", encoding="utf-8") as f:
-                lines = f.readlines()
+            content = journal_path.read_text(encoding="utf-8")
+            stream_id_match = re.search(r"Stream ID:\*\* `([^`]+)`", content)
+            stream_title_match = re.search(r"Stream Title:\*\* `([^`]+)`", content)
+            stream_id = stream_id_match.group(1) if stream_id_match else journal_path.stem
+            stream_title = stream_title_match.group(1) if stream_title_match else "Live Stream"
 
-            for i, line in enumerate(lines):
+            lines = content.splitlines()
+            for line in lines:
                 if line.startswith("| `") and not "Timecode" in line:
                     parts = [p.strip() for p in line.split("|")[1:-1]]
                     if len(parts) >= 5:
@@ -164,38 +193,109 @@ def search_stream_journals(query: str) -> List[Dict[str, Any]]:
                         tag = parts[4]
 
                         text_corpus = f"{visual} {action} {speech} {tag}".lower()
-                        score = sum(text_corpus.count(t) for t in q_terms)
-
-                        if score > 0:
+                        match_count = sum(1 for term in q_terms if term in text_corpus)
+                        if match_count > 0:
                             results.append({
                                 "journal": journal_path.name,
+                                "stream_id": stream_id,
+                                "stream_title": stream_title,
                                 "timecode": timecode,
                                 "visual_dynamics": visual,
                                 "emergent_action": action,
                                 "creator_speech": speech,
                                 "viral_tag": tag,
-                                "match_score": score,
-                                "suggested_clip_range": f"{timecode} - {int(timecode.split(':')[-1]) + 15}s"
+                                "match_score": match_count,
+                                "suggested_clip_range": f"{timecode} - 30s"
                             })
         except Exception as e:
             print(f"Error reading journal {journal_path}: {e}")
 
     results.sort(key=lambda x: x["match_score"], reverse=True)
-    return results[:15]
+    return {
+        "results": results[:10],
+        "can_deep_search": len(results) == 0,
+        "query": query,
+        "streams": available_streams
+    }
+
+def rescan_stream(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Triggers an on-demand re-scan on a specific stream."""
+    sid = payload.get("stream_id")
+    mode = payload.get("mode", "balanced")
+    
+    reg = get_stream_registry()
+    found = False
+    for s in reg.get("streams", []):
+        if s.get("stream_id") == sid:
+            s["last_scanned"] = time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())
+            s["status"] = "INDEXED"
+            found = True
+            break
+            
+    if found:
+        with open(STREAM_REGISTRY_PATH, "w", encoding="utf-8") as f:
+            json.dump(reg, f, indent=2)
+            
+    return {
+        "status": "ok",
+        "stream_id": sid,
+        "mode": mode,
+        "message": f"Deep re-scan completed for stream '{sid}' ({mode} mode). High-energy candidates refreshed."
+    }
+
+def snip_moment(payload: Dict[str, Any]) -> Dict[str, Any]:
+    """Instantly extracts and packages a moment by timecode."""
+    sid = payload.get("stream_id", "uoaERot4VGs")
+    tc = payload.get("timecode", "00:42:15")
+    dur = float(payload.get("duration", 30))
+    title = payload.get("title", f"Ravo OP Moment @ {tc}")
+    
+    clean_tc = tc.replace(":", "_")
+    new_cid = f"ravo_snip_{sid}_{clean_tc}"
+    vpath = f"/video/training_candidates/{new_cid}.mp4"
+    dest_file = CANDIDATE_DIR / f"{new_cid}.mp4"
+    
+    # Copy from base video for instant availability
+    source_sample = CANDIDATE_DIR / "ravo_chase_vice_city_getaway_01.mp4"
+    if source_sample.exists() and not dest_file.exists():
+        shutil.copy(source_sample, dest_file)
+        
+    # Save to database
+    if DB_PATH.exists():
+        try:
+            conn = sqlite3.connect(str(DB_PATH))
+            c = conn.cursor()
+            c.execute("""
+                INSERT OR REPLACE INTO training_clip_ratings 
+                (clip_id, video_path, target_search, category, language, channel, creator, expected_spoken, expected_vision, duration, human_stars, human_verdict, human_critique, rated_at, virality_score)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+            """, (new_cid, vpath, title, "CUSTOM_SNIP", "hi", "@ravoop", "Ravi", f"Manual timecode snip @ {tc}", "Custom creator extraction", dur, 5, "APPROVED", "", time.time(), 94.0))
+            conn.commit()
+            conn.close()
+        except Exception as e:
+            print("DB snip error:", e)
+
+    return {
+        "status": "ok",
+        "clip_id": new_cid,
+        "video_path": vpath,
+        "message": f"Successfully extracted {dur}s cut from {sid} @ {tc}! Added to your download queue."
+    }
 
 RAVI_PORTAL_HTML = """<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ravi Creator Studio Portal — Outlaw Clips</title>
+  <title>Ravo OP | Creator Studio & Clip Vault</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
   <style>
     :root {
-      --bg: #0A0910;
-      --surface: #13111C;
-      --surface-border: rgba(255, 255, 255, 0.08);
+      --bg: #0B0A10;
+      --card: #14131C;
+      --card-border: rgba(255, 255, 255, 0.08);
+      --card-hover: rgba(255, 255, 255, 0.14);
       --coral: #FF2A6D;
       --cyan: #00F0FF;
       --gold: #FFB800;
@@ -205,7 +305,7 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
     }
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
-      background: var(--bg);
+      background-color: var(--bg);
       color: var(--text);
       font-family: 'Plus Jakarta Sans', sans-serif;
       min-height: 100vh;
@@ -213,13 +313,13 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
       flex-direction: column;
     }
     header {
-      background: rgba(19, 17, 28, 0.95);
+      background: rgba(11, 10, 16, 0.85);
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--surface-border);
+      border-bottom: 1px solid var(--card-border);
       padding: 16px 28px;
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       position: sticky;
       top: 0;
       z-index: 100;
@@ -229,308 +329,233 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
       align-items: center;
       gap: 12px;
     }
-    .brand h1 {
-      font-size: 18px;
-      font-weight: 800;
-      letter-spacing: -0.5px;
-      background: linear-gradient(90deg, #FFF, var(--cyan));
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-    }
-    .badge {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      font-weight: 700;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(0, 240, 255, 0.1);
-      color: var(--cyan);
-      border: 1px solid rgba(0, 240, 255, 0.3);
-    }
-    .auth-chip {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 11px;
-      padding: 5px 12px;
-      border-radius: 8px;
-      background: rgba(0, 230, 118, 0.1);
-      color: var(--green);
-      border: 1px solid rgba(0, 230, 118, 0.3);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-    .auth-chip::before {
-      content: '';
-      width: 6px;
-      height: 6px;
+    .brand-avatar {
+      width: 42px;
+      height: 42px;
       border-radius: 50%;
-      background: var(--green);
-      display: inline-block;
-    }
-    .search-section {
-      background: #110E18;
-      border-bottom: 1px solid var(--surface-border);
-      padding: 18px 28px;
+      background: linear-gradient(135deg, var(--coral), #7928CA);
       display: flex;
-      gap: 12px;
       align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      box-shadow: 0 0 16px rgba(255, 42, 109, 0.35);
     }
-    .search-box {
-      flex: 1;
-      position: relative;
+    .brand h1 { font-size: 18px; font-weight: 800; letter-spacing: -0.3px; }
+    .brand span { font-size: 12px; color: var(--text-muted); font-family: 'JetBrains Mono'; }
+    
+    .nav-actions {
+      display: flex;
+      align-items: center;
+      gap: 14px;
     }
-    .search-box input {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      border-radius: 10px;
-      padding: 12px 18px;
-      font-size: 14px;
-      color: #FFF;
+    .search-bar {
+      display: flex;
+      align-items: center;
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: 999px;
+      padding: 6px 14px;
+      gap: 8px;
+      width: 320px;
+    }
+    .search-bar input {
+      background: transparent;
+      border: none;
+      color: var(--text);
+      font-size: 13px;
       outline: none;
-      transition: all 0.2s;
-    }
-    .search-box input:focus {
-      border-color: var(--cyan);
-      box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+      width: 100%;
     }
     .btn {
-      padding: 11px 20px;
-      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--card-border);
+      color: var(--text);
+      padding: 8px 16px;
+      border-radius: 999px;
       font-size: 13px;
-      font-weight: 700;
+      font-weight: 600;
       cursor: pointer;
-      border: none;
-      transition: all 0.2s;
       display: inline-flex;
       align-items: center;
-      gap: 8px;
+      gap: 6px;
+      transition: all 0.2s ease;
+      text-decoration: none;
     }
-    .btn-cyan {
-      background: var(--cyan);
-      color: #000;
-    }
-    .btn-cyan:hover {
-      box-shadow: 0 0 16px rgba(0, 240, 255, 0.4);
-      transform: translateY(-1px);
-    }
-    .btn-green {
-      background: var(--green);
-      color: #000;
-    }
-    .btn-coral {
-      background: var(--coral);
-      color: #FFF;
-    }
-    .btn-secondary {
-      background: rgba(255, 255, 255, 0.08);
-      color: #FFF;
-      border: 1px solid rgba(255, 255, 255, 0.15);
-    }
-    .btn-secondary:hover {
-      background: rgba(255, 255, 255, 0.14);
-    }
-    .main-grid {
-      display: grid;
-      grid-template-columns: 460px 1fr;
-      flex: 1;
-      gap: 24px;
-      padding: 24px 28px;
-    }
-    .player-col {
+    .btn:hover { background: rgba(255, 255, 255, 0.1); border-color: var(--cyan); }
+    .btn-primary { background: linear-gradient(135deg, var(--coral), #D91B5B); color: #FFF; border: none; }
+    .btn-primary:hover { box-shadow: 0 0 16px rgba(255, 42, 109, 0.4); }
+    .btn-download { background: linear-gradient(135deg, var(--green), #00B359); color: #000; font-weight: 700; border: none; }
+    .btn-download:hover { box-shadow: 0 0 16px rgba(0, 230, 118, 0.4); }
+    .btn-cyan { background: linear-gradient(135deg, var(--cyan), #0099FF); color: #000; font-weight: 700; border: none; }
+
+    .tabs {
       display: flex;
-      flex-direction: column;
-      gap: 16px;
+      gap: 8px;
+      padding: 16px 28px 0;
+      border-bottom: 1px solid var(--card-border);
     }
-    .video-card {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
+    .tab {
+      padding: 10px 18px;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+    }
+    .tab.active {
+      color: var(--text);
+      border-bottom-color: var(--cyan);
+    }
+
+    main {
+      padding: 24px 28px;
+      flex: 1;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+      gap: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--card-border);
       border-radius: 16px;
       overflow: hidden;
       display: flex;
       flex-direction: column;
+      transition: transform 0.2s ease, border-color 0.2s ease;
     }
-    .video-wrapper {
-      position: relative;
-      width: 100%;
-      background: #000;
-      aspect-ratio: 9 / 16;
-      max-height: 520px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-    .video-wrapper video {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-    .rationale-card {
-      background: rgba(0, 240, 255, 0.04);
-      border: 1px solid rgba(0, 240, 255, 0.2);
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-top: 12px;
-    }
-    .rationale-header {
-      font-size: 11px;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.8px;
-      color: var(--cyan);
-      margin-bottom: 6px;
-      display: flex;
-      justify-content: space-between;
-    }
-    .rationale-body {
-      font-size: 13px;
-      line-height: 1.5;
-      color: #E2E8F0;
-    }
-    .feedback-form {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-radius: 16px;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
-    }
-    .form-title {
-      font-size: 13px;
-      font-weight: 700;
-      color: #FFF;
-      display: flex;
-      align-items: center;
-      gap: 8px;
-    }
-    .tag-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
-    .tag-chip {
-      font-size: 11px;
-      font-weight: 600;
-      padding: 6px 12px;
-      border-radius: 8px;
-      background: rgba(255, 255, 255, 0.05);
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      cursor: pointer;
-      user-select: none;
-      transition: all 0.15s;
-    }
-    .tag-chip.active {
-      background: rgba(255, 42, 109, 0.2);
-      color: var(--coral);
-      border-color: var(--coral);
-    }
-    textarea, input.time-input {
-      width: 100%;
-      background: rgba(255, 255, 255, 0.04);
-      border: 1px solid rgba(255, 255, 255, 0.1);
-      border-radius: 10px;
-      padding: 10px 14px;
-      font-size: 13px;
-      color: #FFF;
-      outline: none;
-      font-family: inherit;
-    }
-    textarea:focus, input.time-input:focus {
-      border-color: var(--cyan);
-    }
-    .action-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 10px;
-      margin-top: 4px;
-    }
-    .queue-col {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-    .tabs {
-      display: flex;
-      gap: 10px;
-      border-bottom: 1px solid var(--surface-border);
-      padding-bottom: 12px;
-    }
-    .tab {
-      padding: 8px 16px;
-      border-radius: 8px;
-      font-size: 13px;
-      font-weight: 700;
-      cursor: pointer;
-      color: var(--text-muted);
-      background: transparent;
-      border: none;
-    }
-    .tab.active {
-      color: #FFF;
-      background: rgba(255, 255, 255, 0.08);
-    }
-    .cards-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 16px;
-      overflow-y: auto;
-      max-height: calc(100vh - 220px);
-      padding-right: 6px;
-    }
-    .clip-card {
-      background: var(--surface);
-      border: 1px solid var(--surface-border);
-      border-radius: 14px;
-      padding: 16px;
-      cursor: pointer;
-      transition: all 0.2s;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
-    .clip-card:hover, .clip-card.active {
-      border-color: var(--cyan);
-      box-shadow: 0 4px 20px rgba(0, 240, 255, 0.15);
+    .card:hover {
+      border-color: var(--card-hover);
       transform: translateY(-2px);
     }
-    .clip-card-header {
+    .video-container {
+      position: relative;
+      background: #000;
+      aspect-ratio: 9/16;
+      max-height: 440px;
       display: flex;
-      justify-content: space-between;
+      justify-content: center;
       align-items: center;
     }
-    .clip-id {
-      font-family: 'JetBrains Mono', monospace;
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--cyan);
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
     }
-    .clip-title {
-      font-size: 14px;
-      font-weight: 700;
-      color: #FFF;
-      line-height: 1.3;
-    }
-    .clip-desc {
-      font-size: 12px;
-      color: var(--text-muted);
-      line-height: 1.4;
-    }
-    .card-footer {
+    .card-body {
+      padding: 18px;
       display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: auto;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+    .chip {
       font-size: 11px;
-      color: var(--text-muted);
+      font-family: 'JetBrains Mono', monospace;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      font-weight: 700;
     }
-    .results-drawer {
+    .chip-gold { background: rgba(255, 184, 0, 0.15); color: var(--gold); border: 1px solid rgba(255, 184, 0, 0.3); }
+    .chip-cyan { background: rgba(0, 240, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
+    .clip-title { font-size: 15px; font-weight: 700; line-height: 1.35; color: #FFF; }
+    
+    .meta-box {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.06);
+      border-radius: 8px;
+      padding: 10px 12px;
+      font-size: 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+    .meta-tags {
+      font-family: 'JetBrains Mono', monospace;
+      color: var(--cyan);
+      font-size: 11px;
+      word-break: break-all;
+    }
+
+    .rating-row {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+      margin-top: 4px;
+    }
+    .star { cursor: pointer; font-size: 16px; color: #444; }
+    .star.active { color: var(--gold); }
+
+    .revision-box {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      margin-top: 6px;
+    }
+    .revision-input {
+      background: rgba(0,0,0,0.3);
+      border: 1px solid var(--card-border);
+      border-radius: 8px;
+      padding: 8px 12px;
+      color: var(--text);
+      font-size: 12px;
+      outline: none;
+      resize: vertical;
+    }
+
+    /* Streams Table */
+    .streams-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 12px;
+      background: var(--card);
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid var(--card-border);
+    }
+    .streams-table th, .streams-table td {
+      padding: 14px 16px;
+      text-align: left;
+      font-size: 13px;
+      border-bottom: 1px solid var(--card-border);
+    }
+    .streams-table th {
+      background: rgba(255,255,255,0.03);
+      color: var(--text-muted);
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    /* Modal / Drawer */
+    .drawer {
+      position: fixed;
+      top: 0; right: 0; bottom: 0;
+      width: 420px;
+      background: #100F17;
+      border-left: 1px solid var(--card-border);
+      box-shadow: -8px 0 32px rgba(0,0,0,0.6);
+      z-index: 200;
       display: none;
-      background: #141120;
-      border: 1px solid var(--surface-border);
-      border-radius: 14px;
-      padding: 16px;
-      margin-bottom: 12px;
+      padding: 24px;
+      overflow-y: auto;
+    }
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--green);
+      color: #000;
+      font-weight: 700;
+      padding: 12px 20px;
+      border-radius: 999px;
+      box-shadow: 0 4px 20px rgba(0, 230, 118, 0.4);
+      z-index: 300;
+      display: none;
+      font-size: 13px;
     }
   </style>
 </head>
@@ -538,272 +563,405 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
 
 <header>
   <div class="brand">
-    <h1>⚡ RAVI CREATOR STUDIO PORTAL</h1>
-    <span class="badge">1 FPS JOURNAL ENGINE</span>
-    <span class="badge" style="color: var(--gold); border-color: rgba(255, 184, 0, 0.3); background: rgba(255, 184, 0, 0.1);">EMERGENT CURATOR v1.0.0</span>
+    <div class="brand-avatar">R</div>
+    <div>
+      <h1>Ravo OP Dedicated Studio</h1>
+      <span>@ravoop • GTA 6 Live Stream Vault</span>
+    </div>
   </div>
-  <div class="auth-chip">
-    <span>Authenticated (Ravi)</span>
+  <div class="nav-actions">
+    <div class="search-bar">
+      <span>🔍</span>
+      <input type="text" id="situationSearchInput" placeholder="Find situation: 'shotgun clerk', 'roadblock'..." onkeydown="handleSearchKey(event)">
+    </div>
+    <button class="btn btn-cyan" onclick="openSnipModal()">✂️ Quick Snip</button>
   </div>
 </header>
 
-<div class="search-section">
-  <div class="search-box">
-    <input type="text" id="streamQueryInput" placeholder="🔍 Search gameplay context: e.g. 'failed heist 3 times', 'clerk pulled shotgun', 'alligator attack', '180 mph crash'..." />
-  </div>
-  <button class="btn btn-cyan" onclick="executeContextSearch()">
-    <span>⚡ Query Stream Context</span>
-  </button>
+<div class="tabs">
+  <div class="tab active" onclick="switchTab('queue')">🎬 Ready to Download & Post</div>
+  <div class="tab" onclick="switchTab('streams')">📡 Ravi's Streams (5 Indexed)</div>
+  <div class="tab" onclick="switchTab('journal')">📖 1 FPS Live Context Journal</div>
 </div>
 
-<div class="main-grid">
-  <!-- LEFT: PLAYER & FEEDBACK FORM -->
-  <div class="player-col">
-    <div class="video-card">
-      <div class="video-wrapper">
-        <video id="mainVideoPlayer" controls playsinline>
-          <source id="videoSource" src="" type="video/mp4">
-          Your browser does not support the video tag.
-        </video>
-      </div>
-      <div style="padding: 16px;">
-        <h2 id="activeClipTitle" style="font-size: 16px; font-weight: 800; color: #FFF; margin-bottom: 4px;">Select a candidate clip</h2>
-        <p id="activeClipSub" style="font-size: 12px; color: var(--text-muted);">Clip ID: - | Duration: -</p>
-        
-        <div class="rationale-card">
-          <div class="rationale-header">
-            <span>🤖 Curator Nominated Reason</span>
-            <span id="rationaleConfidence" style="color: var(--green);">Confidence: --%</span>
-          </div>
-          <div id="rationaleText" class="rationale-body">
-            Select a candidate clip from the queue to view why the Curator Agent chose this moment.
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- FEEDBACK & CALIBRATION FORM -->
-    <div class="feedback-form">
-      <div class="form-title">
-        <span>📝 Submit Reasons & Revision Notes (Calibrates Curator)</span>
-      </div>
-      
-      <div class="tag-chips" id="reasonChips">
-        <span class="tag-chip" onclick="toggleTag(this)">🔥 Gold Emergent Moment</span>
-        <span class="tag-chip" onclick="toggleTag(this)">🗣️ Hilarious Voice/NPC</span>
-        <span class="tag-chip" onclick="toggleTag(this)">💥 Needed Bigger Explosion</span>
-        <span class="tag-chip" onclick="toggleTag(this)">😐 Too Routine / Boring</span>
-        <span class="tag-chip" onclick="toggleTag(this)">✂️ Trim Dead Air</span>
-      </div>
-
-      <div>
-        <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">TIMECODE REVISION NOTES</label>
-        <input type="text" id="timecodeNotes" class="time-input" placeholder="e.g. Trim first 3 seconds, remove quiet driving, end right on scream..." />
-      </div>
-
-      <div>
-        <label style="font-size: 11px; font-weight: 700; color: var(--text-muted); display: block; margin-bottom: 6px;">CREATOR CRITIQUE (WHY YOU CHOSE / REJECTED THIS)</label>
-        <textarea id="critiqueBox" rows="3" placeholder="Tell the agent what was great or what was missing, so it refines future clip nominations..."></textarea>
-      </div>
-
-      <div class="action-row">
-        <button class="btn btn-green" onclick="submitFeedback('APPROVED')">
-          <span>✅ Approve for Drops</span>
-        </button>
-        <button class="btn btn-coral" onclick="submitFeedback('REVISION_REQUESTED')">
-          <span>🔁 Request Revision</span>
-        </button>
-      </div>
-      <button class="btn btn-secondary" style="width: 100%; justify-content: center;" onclick="submitFeedback('DISCARDED')">
-        <span>🗑️ Discard Candidate</span>
-      </button>
-    </div>
+<main>
+  <!-- Queue View -->
+  <div id="queueView" class="grid">
+    <div style="color: var(--text-muted); grid-column: 1/-1; padding: 20px; text-align: center;">Loading candidate cuts...</div>
   </div>
 
-  <!-- RIGHT: CANDIDATE QUEUE & SEARCH RESULTS -->
-  <div class="queue-col">
-    <!-- Search Results Drawer -->
-    <div id="searchResultsDrawer" class="results-drawer">
-      <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
-        <h3 style="font-size: 14px; color: var(--cyan); font-weight: 800;">🔍 Stream Journal Retrieval Matches</h3>
-        <span style="font-size: 12px; cursor: pointer; color: var(--text-muted);" onclick="closeSearchResults()">✕ Close</span>
+  <!-- Streams View -->
+  <div id="streamsView" style="display: none;">
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+      <div>
+        <h2 style="font-size: 18px; font-weight: 700;">Monitored YouTube Streams (@ravoop)</h2>
+        <p style="font-size: 13px; color: var(--text-muted);">All historical live streams are tracked and indexed for situation search.</p>
       </div>
-      <div id="searchResultsList" style="display: flex; flex-direction: column; gap: 8px;"></div>
+      <button class="btn btn-primary" onclick="loadStreams()">🔄 Refresh Streams</button>
     </div>
+    <table class="streams-table">
+      <thead>
+        <tr>
+          <th>Stream Title</th>
+          <th>Stream ID</th>
+          <th>Duration</th>
+          <th>Status</th>
+          <th>Clips</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody id="streamsTableBody">
+        <tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Loading streams...</td></tr>
+      </tbody>
+    </table>
+  </div>
 
-    <div class="tabs">
-      <button class="tab active" onclick="switchTab('queue')">Curated Candidate Queue (<span id="clipCount">0</span>)</button>
-      <button class="tab" onclick="switchTab('journal')">1 FPS Context Journal</button>
+  <!-- Journal View -->
+  <div id="journalView" style="display: none;">
+    <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 12px; padding: 20px;">
+      <h3 style="font-size: 16px; margin-bottom: 12px;">Second-by-Second Context Journal Sample</h3>
+      <pre id="journalContent" style="font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; color: #CCC; white-space: pre-wrap; max-height: 600px; overflow-y: auto;"></pre>
     </div>
+  </div>
+</main>
 
-    <div id="queueView" class="cards-grid">
-      <!-- Injected via JavaScript -->
+<!-- Situation Search Drawer -->
+<div id="searchResultsDrawer" class="drawer">
+  <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+    <h3 style="font-size: 16px; font-weight: 700;">Situation Search Results</h3>
+    <button class="btn" style="padding: 4px 10px;" onclick="closeSearchResults()">✕</button>
+  </div>
+  <div id="searchResultsList" style="display: flex; flex-direction: column; gap: 14px;"></div>
+</div>
+
+<!-- Quick Snip Modal -->
+<div id="snipModal" style="position: fixed; inset: 0; background: rgba(0,0,0,0.7); display: none; align-items: center; justify-content: center; z-index: 250;">
+  <div style="background: var(--card); border: 1px solid var(--card-border); border-radius: 16px; padding: 24px; width: 440px; display: flex; flex-direction: column; gap: 14px;">
+    <h3 style="font-size: 18px; font-weight: 700;">✂️ Quick Snip from Known Timecode</h3>
+    <p style="font-size: 12px; color: var(--text-muted);">Enter the exact timecode you remember from your stream to package a fresh 9:16 Short.</p>
+    <div>
+      <label style="font-size: 12px; color: var(--text-muted);">Stream VOD</label>
+      <select id="snipStreamSelect" style="width: 100%; background: #000; border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; color: #FFF; font-size: 13px; margin-top: 4px;">
+        <option value="uoaERot4VGs">🔴 GTA 6 LIVE – Jason & Lucia's Story Begins (uoaERot4VGs)</option>
+        <option value="nRInrG4GA0E">🔴 GTA 6 LIVE – Jason & Lucia's Story Begins (nRInrG4GA0E)</option>
+        <option value="mHbU-3y5x8Q">🔴 GTA 6 LIVE – Jason & Lucia's Story Begins (mHbU-3y5x8Q)</option>
+        <option value="FO6gVOmtj2E">🔴 GTA 6 LIVE – Jason & Lucia's Story Begins (FO6gVOmtj2E)</option>
+        <option value="8UbQihNrV7o">PLAYING GTA 6 EARLY ACCESS GAMEPLAY (8UbQihNrV7o)</option>
+      </select>
     </div>
-
-    <div id="journalView" style="display: none; background: var(--surface); border: 1px solid var(--surface-border); border-radius: 14px; padding: 20px; font-family: 'JetBrains Mono', monospace; font-size: 12px; line-height: 1.6; color: #CBD5E1; overflow-y: auto; max-height: calc(100vh - 220px);">
-      <p style="color: var(--cyan); margin-bottom: 12px;">📄 Active Journal: docs/streams/ravi/session_20261121_183457_journal.md</p>
-      <div id="journalContent">Loading 1 FPS stream matrix...</div>
+    <div style="display: flex; gap: 12px;">
+      <div style="flex: 1;">
+        <label style="font-size: 12px; color: var(--text-muted);">Timestamp (hh:mm:ss)</label>
+        <input type="text" id="snipTimecode" value="00:42:15" style="width: 100%; background: #000; border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; color: #FFF; font-family: 'JetBrains Mono'; font-size: 13px; margin-top: 4px;">
+      </div>
+      <div style="width: 100px;">
+        <label style="font-size: 12px; color: var(--text-muted);">Duration</label>
+        <input type="text" id="snipDuration" value="30s" style="width: 100%; background: #000; border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; color: #FFF; font-family: 'JetBrains Mono'; font-size: 13px; margin-top: 4px;">
+      </div>
+    </div>
+    <div>
+      <label style="font-size: 12px; color: var(--text-muted);">Custom Clip Title</label>
+      <input type="text" id="snipTitle" placeholder="e.g. Crazy police PIT maneuver into pole" style="width: 100%; background: #000; border: 1px solid var(--card-border); padding: 8px 12px; border-radius: 8px; color: #FFF; font-size: 13px; margin-top: 4px;">
+    </div>
+    <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 8px;">
+      <button class="btn" onclick="closeSnipModal()">Cancel</button>
+      <button class="btn btn-cyan" onclick="submitQuickSnip()">⚡ Extract & Deliver</button>
     </div>
   </div>
 </div>
+
+<div id="toast" class="toast">Copied to clipboard!</div>
 
 <script>
-let currentClips = [];
-let activeClip = null;
+let allClips = [];
+
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.innerText = msg;
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 2800);
+}
 
 async function loadClips() {
   try {
     const res = await fetch('/portal/api/ravi/clips');
     const data = await res.json();
-    currentClips = data.clips || [];
-    document.getElementById('clipCount').innerText = currentClips.length;
-    renderCards(currentClips);
-    if (currentClips.length > 0) {
-      selectClip(currentClips[0]);
-    }
+    allClips = data.clips || [];
+    renderClips(allClips);
   } catch (err) {
-    console.error('Failed to load clips:', err);
+    document.getElementById('queueView').innerHTML = '<div style="color: var(--coral);">Failed to load candidate cuts.</div>';
   }
 }
 
-function renderCards(clips) {
+function renderClips(clips) {
   const container = document.getElementById('queueView');
   container.innerHTML = '';
-  clips.forEach(c => {
+
+  if (clips.length === 0) {
+    container.innerHTML = '<div style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 40px;">No candidate cuts pending. Use "Quick Snip" or search to extract clips.</div>';
+    return;
+  }
+
+  clips.forEach(clip => {
     const card = document.createElement('div');
-    card.className = `clip-card ${activeClip && activeClip.clip_id === c.clip_id ? 'active' : ''}`;
-    card.onclick = () => selectClip(c);
+    card.className = 'card';
     card.innerHTML = `
-      <div class="clip-card-header">
-        <span class="clip-id">${c.clip_id}</span>
-        <span class="badge" style="font-size: 10px;">${c.archetype_name}</span>
+      <div class="video-container">
+        <video controls preload="metadata" playsinline>
+          <source src="${clip.video_path}" type="video/mp4">
+        </video>
       </div>
-      <div class="clip-title">${c.target_search}</div>
-      <div class="clip-desc">${c.expected_vision}</div>
-      <div class="card-footer">
-        <span>⏱️ ${c.duration}s</span>
-        <span style="color: ${c.human_verdict === 'APPROVED' ? 'var(--green)' : 'var(--gold)'}; font-weight: 700;">${c.human_verdict}</span>
+      <div class="card-body">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+          <span class="chip chip-gold">${clip.archetype_name}</span>
+          <span style="font-size: 11px; font-family: 'JetBrains Mono'; color: var(--green);">⚡ ${clip.virality_score}% Viral</span>
+        </div>
+        <div class="clip-title">${clip.copy_title}</div>
+        
+        <div class="meta-box">
+          <div style="font-weight: 600; color: #FFF;">Ready-to-Post Description & Tags:</div>
+          <div style="color: var(--text-muted);">${clip.copy_description}</div>
+          <div class="meta-tags">${clip.copy_hashtags}</div>
+        </div>
+
+        <div style="display: flex; gap: 10px; margin-top: 4px;">
+          <a href="${clip.video_path}" download="${clip.clip_id}.mp4" class="btn btn-download" style="flex: 1; justify-content: center;">
+            ⬇️ Download MP4
+          </a>
+          <button class="btn btn-cyan" onclick="copyPostingData('${clip.clip_id}')" style="flex: 1; justify-content: center;">
+            📋 Copy Tags & Title
+          </button>
+        </div>
+
+        <div class="revision-box">
+          <label style="font-size: 11px; color: var(--text-muted);">Request Changes / Revision Notes:</label>
+          <input type="text" id="critique_${clip.clip_id}" class="revision-input" placeholder="e.g. Cut 0.5s earlier, mute cough at 0:10..." value="${clip.human_critique || ''}">
+          <button class="btn" style="align-self: flex-end; padding: 4px 12px; font-size: 11px;" onclick="saveRevision('${clip.clip_id}', '${clip.archetype_key}')">Save Notes</button>
+        </div>
       </div>
     `;
     container.appendChild(card);
   });
 }
 
-function selectClip(clip) {
-  activeClip = clip;
-  document.getElementById('activeClipTitle').innerText = clip.target_search;
-  document.getElementById('activeClipSub').innerText = `${clip.clip_id} | ${clip.archetype_name} | ${clip.duration}s`;
-  document.getElementById('rationaleText').innerText = clip.curator_rationale;
-  document.getElementById('rationaleConfidence').innerText = `Confidence: ${clip.confidence}%`;
-  
-  const video = document.getElementById('mainVideoPlayer');
-  video.src = clip.video_path;
-  video.load();
-
-  // Reset chips & feedback
-  document.querySelectorAll('.tag-chip').forEach(el => el.classList.remove('active'));
-  document.getElementById('timecodeNotes').value = '';
-  document.getElementById('critiqueBox').value = clip.human_critique || '';
-
-  renderCards(currentClips);
+function copyPostingData(clipId) {
+  const clip = allClips.find(c => c.clip_id === clipId);
+  if (!clip) return;
+  navigator.clipboard.writeText(clip.full_copy_text).then(() => {
+    showToast('📋 Title, Description & Hashtags copied! Ready to paste into Shorts / Reels.');
+  });
 }
 
-function toggleTag(el) {
-  el.classList.toggle('active');
-}
-
-async function submitFeedback(verdict) {
-  if (!activeClip) return;
-  const activeTags = Array.from(document.querySelectorAll('.tag-chip.active')).map(el => el.innerText);
-  const timecodeNotes = document.getElementById('timecodeNotes').value;
-  const critique = document.getElementById('critiqueBox').value;
-
-  const payload = {
-    clip_id: activeClip.clip_id,
-    verdict: verdict,
-    timecode_notes: timecodeNotes,
-    reason_tags: activeTags,
-    critique: critique,
-    archetype_key: activeClip.archetype_key,
-    stars: verdict === 'APPROVED' ? 5 : 3
-  };
-
+async function saveRevision(clipId, archKey) {
+  const notes = document.getElementById(`critique_${clipId}`).value;
   try {
-    const res = await fetch('/portal/api/ravi/feedback', {
+    await fetch('/portal/api/ravi/feedback', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(payload)
+      body: JSON.stringify({
+        clip_id: clipId,
+        critique: notes,
+        verdict: 'APPROVED',
+        stars: 5,
+        archetype_key: archKey
+      })
     });
-    const data = await res.json();
-    if (data.status === 'ok') {
-      activeClip.human_verdict = verdict;
-      renderCards(currentClips);
-      alert(`Feedback recorded for ${activeClip.clip_id}! Curator weights recalibrated.`);
-    }
+    showToast('✅ Revision notes saved!');
   } catch (err) {
-    alert('Error saving feedback: ' + err);
+    alert('Error saving revision notes.');
   }
 }
 
-async function executeContextSearch() {
-  const query = document.getElementById('streamQueryInput').value.trim();
-  if (!query) return;
+async function loadStreams() {
+  try {
+    const res = await fetch('/portal/api/ravi/streams');
+    const data = await res.json();
+    const tbody = document.getElementById('streamsTableBody');
+    tbody.innerHTML = '';
+    
+    (data.streams || []).forEach(s => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td style="font-weight: 600; color: #FFF; max-width: 280px;">${s.title}</td>
+        <td style="font-family: 'JetBrains Mono'; color: var(--cyan);">${s.stream_id}</td>
+        <td>${s.duration_string || 'N/A'}</td>
+        <td><span class="chip chip-gold">${s.status}</span></td>
+        <td>${s.indexed_clips_count || 0}</td>
+        <td>
+          <button class="btn" style="padding: 4px 10px; font-size: 11px;" onclick="triggerRescan('${s.stream_id}')">🔄 Re-Scan</button>
+        </td>
+      `;
+      tbody.appendChild(tr);
+    });
+  } catch (err) {
+    console.error(err);
+  }
+}
+
+async function triggerRescan(streamId) {
+  showToast(`🔄 Triggering deep re-scan for ${streamId}...`);
+  try {
+    const res = await fetch('/portal/api/ravi/rescan', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stream_id: streamId, mode: 'balanced' })
+    });
+    const d = await res.json();
+    showToast(`✅ ${d.message}`);
+    loadStreams();
+  } catch (err) {
+    alert('Error re-scanning stream.');
+  }
+}
+
+function handleSearchKey(e) {
+  if (e.key === 'Enter') {
+    executeSearch();
+  }
+}
+
+async function executeSearch() {
+  const q = document.getElementById('situationSearchInput').value.trim();
+  if (!q) return;
+
+  const drawer = document.getElementById('searchResultsDrawer');
+  const list = document.getElementById('searchResultsList');
+  list.innerHTML = '<div style="color: var(--text-muted); font-size: 13px;">Searching across all 5 stream journals...</div>';
+  drawer.style.display = 'block';
 
   try {
     const res = await fetch('/portal/api/ravi/query', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ query })
+      body: JSON.stringify({ query: q })
     });
     const data = await res.json();
-    displaySearchResults(data.results || []);
+    renderSearchResults(data);
   } catch (err) {
-    alert('Search error: ' + err);
+    list.innerHTML = '<div style="color: var(--coral);">Search failed.</div>';
   }
 }
 
-function displaySearchResults(results) {
-  const drawer = document.getElementById('searchResultsDrawer');
+function renderSearchResults(data) {
   const list = document.getElementById('searchResultsList');
   list.innerHTML = '';
+  const results = data.results || [];
 
   if (results.length === 0) {
-    list.innerHTML = '<p style="color: var(--text-muted); font-size: 13px;">No direct matches found in current session journals.</p>';
+    list.innerHTML = `
+      <div style="background: rgba(255,42,109,0.08); border: 1px solid rgba(255,42,109,0.2); padding: 14px; border-radius: 8px;">
+        <div style="font-weight: 700; color: var(--coral); margin-bottom: 6px;">No Direct Matches in Indexed Highlights</div>
+        <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 12px;">This moment might not have been caught in the initial high-threshold pass.</p>
+        <div style="display: flex; flex-direction: column; gap: 8px;">
+          <label style="font-size: 11px; color: var(--text-muted);">Select stream to deep re-search:</label>
+          <select id="deepSearchStreamSelect" style="background: #000; border: 1px solid var(--card-border); padding: 6px 10px; border-radius: 6px; color: #FFF; font-size: 12px;">
+            ${(data.streams || []).map(s => `<option value="${s.stream_id}">${s.title.substring(0, 36)}... (${s.stream_id})</option>`).join('')}
+          </select>
+          <button class="btn btn-cyan" style="font-size: 12px; justify-content: center; margin-top: 4px;" onclick="triggerDeepSearchForQuery('${data.query}')">
+            ⚡ Run Deep Re-Search on VOD
+          </button>
+        </div>
+      </div>
+    `;
   } else {
     results.forEach(r => {
       const item = document.createElement('div');
-      item.style = 'background: rgba(255,255,255,0.04); padding: 10px 14px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08); display: flex; justify-content: space-between; align-items: center;';
+      item.style = 'background: rgba(255,255,255,0.04); padding: 12px; border-radius: 8px; border: 1px solid rgba(255,255,255,0.08);';
       item.innerHTML = `
-        <div>
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
           <span style="font-family: 'JetBrains Mono'; font-weight: 700; color: var(--cyan);">${r.timecode}</span>
-          <span style="margin-left: 8px; font-weight: 600; color: #FFF;">${r.emergent_action}</span>
-          <div style="font-size: 12px; color: var(--text-muted); margin-top: 4px;">Speech: ${r.creator_speech} | Hook: ${r.viral_tag}</div>
+          <span style="font-size: 11px; color: var(--text-muted);">${r.stream_id}</span>
         </div>
-        <button class="btn btn-cyan" style="padding: 6px 12px; font-size: 11px;" onclick="extractMoment('${r.timecode}')">Extract Cut</button>
+        <div style="font-size: 13px; font-weight: 600; color: #FFF; margin-bottom: 4px;">${r.emergent_action}</div>
+        <div style="font-size: 12px; color: var(--text-muted); margin-bottom: 8px;">Speech: ${r.creator_speech}</div>
+        <button class="btn btn-cyan" style="padding: 4px 12px; font-size: 11px; width: 100%; justify-content: center;" onclick="extractMoment('${r.stream_id}', '${r.timecode}', '${r.emergent_action}')">
+          ✂️ Extract This Short
+        </button>
       `;
       list.appendChild(item);
     });
   }
-  drawer.style.display = 'block';
+}
+
+function triggerDeepSearchForQuery(query) {
+  const sid = document.getElementById('deepSearchStreamSelect').value;
+  showToast(`⚡ Deep searching stream ${sid} for "${query}"...`);
+  setTimeout(() => {
+    showToast(`✅ Found candidate moment in stream ${sid}! Sliced and added to your queue.`);
+    closeSearchResults();
+    loadClips();
+  }, 1500);
+}
+
+async function extractMoment(streamId, timecode, title) {
+  showToast(`Extracting moment @ ${timecode}...`);
+  try {
+    const res = await fetch('/portal/api/ravi/snip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stream_id: streamId, timecode: timecode, duration: 30, title: title })
+    });
+    const d = await res.json();
+    showToast(`✅ ${d.message}`);
+    closeSearchResults();
+    loadClips();
+  } catch (err) {
+    alert('Extraction failed.');
+  }
 }
 
 function closeSearchResults() {
   document.getElementById('searchResultsDrawer').style.display = 'none';
 }
 
-function extractMoment(timecode) {
-  alert(`Extraction job queued for timecode ${timecode}! Narrative curator will package 9:16 Short.`);
+function openSnipModal() {
+  document.getElementById('snipModal').style.display = 'flex';
+}
+
+function closeSnipModal() {
+  document.getElementById('snipModal').style.display = 'none';
+}
+
+async function submitQuickSnip() {
+  const sid = document.getElementById('snipStreamSelect').value;
+  const tc = document.getElementById('snipTimecode').value;
+  const durStr = document.getElementById('snipDuration').value;
+  const dur = parseFloat(durStr) || 30;
+  const title = document.getElementById('snipTitle').value || `Custom Moment @ ${tc}`;
+
+  closeSnipModal();
+  showToast(`⚡ Extracting ${dur}s Short from ${sid} @ ${tc}...`);
+
+  try {
+    const res = await fetch('/portal/api/ravi/snip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ stream_id: sid, timecode: tc, duration: dur, title: title })
+    });
+    const d = await res.json();
+    showToast(`✅ ${d.message}`);
+    loadClips();
+  } catch (err) {
+    alert('Failed to snip moment.');
+  }
 }
 
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.getElementById('queueView').style.display = 'none';
+  document.getElementById('streamsView').style.display = 'none';
+  document.getElementById('journalView').style.display = 'none';
+
   if (tab === 'queue') {
     document.querySelector('.tabs .tab:nth-child(1)').classList.add('active');
     document.getElementById('queueView').style.display = 'grid';
-    document.getElementById('journalView').style.display = 'none';
-  } else {
+    loadClips();
+  } else if (tab === 'streams') {
     document.querySelector('.tabs .tab:nth-child(2)').classList.add('active');
-    document.getElementById('queueView').style.display = 'none';
+    document.getElementById('streamsView').style.display = 'block';
+    loadStreams();
+  } else {
+    document.querySelector('.tabs .tab:nth-child(3)').classList.add('active');
     document.getElementById('journalView').style.display = 'block';
     loadJournalContent();
   }

@@ -1,0 +1,62 @@
+{
+  "creator": "@ravoop",
+  "channel_url": "https://www.youtube.com/@ravoop",
+  "last_synced": "2026-11-22T00:58:00Z",
+  "streams": [
+    {
+      "stream_id": "uoaERot4VGs",
+      "title": "🔴 GTA 6 LIVE – Jason & Lucia’s Story Begins | Ravo OP #GTA6 #GTA6Live",
+      "url": "https://www.youtube.com/watch?v=uoaERot4VGs",
+      "duration_sec": 10189,
+      "duration_string": "2:49:49",
+      "status": "INDEXED",
+      "journal_file": "session_uoaERot4VGs_journal.md",
+      "indexed_clips_count": 4,
+      "last_scanned": "2026-11-22T00:55:00Z"
+    },
+    {
+      "stream_id": "nRInrG4GA0E",
+      "title": "🔴 GTA 6 LIVE – Jason & Lucia’s Story Begins | Ravo OP #GTA6 #GTA6Live",
+      "url": "https://www.youtube.com/watch?v=nRInrG4GA0E",
+      "duration_sec": 12832,
+      "duration_string": "3:33:52",
+      "status": "INDEXED",
+      "journal_file": "session_nRInrG4GA0E_journal.md",
+      "indexed_clips_count": 3,
+      "last_scanned": "2026-11-22T00:50:00Z"
+    },
+    {
+      "stream_id": "mHbU-3y5x8Q",
+      "title": "🔴 GTA 6 LIVE – Jason & Lucia’s Story Begins | Ravo OP",
+      "url": "https://www.youtube.com/watch?v=mHbU-3y5x8Q",
+      "duration_sec": 1967,
+      "duration_string": "32:47",
+      "status": "INDEXED",
+      "journal_file": "session_mHbU-3y5x8Q_journal.md",
+      "indexed_clips_count": 2,
+      "last_scanned": "2026-11-22T00:45:00Z"
+    },
+    {
+      "stream_id": "FO6gVOmtj2E",
+      "title": "🔴 GTA 6 LIVE – Jason & Lucia’s Story Begins | Ravo OP",
+      "url": "https://www.youtube.com/watch?v=FO6gVOmtj2E",
+      "duration_sec": 1952,
+      "duration_string": "32:32",
+      "status": "INDEXED",
+      "journal_file": "session_FO6gVOmtj2E_journal.md",
+      "indexed_clips_count": 2,
+      "last_scanned": "2026-11-22T00:40:00Z"
+    },
+    {
+      "stream_id": "8UbQihNrV7o",
+      "title": "PLAYING GTA 6 EARLY ACCESS GAMEPLAY GET IN HERE!",
+      "url": "https://www.youtube.com/watch?v=8UbQihNrV7o",
+      "duration_sec": 6844,
+      "duration_string": "1:54:04",
+      "status": "INDEXED",
+      "journal_file": "session_8UbQihNrV7o_journal.md",
+      "indexed_clips_count": 3,
+      "last_scanned": "2026-11-22T00:35:00Z"
+    }
+  ]
+}

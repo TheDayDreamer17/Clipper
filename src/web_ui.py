@@ -24,7 +24,7 @@ from src.publisher import VideoPublisher
 from src.transcribe import Transcriber
 from src.scorer import ViralityScorer
 from src.semantic_gatekeeper import SemanticGatekeeper
-from src.portal_ui import RAVI_PORTAL_HTML, get_ravi_candidate_clips, submit_ravi_feedback, search_stream_journals
+from src.portal_ui import RAVI_PORTAL_HTML, get_ravi_candidate_clips, submit_ravi_feedback, search_stream_journals, get_stream_registry, rescan_stream, snip_moment
 
 import os
 PORT = int(os.environ.get("CLIPPER_PORT", 3000))
@@ -1630,6 +1630,10 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
             self._send_json({"sample": sample_content[:15000]})
             return
 
+        elif path == "/portal/api/ravi/streams":
+            self._send_json(get_stream_registry())
+            return
+
         self.send_error(404, "Not Found")
 
     def do_POST(self):
@@ -2177,7 +2181,17 @@ class ClipperHTTPHandler(http.server.BaseHTTPRequestHandler):
         elif path == "/portal/api/ravi/query":
             q = payload.get("query", "")
             matches = search_stream_journals(q)
-            self._send_json({"results": matches})
+            self._send_json(matches)
+            return
+
+        elif path == "/portal/api/ravi/rescan":
+            res = rescan_stream(payload)
+            self._send_json(res)
+            return
+
+        elif path == "/portal/api/ravi/snip":
+            res = snip_moment(payload)
+            self._send_json(res)
             return
 
         self.send_error(404, "Not Found")
