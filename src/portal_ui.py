@@ -10,7 +10,7 @@ from typing import Dict, List, Any, Optional
 CURATOR_PROFILE_PATH = Path("data/curator_profiles/ravi_curator_profile.json")
 STREAM_REGISTRY_PATH = Path("data/ravoop_stream_registry.json")
 JOURNAL_DIR = Path("docs/streams/ravi")
-DB_PATH = Path("data/telemetry.db")
+DB_PATH = Path("data/ravi_vault.db")
 CANDIDATE_DIR = Path("output/training_candidates")
 
 def get_curator_profile() -> Dict[str, Any]:
@@ -42,8 +42,7 @@ def get_ravi_candidate_clips() -> List[Dict[str, Any]]:
                 SELECT clip_id, video_path, target_search, category, language, 
                        channel, creator, expected_spoken, expected_vision, duration, 
                        human_stars, human_verdict, human_critique, rated_at, virality_score
-                FROM training_clip_ratings
-                WHERE creator IN ('Ravi', '@ravoop', 'Ravoop')
+                FROM ravi_clips
                 ORDER BY rated_at DESC, clip_id ASC;
             """)
             rows = c.fetchall()
@@ -119,7 +118,7 @@ def submit_ravi_feedback(payload: Dict[str, Any]) -> Dict[str, Any]:
             conn = sqlite3.connect(str(DB_PATH))
             c = conn.cursor()
             c.execute("""
-                UPDATE training_clip_ratings 
+                UPDATE ravi_clips 
                 SET human_stars = ?, human_verdict = ?, human_critique = ?, rated_at = ?
                 WHERE clip_id = ?;
             """, (stars, verdict, full_critique, time.time(), cid))
@@ -266,7 +265,7 @@ def snip_moment(payload: Dict[str, Any]) -> Dict[str, Any]:
             conn = sqlite3.connect(str(DB_PATH))
             c = conn.cursor()
             c.execute("""
-                INSERT OR REPLACE INTO training_clip_ratings 
+                INSERT OR REPLACE INTO ravi_clips 
                 (clip_id, video_path, target_search, category, language, channel, creator, expected_spoken, expected_vision, duration, human_stars, human_verdict, human_critique, rated_at, virality_score)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """, (new_cid, vpath, title, "CUSTOM_SNIP", "hi", "@ravoop", "Ravi", f"Manual timecode snip @ {tc}", "Custom creator extraction", dur, 5, "APPROVED", "", time.time(), 94.0))
