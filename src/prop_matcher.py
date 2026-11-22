@@ -119,7 +119,7 @@ class PropMatcher:
                 best_score = 78.0
             elif any(w in combined_text for w in ["strip", "club", "dance", "beach", "party", "gyatt", "mature"]):
                 matched_category = "MATURE_SCENE"
-                what_happened = f"{creator} VICE CITY NIGHTCLUB & BEACH ENCOUNTER"
+                what_happened = f"{creator} GTA 6 NIGHTCLUB & BEACH ENCOUNTER"
                 best_score = 80.0
             elif any(w in combined_text for w in ["robbery", "heist", "store", "cash", "gun", "shootout"]):
                 matched_category = "HEIST_AND_ROBBERY"

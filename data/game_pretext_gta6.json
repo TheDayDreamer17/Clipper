@@ -1,0 +1,108 @@
+{
+  "game_title": "Grand Theft Auto VI",
+  "short_code": "GTA6",
+  "setting": {
+    "region": "State of Leonida (fictional Florida)",
+    "cities": [
+      "Vice City",
+      "Port Gellhorn",
+      "Ambrosia",
+      "Grassrivers (Everglades)",
+      "Vice Keys"
+    ],
+    "environmental_traits": [
+      "tropical palm avenues",
+      "neon beachfront hotels",
+      "swamp wetlands",
+      "shallow ocean canals",
+      "construction bridges"
+    ]
+  },
+  "protagonists": {
+    "leads": [
+      "Lucia Caminos",
+      "Jason Duval"
+    ],
+    "coop_mechanics": [
+      "real-time character swapping",
+      "companion crime callouts",
+      "passenger seat shooting",
+      "partner driving"
+    ]
+  },
+  "core_gameplay_systems": {
+    "stealth_and_infiltration": {
+      "description": "Tactical covert movement, sneaking past guards, crawling prone, silenced weapons, and security evasion.",
+      "visual_indicators": [
+        "crouched posture",
+        "prone crawling",
+        "silenced pistol/smg",
+        "unseen movement",
+        "radar detection evasion"
+      ],
+      "typical_scenarios": [
+        "prison corridor escape",
+        "yacht deck night infiltration",
+        "warehouse compound infiltration"
+      ]
+    },
+    "crime_and_heists": {
+      "description": "Store hold-ups, register looting, bank vault drilling, and clerk confrontations.",
+      "visual_indicators": [
+        "pointing gun at cashier",
+        "bagging cash bundles",
+        "shattered display cases",
+        "clerk drawing shotgun"
+      ],
+      "typical_scenarios": [
+        "supermarket register robbery",
+        "armored car vault blast",
+        "jewelry store heist"
+      ]
+    },
+    "law_enforcement_and_heat": {
+      "description": "Dynamic police responses, crime witnesses, 1-5 wanted stars, and the evidentiary Heat tracking system.",
+      "visual_indicators": [
+        "cruiser sirens",
+        "roadblock squad cars",
+        "spike strips",
+        "police helicopter searchlight",
+        "flashing wanted stars"
+      ],
+      "typical_scenarios": [
+        "alleyway roadblock drift",
+        "helicopter spotlight tracking",
+        "PIT maneuver collisions"
+      ]
+    },
+    "aviation_and_vehicle_physics": {
+      "description": "Extreme vehicle handling, high-speed collisions, bridge fly-unders, and ragdoll physics.",
+      "visual_indicators": [
+        "airplane wing clipping",
+        "cockpit dive",
+        "vehicle rollover",
+        "ragdoll ejection into water",
+        "WASTED red screen"
+      ],
+      "typical_scenarios": [
+        "bridge fly-under disaster",
+        "tree-line plane dive",
+        "highway intersection T-bone"
+      ]
+    },
+    "open_world_and_npc_emergence": {
+      "description": "Dynamic Florida-inspired wildlife, comedic NPC anomalies, and street encounters.",
+      "visual_indicators": [
+        "alligators in urban areas",
+        "bizarre NPC fistfights",
+        "gang street ambushes",
+        "social media phone reels"
+      ],
+      "typical_scenarios": [
+        "aura walk-in street regret",
+        "swamp wildlife encounters",
+        "bizarre pedestrian reactions"
+      ]
+    }
+  }
+}
