@@ -168,6 +168,30 @@ class TwitchClipEngine:
         except Exception as e:
             return {"comments": [], "error": str(e), "chat_velocity": 0}
 
+    def download_clip(self, url: str, output_name: Optional[str] = None) -> Optional[Path]:
+        """
+        Downloads a Twitch clip MP4 using yt-dlp.
+        """
+        import time
+        out_name = output_name or f"twitch_{int(time.time())}.mp4"
+        raw_clip = self.temp_dir / out_name
+        self.temp_dir.mkdir(parents=True, exist_ok=True)
+
+        cmd = [
+            self.ytdlp_bin,
+            "--ffmpeg-location", "/opt/homebrew/bin/ffmpeg",
+            "-f", "bestvideo[ext=mp4]+bestaudio[ext=m4a]/best[ext=mp4]/best",
+            "--force-overwrites",
+            "--no-warnings",
+            "-o", str(raw_clip),
+            url
+        ]
+        res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        if raw_clip.exists():
+            return raw_clip
+        print(f"❌ Failed to download clip: {res.stderr.decode()[:200]}")
+        return None
+
     def process_clip_to_short(self, clip: Dict[str, Any]) -> Optional[Path]:
         """
         Downloads a Twitch clip and formats it into a 9:16 vertical short.

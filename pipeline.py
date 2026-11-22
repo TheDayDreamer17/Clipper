@@ -8,7 +8,7 @@ from src.transcribe import Transcriber
 from src.matcher import TopicMatcher
 from src.slicer import VideoSlicer
 
-def run_pipeline(url: str = None, query: str = "GTA 5 Hindi", output_dir: str = "output"):
+def run_pipeline(url: str = None, query: str = "GTA 6 Hindi", output_dir: str = "output"):
     out_path = Path(output_dir)
     out_path.mkdir(parents=True, exist_ok=True)
 
@@ -107,7 +107,7 @@ def run_pipeline(url: str = None, query: str = "GTA 5 Hindi", output_dir: str = 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Run the end-to-end Clipper pipeline.")
     parser.add_argument("--url", help="Direct stream/video URL to process.")
-    parser.add_argument("--query", default="GTA 5 Hindi", help="Search query to auto-fetch the best stream.")
+    parser.add_argument("--query", default="GTA 6 Hindi", help="Search query to auto-fetch the best stream.")
     parser.add_argument("--output_dir", default="output", help="Directory for rendered clips.")
     args = parser.parse_args()
 

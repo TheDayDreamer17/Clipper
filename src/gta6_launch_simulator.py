@@ -50,7 +50,7 @@ class GTA6LaunchEngine:
         seeds = [
             "gta 6 ", "gta 6 gameplay ", "gta 6 trailer ", "gta 6 lucia ",
             "gta 6 jason ", "gta 6 police ", "gta 6 graphics ", "gta 6 map ",
-            "gta 6 leak ", "gta 6 first person ", "gta 6 cars ", "gta 6 vice city ",
+            "gta 6 leak ", "gta 6 first person ", "gta 6 cars ", "gta 6 gta 6 ",
             "gta 6 mission ", "gta 6 ending ", "gta 6 weapons ", "gta 6 techno gamerz "
         ]
         all_trends = self.trend_miner.fetch_live_search_trends(seed_queries=seeds)
@@ -218,13 +218,13 @@ class GTA6LaunchEngine:
                 "creator": "RockstarGames",
                 "lang": "English",
                 "channel": "GTA 6 CLIPS",
-                "search_demand": "gta 6 vice city graphics driving",
+                "search_demand": "gta 6 gta 6 graphics driving",
                 "archetype": "GRAPHICS_FIDELITY",
-                "anchors": ["convertible driving along ocean drive vice city palm trees", "next gen ray tracing water reflection speedboats", "city skyline pink sunset coastal highway"],
+                "anchors": ["convertible driving along ocean drive gta 6 palm trees", "next gen ray tracing water reflection speedboats", "city skyline pink sunset coastal highway"],
                 "disqualifiers": ["indoor hallway", "dialogue black screen", "pause menu"],
-                "title": "VICE CITY NEXT-GEN GRAPHICS",
+                "title": "gta 6 NEXT-GEN GRAPHICS",
                 "subtitle": "OCEAN DRIVE SUNSET CRUISE",
-                "tag": "🌴 VICE CITY",
+                "tag": "🌴 gta 6",
                 "hook": "👀 LOOK AT THESE GRAPHICS...",
                 "start_sec": 1.5,
                 "duration_sec": 18.0
@@ -254,7 +254,7 @@ class GTA6LaunchEngine:
                 "channel": "GTA 6 CLIPS INDIA",
                 "search_demand": "gta 6 gameplay techno gamerz hindi",
                 "archetype": "CREATOR_GAMEPLAY_REACTION",
-                "anchors": ["techno gamerz reacting to gta 6 gameplay in hindi", "vice city gameplay commentary gaming streamer", "streamer webcam facecam live reaction"],
+                "anchors": ["techno gamerz reacting to gta 6 gameplay in hindi", "gta 6 gameplay commentary gaming streamer", "streamer webcam facecam live reaction"],
                 "disqualifiers": ["pause screen", "blank black screen"],
                 "title": "TECHNO GAMERZ GTA 6 GAMEPLAY",
                 "subtitle": "HINDI LIVE GAMEPLAY REACTION",

@@ -8,13 +8,14 @@ from pathlib import Path
 from typing import Dict, List, Any, Optional, Generator
 from datetime import datetime
 from PIL import Image
+from src.semantic_gatekeeper import SemanticGatekeeper
 
 class CreatorJournalEngine:
     """
     Continuous 1 FPS Direct Stream Perception & Journaling Engine.
     Streams YouTube/Twitch live broadcasts or past VODs on the fly via FFmpeg pipe,
     classifies gameplay at 1 frame per second without storing video dumps on disk,
-    and maintains a persistent second-by-second markdown context journal.
+    evaluates frames with SemanticGatekeeper, and maintains a persistent second-by-second markdown context journal.
     """
     def __init__(
         self,
@@ -25,6 +26,7 @@ class CreatorJournalEngine:
         self.output_dir = Path(output_dir or f"docs/streams/{creator_name.lower()}")
         self.output_dir.mkdir(parents=True, exist_ok=True)
         self.ffmpeg_bin = shutil_which("ffmpeg") or "/opt/homebrew/bin/ffmpeg"
+        self.gatekeeper = SemanticGatekeeper()
 
     def _format_timecode(self, total_seconds: int) -> str:
         h = total_seconds // 3600
@@ -103,11 +105,114 @@ class CreatorJournalEngine:
         proc.stdout.close()
         proc.wait()
 
+    def scan_audio_energy(self, media_path: str, start_sec: float = 0.0, duration_sec: float = 30.0) -> Dict[str, Any]:
+        """Runs ffmpeg volumedetect to get mean and max volume decibels across a time window."""
+        cmd = [
+            self.ffmpeg_bin,
+            "-hide_banner",
+            "-ss", str(start_sec),
+            "-t", str(duration_sec),
+            "-i", str(media_path),
+            "-af", "volumedetect",
+            "-f", "null",
+            "-"
+        ]
+        res = subprocess.run(cmd, stderr=subprocess.PIPE, text=True)
+        mean_vol = -99.0
+        max_vol = -99.0
+        for line in res.stderr.splitlines():
+            if "mean_volume:" in line:
+                try:
+                    mean_vol = float(line.split("mean_volume:")[1].split("dB")[0].strip())
+                except Exception:
+                    pass
+            if "max_volume:" in line:
+                try:
+                    max_vol = float(line.split("max_volume:")[1].split("dB")[0].strip())
+                except Exception:
+                    pass
+        is_audible = mean_vol > -36.0
+        return {
+            "mean_volume": mean_vol,
+            "max_volume": max_vol,
+            "is_audible": is_audible
+        }
+
+    def evaluate_window(
+        self,
+        media_path: str,
+        start_sec: float,
+        duration_sec: float = 30.0
+    ) -> Dict[str, Any]:
+        """
+        Grounded Multi-Modal Evaluation:
+        1. Checks Audio Energy: rejects dead air / silence (< -36 dB).
+        2. Samples Frames: evaluates with SemanticGatekeeper (BLIP caption + CLIP archetype).
+        3. Returns full verified candidate decision with social metadata.
+        """
+        audio = self.scan_audio_energy(media_path, start_sec=start_sec, duration_sec=duration_sec)
+        if not audio["is_audible"]:
+            return {
+                "is_approved": False,
+                "confidence": 0.0,
+                "reason": f"Rejected as Dead Air / Muted Audio ({audio['mean_volume']} dB)",
+                "archetype": "MUTED_AUDIO",
+                "audio": audio,
+                "captions": [],
+                "metadata": None
+            }
+
+        # Extract 3 frames across the window (start + 25%, start + 50%, start + 75%)
+        frames = []
+        for offset in [0.25 * duration_sec, 0.50 * duration_sec, 0.75 * duration_sec]:
+            t = start_sec + offset
+            cmd = [
+                self.ffmpeg_bin, "-y",
+                "-ss", str(t),
+                "-i", str(media_path),
+                "-vframes", "1",
+                "-f", "image2pipe",
+                "-vcodec", "mjpeg",
+                "-"
+            ]
+            res = subprocess.run(cmd, stdout=subprocess.PIPE, stderr=subprocess.DEVNULL)
+            if res.stdout:
+                try:
+                    frames.append(Image.open(io.BytesIO(res.stdout)).convert("RGB"))
+                except Exception:
+                    pass
+
+        if not frames:
+            return {
+                "is_approved": False,
+                "confidence": 0.0,
+                "reason": "Failed to extract frames",
+                "archetype": "EXTRACTION_FAILURE",
+                "audio": audio,
+                "captions": [],
+                "metadata": None
+            }
+
+        eval_res = self.gatekeeper.evaluate_multi_frame_context(
+            frames,
+            streamer_name=self.creator_name,
+            game_title="GTA 6"
+        )
+
+        return {
+            "is_approved": eval_res["is_worth_clipping"],
+            "confidence": eval_res["confidence"],
+            "reason": eval_res["decision_reason"],
+            "archetype": eval_res["novel_archetype"],
+            "audio": audio,
+            "captions": eval_res.get("frame_captions", []),
+            "metadata": eval_res.get("metadata")
+        }
+
     def classify_frame(self, frame_info: Dict[str, Any], prev_frame: Optional[Image.Image] = None) -> Dict[str, Any]:
         """
         Deep multi-modal perception classifier for 1 FPS continuous stream.
-        Captures rich observational scene data, entity interactions, audio commentary,
-        and emergent anomalies while keeping generic game state as secondary telemetry metadata.
+        Grounded in SemanticGatekeeper (BLIP captions + CLIP contrast against novel vs lame archetypes).
         """
         img = frame_info["image"]
         sec = frame_info["second"]
@@ -128,82 +233,25 @@ class CreatorJournalEngine:
             else:
                 motion_level = "ACTIVE"
 
-        # Telemetry & Game State (Compact Extra Metadata)
-        generic_state = "FREE_ROAM"
-        speed_mph = 35 + (sec * 7) % 110
-        wanted_stars = min(5, sec // 20)
-        health_pct = max(10, 100 - (sec % 35) * 3)
-        collision = "NONE"
+        # Run real multi-modal perception via SemanticGatekeeper
+        eval_res = self.gatekeeper.evaluate_multi_frame_context(
+            [img],
+            streamer_name=self.creator_name,
+            game_title="GTA 6"
+        )
 
-        # Rich Observational Scene & Entity Dynamics
-        visual_entities = "Player character in muscle car navigating coastal avenue"
-        emergent_action = "Routine cruising along neon beachfront hotels"
-        creator_speech = "Talking with live chat about Vice City car handling"
-        audio_energy = "Calm"
-        curator_hook = "Ambient Gameplay"
-        is_emergent_highlight = False
+        is_worth = eval_res.get("is_worth_clipping", False)
+        caps = eval_res.get("frame_captions", ["Gameplay scene"])
+        visual_entities = caps[0] if caps else "In-game view"
+        emergent_action = eval_res.get("decision_reason", "Routine gameplay")
+        curator_hook = eval_res.get("novel_archetype", "AMBIENT_ACTION") if is_worth else "AMBIENT_GAMEPLAY"
+        confidence = eval_res.get("confidence", 0.0)
 
-        # Simulate deep emergent pattern classification based on stream progression
-        if sec % 30 in [6, 7, 8]:
-            generic_state = "STORE_INTERIOR"
-            wanted_stars = 1
-            visual_entities = "Player aiming pistol at convenience store clerk behind register counter"
-            emergent_action = "Attempted shakedown: Clerk ducks under counter, alarm bell shrieking"
-            creator_speech = "'Hands up! Give me the bag right now! Don't touch that button!'"
-            audio_energy = "High / Confident"
-            curator_hook = "Robbery In Progress"
-        elif sec % 30 == 9:
-            generic_state = "COMBAT_ENCOUNTER"
-            wanted_stars = 2
-            visual_entities = "Clerk pops up wielding sawed-off shotgun, muzzle flash illuminating register"
-            emergent_action = "🚨 UNEXPECTED TWIST: Armed clerk counter-ambush! Shotgun blast shatters glass behind player"
-            creator_speech = "'WHAT?! Bro has a shotgun?! Bhaago yaha se!!'"
-            audio_energy = "Screaming / Pure Panic"
-            curator_hook = "💥 ROBBERY_GONE_WRONG"
-            is_emergent_highlight = True
-        elif sec % 30 == 10:
-            generic_state = "EMERGENCY_GETAWAY"
-            wanted_stars = 3
-            visual_entities = "Player sprinting out store door into street; off-duty police cruiser already parked outside"
-            emergent_action = "Cop cruiser blocked player getaway vehicle; player forced into foot pursuit"
-            creator_speech = "'Police bahar hi khadi thi?! Yeh kya scam hai Rockstar?!'"
-            audio_energy = "Laughter / Despair"
-            curator_hook = "Instant Karma Shakedown"
-            is_emergent_highlight = True
-        elif motion_level == "EXTREME_MOTION" and speed_mph > 95:
-            if sec % 17 == 0:
-                generic_state = "PHYSICS_COLLISION"
-                collision = "CATASTROPHIC"
-                visual_entities = "Sports car T-boning municipal bus at 105 mph; front clip sheared off"
-                emergent_action = "🚨 INSTANT KARMA: Hit NPC launched 30 feet into hotel swimming pool"
-                creator_speech = "'Watch this gap— OH MY GOD HE FLEW INTO THE POOL!!'"
-                audio_energy = "Hysterical Laughter"
-                curator_hook = "💥 ACCIDENTAL_CHAOS"
-                is_emergent_highlight = True
-            else:
-                generic_state = "PURSUIT_DRIVING"
-                visual_entities = "High-speed lane weaving between civilian sedans with tire smoke"
-                emergent_action = "Threading narrow gap between two box trucks with 0cm clearance"
-                creator_speech = "'Pure driving skills right here boys, nobody can touch me!'"
-                audio_energy = "Hype / Focused"
-                curator_hook = "Smooth Operator"
-        elif sec % 45 in range(20, 24):
-            generic_state = "MISSION_ACTIVE"
-            visual_entities = "Player taking cover behind brick warehouse pillar; 4 cartel guards advancing"
-            emergent_action = "Suppressive crossfire with Micro SMG; concrete debris flying"
-            creator_speech = "'Covering the flank! Lucia, take the rooftop sniper!'"
-            audio_energy = "Intense"
-            curator_hook = "Heist Shootout"
-        elif sec % 45 == 24:
-            generic_state = "MISSION_FAILED"
-            visual_entities = "Screen turns monochrome 'WASTED' after grenade detonation"
-            emergent_action = "Unexpected friendly fire: Jason threw grenade into doorway frame"
-            creator_speech = "'Bro Jason threw the grenade AT THE WALL! ARE YOU SERIOUS?!'"
-            audio_energy = "Frustration Sigh"
-            curator_hook = "💥 NOOB_FAIL_ARC"
-            is_emergent_highlight = True
+        creator_speech = "Live Commentary"
+        audio_energy = "Active" if is_worth else "Calm"
+        generic_state = "ACTION_EVENT" if is_worth else "FREE_ROAM"
 
-        extra_telemetry = f"State: {generic_state} | Wanted: {'★' * wanted_stars}{'☆' * (5 - wanted_stars)} | Spd: {speed_mph}mph | HP: {health_pct}%"
+        extra_telemetry = f"State: {generic_state} | Motion: {motion_level} | Gatekeeper Conf: {confidence}%"
 
         return {
             "second": sec,
@@ -215,9 +263,9 @@ class CreatorJournalEngine:
             "audio_energy": audio_energy,
             "curator_hook": curator_hook,
             "extra_telemetry": extra_telemetry,
-            "is_emergent_highlight": is_emergent_highlight,
-            "speed_mph": speed_mph,
-            "collision": collision
+            "is_emergent_highlight": is_worth,
+            "confidence": confidence,
+            "metadata": eval_res.get("metadata")
         }
 
     def generate_session_journal(

@@ -1,0 +1,55 @@
+{
+  "vault_name": "Ravo OP (@ravoop) Hybrid Multi-Tier Vault",
+  "creator": "@ravoop",
+  "platform": "YouTube Live Playthroughs",
+  "generated_at": "2026-11-20T06:10:00Z",
+  "format_specs": {
+    "resolution": "1920x1080 (1080p60)",
+    "video_codec": "H.264 (High Profile, YUV420p)",
+    "audio_codec": "AAC Stereo (192 kbps, 48kHz)",
+    "watermarks": "None (100% Raw)",
+    "burned_captions": "None (Pure Source Audio)"
+  },
+  "clips": [
+    {
+      "clip_id": "RAVO_MISSION_01",
+      "category": "missions",
+      "filename": "ravi/missions/ravo_mission_jason_lucia_opening_arc.mp4",
+      "duration": "2m 30s",
+      "source_stream": "🔴 GTA 6 LIVE – Jason & Lucia’s Story Begins | Ravo OP (FO6gVOmtj2E)",
+      "timestamps": "03:15 - 05:45",
+      "narrative_arc": "Day 1 story mission kickoff with Jason & Lucia in-car dialogue, setting up the crime spree across Leonida.",
+      "best_use": "Mid-form YouTube Video / Facebook Gaming Showcase / Multi-part Carousel"
+    },
+    {
+      "clip_id": "RAVO_CHASE_01",
+      "category": "chases",
+      "filename": "ravi/chases/ravo_chase_vice_city_getaway_01.mp4",
+      "duration": "45s",
+      "source_stream": "🔴 GTA 6 LIVE – Jason & Lucia’s Story Begins | Ravo OP (FO6gVOmtj2E)",
+      "timestamps": "08:30 - 09:15",
+      "narrative_arc": "High-speed police evasion through downtown Vice City alleys with close calls and dynamic squad car collisions.",
+      "best_use": "YouTube Shorts / Instagram Reels / TikTok Action Clip"
+    },
+    {
+      "clip_id": "RAVO_CHASE_02",
+      "category": "chases",
+      "filename": "ravi/chases/ravo_chase_vice_city_pursuit_02.mp4",
+      "duration": "1m 30s",
+      "source_stream": "🔴 GTA 6 LIVE – Jason & Lucia’s Story Begins | Ravo OP (mHbU-3y5x8Q)",
+      "timestamps": "18:30 - 20:00",
+      "narrative_arc": "Extended multi-vehicle pursuit with roadblock ramming and highway drift escape.",
+      "best_use": "YouTube Shorts / Telegram Community Sharing"
+    },
+    {
+      "clip_id": "RAVO_FUNNY_01",
+      "category": "funny",
+      "filename": "ravi/funny/ravo_funny_stunt_reaction_01.mp4",
+      "duration": "35s",
+      "source_stream": "PLAYING GTA 6 EARLY ACCESS GAMEPLAY GET IN HERE! (8UbQihNrV7o)",
+      "timestamps": "15:00 - 15:35",
+      "narrative_arc": "Unexpected physics ragdoll launch off a bridge jump with genuine streamer laughing reaction.",
+      "best_use": "Viral Meme Short / TikTok Reel / Telegram Reaction"
+    }
+  ]
+}

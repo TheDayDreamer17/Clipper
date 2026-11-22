@@ -207,9 +207,9 @@ class MultiStreamOrchestrator:
         # 1. Fetch live trends and synthesize props
         trends = self.trend_miner.fetch_live_search_trends(["gta 6 gameplay", "gta 6 police"])
         mapped_props = [
-            self.trend_miner.enrich_trend_into_precision_prop(self.trend_miner.map_gta6_to_gta5_equivalent("police chase")),
-            self.trend_miner.enrich_trend_into_precision_prop(self.trend_miner.map_gta6_to_gta5_equivalent("loading screen")),
-            self.trend_miner.enrich_trend_into_precision_prop(self.trend_miner.map_gta6_to_gta5_equivalent("first person driving"))
+            self.trend_miner.enrich_trend_into_precision_prop(self.trend_miner.map_gta6_trend_scenario("police chase")),
+            self.trend_miner.enrich_trend_into_precision_prop(self.trend_miner.map_gta6_trend_scenario("loading screen")),
+            self.trend_miner.enrich_trend_into_precision_prop(self.trend_miner.map_gta6_trend_scenario("first person driving"))
         ]
 
         # 2. Run workers concurrently in ThreadPool

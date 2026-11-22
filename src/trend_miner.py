@@ -43,54 +43,59 @@ class TrendMiner:
                 pass
         return sorted(list(results))
 
-    def map_gta6_to_gta5_equivalent(self, query: str) -> Dict[str, Any]:
+    def map_gta6_trend_scenario(self, query: str) -> Dict[str, Any]:
         """
-        Maps a trending GTA 6 query to its corresponding GTA 5 benchmark scenario
-        for pre-release testing and validation.
+        Maps a trending GTA 6 query to its corresponding Grand Theft Auto VI scenario.
         """
         q = query.lower()
         if any(w in q for w in ["police", "chase", "cop", "wanted", "pursuit", "stars"]):
             return {
                 "category": "POLICE_PURSUIT",
-                "gta6_topic": "Vice City Metro Police 3-Star Cruiser Ambush",
-                "gta5_equivalent": "Los Santos High-Speed 3-Star Police Pursuit with Cruisers & Sirens",
+                "gta6_topic": "GTA 6 Highway Police 3-Star Cruiser Ambush",
+                "scenario_name": "GTA 6 High-Speed 3-Star Police Pursuit with Cruisers & Sirens",
                 "test_anchor": "police cruisers pursuing player with sirens, roadblocks and wanted stars"
             }
         elif any(w in q for w in ["first person", "fpv", "cockpit", "interior", "pov", "camera"]):
             return {
                 "category": "CAMERA_POV",
                 "gta6_topic": "Vehicle Interior Cockpit FPV with Functional Mirrors",
-                "gta5_equivalent": "In-Car Cockpit Driving with Steering Wheel & Dashboard Toggle",
+                "scenario_name": "In-Car Cockpit Driving with Steering Wheel & Dashboard Toggle",
                 "test_anchor": "first person driver cockpit view inside vehicle showing steering wheel"
             }
         elif any(w in q for w in ["helicopter", "plane", "flying", "heli", "aerial", "sky"]):
             return {
                 "category": "AERIAL_FLIGHT",
-                "gta6_topic": "Maverick Helicopter Flight Over Vice Beach Sunset",
-                "gta5_equivalent": "Helicopter Helipad Ground Takeoff to Los Santos Skyline",
+                "gta6_topic": "Maverick Helicopter Flight Over GTA 6 Coastal Sunset",
+                "scenario_name": "Helicopter Helipad Ground Takeoff to GTA 6 Skyline",
                 "test_anchor": "helicopter takeoff from ground climbing up over city skyline at sunset"
             }
         elif any(w in q for w in ["loading", "intro", "boot", "artwork", "characters"]):
             return {
                 "category": "LOADING_ARTWORK",
                 "gta6_topic": "Official Lucia & Jason Launch Loading Artwork Slides",
-                "gta5_equivalent": "Complete Character Artwork Rotation (Michael, Franklin, Trevor, Bikini Girl)",
-                "test_anchor": "GTA loading screen rotating character artwork portraits and title logo"
+                "scenario_name": "Complete Character Artwork Rotation (Lucia, Jason, GTA 6)",
+                "test_anchor": "GTA 6 loading screen rotating character artwork portraits and title logo"
             }
         elif any(w in q for w in ["weapon", "gun", "inventory", "shoot", "combat", "wheel"]):
             return {
                 "category": "WEAPON_COMBAT",
                 "gta6_topic": "Physical Weapon Sling & Tactical Firefight",
-                "gta5_equivalent": "In-Game Radial Weapon Wheel Selection & Combat Shootout",
+                "scenario_name": "In-Game Radial Weapon Wheel Selection & Combat Shootout",
                 "test_anchor": "player aiming gun with weapon wheel circular selector menu open in combat"
             }
         else:
             return {
                 "category": "DYNAMIC_DRIVING",
                 "gta6_topic": "Next-Gen Vehicle Physics & Wet Road SSR",
-                "gta5_equivalent": "Rainy Night Wet Road Driving with Neon Reflections",
+                "scenario_name": "GTA 6 Rainy Night Wet Road Driving with Neon Reflections",
                 "test_anchor": "car driving on wet city street at night with rain reflections"
             }
+
+    # Backward compatibility alias
+    def map_gta6_to_gta5_equivalent(self, query: str) -> Dict[str, Any]:
+        mapped = self.map_gta6_trend_scenario(query)
+        mapped["gta5_equivalent"] = mapped["scenario_name"]
+        return mapped
 
     def enrich_trend_into_precision_prop(self, mapped_concept: Dict[str, Any]) -> Dict[str, Any]:
         """
@@ -98,12 +103,13 @@ class TrendMiner:
         with positive anchors, negative disqualifiers, and HUD triggers.
         """
         cat = mapped_concept["category"]
+        name = mapped_concept.get("scenario_name") or mapped_concept.get("gta5_equivalent", "GTA 6 Action")
 
         if cat == "POLICE_PURSUIT":
             return {
                 "prop_id": "PROP_POLICE_PURSUIT_ENRICHED",
                 "category": cat,
-                "name": mapped_concept["gta5_equivalent"],
+                "name": name,
                 "visual_anchors": [
                     "police cruiser patrol car chasing player with flashing red and blue lights",
                     "high speed car pursuit evasion through city streets with sirens",
@@ -122,7 +128,7 @@ class TrendMiner:
                 "banner_ui": {
                     "tag": "🚨 3-STAR WANTED",
                     "title": "HIGH SPEED POLICE CHASE",
-                    "subtitle": "LOS SANTOS CRUISER PURSUIT & ESCAPE"
+                    "subtitle": "GTA 6 CRUISER PURSUIT & ESCAPE"
                 }
             }
 
@@ -130,7 +136,7 @@ class TrendMiner:
             return {
                 "prop_id": "PROP_CAMERA_POV_ENRICHED",
                 "category": cat,
-                "name": mapped_concept["gta5_equivalent"],
+                "name": name,
                 "visual_anchors": [
                     "first person interior cockpit view from driver seat with steering wheel and dashboard",
                     "camera transitioning from third person chase view into interior driver cockpit",
@@ -156,7 +162,7 @@ class TrendMiner:
             return {
                 "prop_id": "PROP_AERIAL_FLIGHT_ENRICHED",
                 "category": cat,
-                "name": mapped_concept["gta5_equivalent"],
+                "name": name,
                 "visual_anchors": [
                     "helicopter starting from helipad ground lifting up into the air",
                     "helicopter climbing above city skyline with sunset horizon",
@@ -182,10 +188,10 @@ class TrendMiner:
             return {
                 "prop_id": "PROP_LOADING_ARTWORK_ENRICHED",
                 "category": cat,
-                "name": mapped_concept["gta5_equivalent"],
+                "name": name,
                 "visual_anchors": [
-                    "GTA loading screen rotating character artwork slides and portraits",
-                    "official Rockstar artwork of Michael, Franklin, Trevor, and bikini girl",
+                    "GTA 6 loading screen rotating character artwork slides and portraits",
+                    "official Rockstar artwork of Lucia and Jason in GTA 6",
                     "loading screen transition with background artwork into game world"
                 ],
                 "negative_anchors": [
@@ -198,7 +204,7 @@ class TrendMiner:
                     "vqa_prompt": "Is this a loading screen displaying 2D character artwork?"
                 },
                 "banner_ui": {
-                    "tag": "🔥 GTA ARTWORK",
+                    "tag": "🔥 GTA 6 ARTWORK",
                     "title": "FULL CHARACTER ARTWORK",
                     "subtitle": "COMPLETE LOADING SCREEN ROTATION"
                 }
@@ -208,7 +214,7 @@ class TrendMiner:
             return {
                 "prop_id": "PROP_WEAPON_COMBAT_ENRICHED",
                 "category": cat,
-                "name": mapped_concept["gta5_equivalent"],
+                "name": name,
                 "visual_anchors": [
                     "player opening in-game circular radial weapon wheel to switch guns",
                     "active gunfight shootout with weapon reticle and muzzle flash",
