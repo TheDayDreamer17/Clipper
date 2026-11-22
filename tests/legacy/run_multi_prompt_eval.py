@@ -13,7 +13,7 @@ from src.ingest import StreamIngester
 
 def run_evaluation():
     print("=" * 70)
-    print("🧪 MULTI-PROMPT METHOD BENCHMARK ON GTA 5 SCENARIOS")
+    print("🧪 MULTI-PROMPT METHOD BENCHMARK ON GTA 6 SCENARIOS")
     print("Scenarios: Loading Screen, 3 (Police), 5 (Weapon Wheel), 7 (Heli),")
     print("           9 (Rainy Night), and Driving (FPV vs TPV)")
     print("=" * 70)

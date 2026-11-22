@@ -36,12 +36,12 @@ def run_end_to_end_test():
         print(f"🎯 PROCESSING TREND: \"{query}\"")
         print("=" * 65)
 
-        # 2. GTA 6 -> GTA 5 EQUIVALENT MAPPING
-        print("🔄 STEP 2: Mapping GTA 6 Concept to GTA 5 Benchmark...")
-        mapped = miner.map_gta6_to_gta5_equivalent(query)
-        print(f"   • GTA 6 Topic:      {mapped['gta6_topic']}")
-        print(f"   • GTA 5 Equivalent: {mapped['gta5_equivalent']}")
-        print(f"   • Core Anchor:      {mapped['test_anchor']}")
+        # 2. GTA 6 SCENARIO SYNTHESIS
+        print("🔄 STEP 2: Synthesizing GTA 6 Scenario...")
+        mapped = miner.map_gta6_trend_scenario(query)
+        print(f"   • GTA 6 Topic:     {mapped['gta6_topic']}")
+        print(f"   • Scenario Name:   {mapped['scenario_name']}")
+        print(f"   • Core Anchor:     {mapped['test_anchor']}")
 
         # 3. KNOWLEDGE ENRICHMENT (PRECISION PROP GENERATION)
         print("\n🧠 STEP 3: Autonomous Knowledge Enrichment (Precision Prop)...")

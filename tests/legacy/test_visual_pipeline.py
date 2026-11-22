@@ -9,7 +9,7 @@ from src.stream_journal import StreamJournal
 from src.slicer import VideoSlicer
 
 def run_test():
-    video_id = "1A4j0G8a43c" # GTA 4 vs. GTA 5 Ultimate Physics Comparison
+    video_id = "1A4j0G8a43c" # GTA 6 Next-Gen Physics Comparison
     video_url = f"https://www.youtube.com/watch?v={video_id}"
     
     print("=" * 60)
@@ -18,8 +18,8 @@ def run_test():
 
     # 1. Initialize Stream Journal
     journal = StreamJournal(
-        stream_id="test_gta5_physics_showcase",
-        streamer_name="GTA 5 Ultimate Physics Comparison",
+        stream_id="test_gta6_physics_showcase",
+        streamer_name="GTA 6 Ultimate Physics Comparison",
         platform="YouTube"
     )
     print(f"📖 Initialized Journal: {journal.journal_file}")

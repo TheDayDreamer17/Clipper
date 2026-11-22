@@ -24,7 +24,7 @@ def run():
             "output_chunk": "story_loading_intro.mp4",
             "start_time": "10",
             "duration": 25,
-            "banner_title": "GTA 5 Official Loading Screen",
+            "banner_title": "GTA 6 Official Loading Screen",
             "banner_sub": "ROCKSTAR ARTWORK & SIREN INTRO",
             "expected": "PROP_01"
         },
@@ -35,7 +35,7 @@ def run():
             "start_time": "20",
             "duration": 25,
             "banner_title": "Franklin & Lamar Character Intro",
-            "banner_sub": "GTA 5 STORY MODE MISSION #1",
+            "banner_sub": "GTA 6 STORY MODE MISSION #1",
             "expected": "PROP_02"
         },
         {
