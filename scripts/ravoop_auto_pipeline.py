@@ -9,6 +9,9 @@ from typing import List, Dict, Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
+from src.creator_journal_engine import CreatorJournalEngine
+from src.slicer import VideoSlicer
+
 DB_PATH = Path("data/ravi_vault.db")
 REGISTRY_PATH = Path("data/ravoop_stream_registry.json")
 OUT_DIR = Path("output/training_candidates")
@@ -18,7 +21,8 @@ class RavoopAutoPipeline:
     """
     Autonomous Stream Monitor & Ingestion Engine for Ravi (@ravoop).
     Continuously monitors Ravi's YouTube live channel, discovers new streams,
-    generates 1 FPS context journals, extracts top dual-format clips (16:9 Wide + 9:16 Short),
+    evaluates audio loudness and visual interactions via SemanticGatekeeper,
+    generates grounded context journals, extracts top dual-format clips (16:9 Wide + 9:16 Short),
     and inserts them directly into the dedicated Ravi Vault database.
     """
     def __init__(self):
@@ -27,6 +31,8 @@ class RavoopAutoPipeline:
         self.processed_ids = self._load_processed()
         OUT_DIR.mkdir(parents=True, exist_ok=True)
         JOURNAL_DIR.mkdir(parents=True, exist_ok=True)
+        self.journal_engine = CreatorJournalEngine(creator_name="Ravi")
+        self.slicer = VideoSlicer()
         self._init_db()
 
     def _init_db(self):
@@ -95,11 +101,54 @@ class RavoopAutoPipeline:
                         streams.append({"id": sid, "title": title, "duration": dur})
             return streams
         except Exception as e:
-            print(f"Error fetching streams: {e}")
+            print(f"Error fetching live streams: {e}. Falling back to registered streams cache.")
+            try:
+                if REGISTRY_PATH.exists():
+                    with open(REGISTRY_PATH, "r", encoding="utf-8") as f:
+                        reg = json.load(f)
+                    return [
+                        {"id": s["stream_id"], "title": s["title"], "duration": float(s.get("duration_sec", 1800.0))}
+                        for s in reg.get("streams", [])
+                    ]
+            except Exception:
+                pass
             return []
 
+    def find_audio_energy_peaks(self, stream_url: str, dur: float, top_k: int = 5) -> List[int]:
+        """Downloads lightweight audio track and finds loudest action timestamps across stream."""
+        audio_tmp = Path(f"/tmp/stream_{int(time.time())}_audio.webm")
+        try:
+            dl_cmd = ["./.venv/bin/yt-dlp", "-f", "251/ba/b", "-o", str(audio_tmp), stream_url]
+            subprocess.run(dl_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, timeout=120, check=True)
+            if not audio_tmp.exists():
+                return [int(dur * f) for f in [0.25, 0.45, 0.65]]
+
+            # Sweep in 90-second increments
+            step = 90
+            candidates = []
+            for sec in range(120, int(dur) - 60, step):
+                cmd = ["ffmpeg", "-ss", str(sec), "-t", "10", "-i", str(audio_tmp), "-af", "volumedetect", "-f", "null", "-"]
+                res = subprocess.run(cmd, capture_output=True, text=True)
+                mean_vol = -99.0
+                for line in res.stderr.splitlines():
+                    if "mean_volume:" in line:
+                        try:
+                            mean_vol = float(line.split("mean_volume:")[1].replace("dB", "").strip())
+                        except Exception:
+                            pass
+                candidates.append((sec, mean_vol))
+
+            candidates.sort(key=lambda x: x[1], reverse=True)
+            peaks = [c[0] for c in candidates[:top_k]]
+            audio_tmp.unlink(missing_ok=True)
+            return sorted(peaks) if peaks else [int(dur * f) for f in [0.25, 0.45, 0.65]]
+        except Exception as e:
+            print(f"Error finding audio energy peaks: {e}")
+            audio_tmp.unlink(missing_ok=True)
+            return [int(dur * f) for f in [0.25, 0.45, 0.65]]
+
     def process_and_dispatch_cycle(self):
-        """Runs one check and harvest cycle."""
+        """Runs one grounded check and harvest cycle using SemanticGatekeeper & Audio Volumedetect."""
         streams = self.fetch_recent_streams()
         print(f"📡 Found {len(streams)} live streams on {self.channel_url}")
 
@@ -108,72 +157,70 @@ class RavoopAutoPipeline:
             if sid in self.processed_ids:
                 continue
 
-            print(f"🎬 New stream detected: {s['title']} ({sid})! Processing autonomous ingestion...")
+            print(f"🎬 New stream detected: {s['title']} ({sid})! Processing autonomous grounded evaluation...")
             stream_url = f"https://www.youtube.com/watch?v={sid}"
+            dur = max(60.0, float(s.get("duration", 1800.0)))
 
-            # Extract 3 high-probability candidate moments across the stream
-            # 1. Early chase (15m in)
-            # 2. Mid-stream action / shakedown (35m in)
-            # 3. High-energy stunt (1h 15m in)
-            moments = [
-                {
-                    "cid": f"ravo_auto_{sid}_chase",
-                    "range": "*00:15:00-00:15:35",
-                    "title": f"Ravo OP High-Speed Police Evasion ({sid[:6]})",
-                    "category": "POLICE_PURSUIT",
-                    "speech": "Police samne se aa gayi! Escape drift!",
-                    "action": "High-speed police evasion through downtown avenues",
-                    "score": 93.0
-                },
-                {
-                    "cid": f"ravo_auto_{sid}_robbery",
-                    "range": "*00:35:00-00:35:35",
-                    "title": f"Ravo OP Store Shakedown Counter-Attack ({sid[:6]})",
-                    "category": "ROBBERY_GONE_WRONG",
-                    "speech": "Bro has a weapon?! Bhaago yaha se!",
-                    "action": "Convenience store armed counter-ambush shootout",
-                    "score": 95.0
-                },
-                {
-                    "cid": f"ravo_auto_{sid}_stunt",
-                    "range": "*01:15:00-01:15:35",
-                    "title": f"Ravo OP Ramp Jump Ragdoll Stunt ({sid[:6]})",
-                    "category": "PHYSICS_FAIL",
-                    "speech": "Gadi flip ho gayi yaaar! Streamer reaction!",
-                    "action": "Ramp launch with airborne physics and crash",
-                    "score": 90.0
-                }
-            ]
+            # Discover real action peaks across the stream via full-stream audio volume energy sweep
+            print(f"   🎧 Running full-stream audio energy sweep to pinpoint loudest action peaks...")
+            test_offsets = self.find_audio_energy_peaks(stream_url, dur, top_k=6)
+            print(f"   🎯 Identified {len(test_offsets)} action peak offsets: {test_offsets}")
 
-            for m in moments:
-                cid = m["cid"]
+            approved_moments = []
+
+            for offset in test_offsets:
+                m_str = f"{offset // 3600:02d}:{(offset % 3600) // 60:02d}:{offset % 60:02d}"
+                m_end = f"{(offset + 35) // 3600:02d}:{((offset + 35) % 3600) // 60:02d}:{(offset + 35) % 60:02d}"
+                sec_range = f"*{m_str}-{m_end}"
+                cid = f"ravo_auto_{sid}_{offset}"
                 wide_path = OUT_DIR / f"{cid}_wide.mp4"
                 short_path = OUT_DIR / f"{cid}_short.mp4"
 
                 try:
-                    # 1. Download 1080p raw 16:9 wide
+                    # 1. Download candidate 35s chunk for multi-modal evaluation
                     dl_cmd = [
                         "./.venv/bin/yt-dlp",
-                        "--download-sections", m["range"],
-                        "-f", "bv*[height<=1080][ext=mp4]+ba[ext=m4a]/bv*[height<=1080]+ba/b",
+                        "--download-sections", sec_range,
+                        "-f", "bv*[height<=1440]+ba/bv*+ba/best",
                         "--merge-output-format", "mp4",
                         "-o", str(wide_path),
                         stream_url
                     ]
                     subprocess.run(dl_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+                    if not wide_path.exists():
+                        continue
 
-                    # 2. Render 9:16 Short (ambient blurred background + uncropped 16:9 center)
-                    enc_cmd = [
-                        "ffmpeg", "-y", "-i", str(wide_path),
-                        "-filter_complex",
-                        "[0:v]scale=1080:1920:force_original_aspect_ratio=increase,crop=1080:1920,boxblur=20:5[bg];[0:v]scale=1080:-1[fg];[bg][fg]overlay=0:(H-h)/2",
-                        "-c:v", "libx264", "-preset", "ultrafast", "-crf", "19",
-                        "-c:a", "aac", "-b:a", "192k",
-                        str(short_path)
-                    ]
-                    subprocess.run(enc_cmd, stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL, check=True)
+                    # 2. Grounded Multi-Modal Gatekeeper Evaluation
+                    eval_res = self.journal_engine.evaluate_window(str(wide_path), start_sec=0.0, duration_sec=30.0)
+                    print(f"   🔍 t={m_str}: Approved={eval_res['is_approved']} | Archetype={eval_res['archetype']} | Vol={eval_res['audio']['mean_volume']}dB")
 
-                    # 3. Save into Ravi Vault DB
+                    if not eval_res["is_approved"]:
+                        print(f"   ❌ Rejected candidate at {m_str}: {eval_res['reason']}")
+                        wide_path.unlink(missing_ok=True)
+                        continue
+
+                    # 3. Format Headless High-Craft 9:16 Short (Vice City Container + Audio Normalization)
+                    meta = eval_res.get("metadata") or {}
+                    title = meta.get("youtube_title") or f"Ravo OP {eval_res['archetype'].title()} #Shorts"
+                    tag_line = f"🔥 {eval_res['archetype'].upper()[:25]}"
+
+                    self.slicer.slice_clip(
+                        input_path=str(wide_path),
+                        start_sec=0.0,
+                        duration_sec=30.0,
+                        output_path=str(short_path),
+                        style="vice_city_container",
+                        facecam_corner=None,  # Headless stream (no webcam)
+                        creator_credit="ravoop",
+                        hook_text=f"👀 WAIT FOR THE ACTION...",
+                        overlay_text=title[:32].upper(),
+                        overlay_subtitle=eval_res['reason'][:36],
+                        tag_text=tag_line,
+                        brand_name="RAVO OP CLIPS",
+                        watermark=False
+                    )
+
+                    # 4. Save into Ravi Vault DB
                     conn = sqlite3.connect(str(DB_PATH))
                     c = conn.cursor()
                     vpath = f"/video/training_candidates/{cid}_wide.mp4"
@@ -181,17 +228,28 @@ class RavoopAutoPipeline:
                         INSERT OR REPLACE INTO ravi_clips 
                         (clip_id, video_path, target_search, category, language, channel, creator, expected_spoken, expected_vision, duration, human_stars, human_verdict, human_critique, rated_at, virality_score)
                         VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-                    """, (cid, vpath, m["title"], m["category"], "hi", "@ravoop", "Ravi", m["speech"], m["action"], 35.0, 5, "APPROVED", "", time.time(), m["score"]))
+                    """, (cid, vpath, title, eval_res["archetype"], "hi", "@ravoop", "Ravi", "Live Voice Commentary", eval_res["reason"], 30.0, 5, "APPROVED", "", time.time(), eval_res["confidence"]))
                     conn.commit()
                     conn.close()
-                    print(f"✅ Autonomously added clip: {cid} to Ravi Studio!")
+
+                    approved_moments.append({
+                        "cid": cid,
+                        "timecode": m_str,
+                        "title": title,
+                        "archetype": eval_res["archetype"],
+                        "confidence": eval_res["confidence"]
+                    })
+                    print(f"   ✅ [Grounded Approval]: Saved verified clip {cid} to Ravi Studio!")
+
+                    # Stop after harvesting 3 high-quality moments from this stream
+                    if len(approved_moments) >= 3:
+                        break
 
                 except Exception as e:
-                    print(f"Error processing {cid}: {e}")
+                    print(f"Error evaluating moment {cid}: {e}")
 
             # Update Stream Registry
-            self._update_registry(sid, s["title"], s["duration"], len(moments))
-
+            self._update_registry(sid, s["title"], s["duration"], len(approved_moments))
             self.processed_ids.add(sid)
             self._save_processed()
 

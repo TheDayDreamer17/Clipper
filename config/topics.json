@@ -22,16 +22,16 @@
       "keywords_roman": ["character", "lucia", "jason", "trevor", "michael", "franklin", "banda", "ladki"]
     },
     {
-      "id": "T1_04_vice_city_drive",
-      "category": "Vice City First Drive",
-      "keywords_en": ["vice city", "drive", "driving", "cruise", "streets", "city", "ocean drive", "beach"],
-      "keywords_hi": ["वाइस सिटी", "ड्राइव", "शहर", "सड़क", "बीच", "गाड़ी चला"],
-      "keywords_roman": ["vice city", "drive", "driving", "sheher", "sadak", "beach", "ghumo"]
+      "id": "T1_04_gta6_first_drive",
+      "category": "GTA 6 First Drive",
+      "keywords_en": ["gta 6 drive", "driving", "cruise", "streets", "city", "ocean drive", "beach"],
+      "keywords_hi": ["ड्राइव", "शहर", "सड़क", "बीच", "गाड़ी चला"],
+      "keywords_roman": ["drive", "driving", "sheher", "sadak", "beach", "ghumo"]
     },
     {
-      "id": "T1_05_gta5_vs_gta6",
-      "category": "GTA 5 vs GTA 6 Comparison",
-      "keywords_en": ["difference", "comparison", "gta 5", "gta 6", "versus", "improved", "better"],
+      "id": "T1_05_gta6_evolution",
+      "category": "GTA 6 Next-Gen Upgrades & Evolution",
+      "keywords_en": ["difference", "evolution", "next gen", "gta 6", "graphics", "improved", "better"],
       "keywords_hi": ["फर्क", "तुलना", "बेहतर", "बदल गया", "पहले से"],
       "keywords_roman": ["fark", "compare", "pehla gta", "better hai", "badal gaya"]
     },

@@ -1,0 +1,52 @@
+{
+  "creator": "@ravoop",
+  "channel_url": "https://www.youtube.com/@ravoop",
+  "version": "1.0.0",
+  "vault_structure": {
+    "missions": "ravi/missions",
+    "funny": "ravi/funny",
+    "chases": "ravi/chases"
+  },
+  "sub_properties": {
+    "RAVO_PROP_01": {
+      "id": "RAVO_PROP_01",
+      "name": "Full Mission Playthrough & Climax",
+      "category": "missions",
+      "target_duration_sec": [120, 240],
+      "cues": ["mission_start_jingle", "objective_marker", "mission_passed_screen", "heist_take"],
+      "narrative_arc": "Setup -> Execution -> Climax -> Escape"
+    },
+    "RAVO_PROP_02": {
+      "id": "RAVO_PROP_02",
+      "name": "High-Heat 5-Star Police Chase & Escape",
+      "category": "chases",
+      "target_duration_sec": [90, 180],
+      "cues": ["siren_escalation", "spike_strip", "roadblock_ram", "helicopter_searchlight", "wanted_stars_flashing"],
+      "narrative_arc": "Pursuit -> High-Speed Evasion -> Near Wreck -> Cool Off"
+    },
+    "RAVO_PROP_03": {
+      "id": "RAVO_PROP_03",
+      "name": "Funny Fails, Ragdoll Glitches & Streamer Banter",
+      "category": "funny",
+      "target_duration_sec": [30, 60],
+      "cues": ["streamer_laugh", "mic_peak_shock", "unexpected_vehicle_flip", "npc_ragdoll_launch"],
+      "narrative_arc": "Normal Gameplay -> Sudden Physics Absurdity -> Streamer Laugh Reaction"
+    },
+    "RAVO_PROP_04": {
+      "id": "RAVO_PROP_04",
+      "name": "Jason & Lucia Intimate Dialogue / Cutscene",
+      "category": "missions",
+      "target_duration_sec": [60, 150],
+      "cues": ["in_car_dialogue", "story_cutscene", "relationship_choice", "ambient_radio"],
+      "narrative_arc": "Cinematic Conversation -> Story Development"
+    },
+    "RAVO_PROP_05": {
+      "id": "RAVO_PROP_05",
+      "name": "Open-World Shenanigans & NPC Interactions",
+      "category": "funny",
+      "target_duration_sec": [45, 90],
+      "cues": ["alligator_encounter", "beach_brawl", "rare_supercar_steal", "airboat_stunt"],
+      "narrative_arc": "Discovery -> Unscripted Chaos"
+    }
+  }
+}

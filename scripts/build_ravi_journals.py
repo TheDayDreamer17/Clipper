@@ -8,7 +8,8 @@ streams = [
         "moments": [
             ("00:09", "Store clerk pops up with sawed-off shotgun, muzzle flash illuminating counter", "🚨 UNEXPECTED TWIST: Armed clerk counter-ambush! Shotgun blast shatters glass", "*\"'WHAT?! Bro has a shotgun?! Bhaago yaha se!!'\"* (Panic/Scream)", "💥 ROBBERY_GONE_WRONG", "State: COMBAT | Wanted: ★★☆☆☆ | HP: 73%"),
             ("00:42", "Police cruiser rams side of muscle car at Vice Beach intersection", "🚨 Sudden PIT Maneuver into palm tree", "*\"'Samne se aake thoka?! Are yaar radiator leak ho gaya!'\"* (Laugh/Frustrated)", "🚨 5-STAR_COLLISION", "State: PURSUIT | Wanted: ★★★☆☆ | Spd: 110mph"),
-            ("01:15", "Stunt jump off canal ramp landing on container barge", "Canal waterway stunt landing on moving barge", "*\"'Clean jump! Chat dekho smooth landing!'\"* (Aura/Hyped)", "🔥 WATERWAY_STUNT", "State: VEHICLE_AIRBORNE | Wanted: ☆☆☆☆☆ | Spd: 85mph")
+            ("01:15", "Stunt jump off canal ramp landing on container barge", "Canal waterway stunt landing on moving barge", "*\"'Clean jump! Chat dekho smooth landing!'\"* (Aura/Hyped)", "🔥 WATERWAY_STUNT", "State: VEHICLE_AIRBORNE | Wanted: ☆☆☆☆☆ | Spd: 85mph"),
+            ("39:15", "Tactical night compound infiltration, crouching behind perimeter fence with silenced weapon avoiding floodlights", "🥷 Covert stealth infiltration & silent takedown past guards", "*\"'Stealth mode on... chupke se nikalna hai, koi alarm nahi bajna chahiye!'\"* (Intense Whispering)", "🥷 STEALTH_TACTICAL_INFILTRATION", "State: STEALTH_CROUCH | Wanted: ☆☆☆☆☆ | Weapon: Silenced Pistol")
         ]
     },
     {
@@ -31,6 +32,7 @@ streams = [
         "id": "8UbQihNrV7o",
         "title": "PLAYING GTA 6 EARLY ACCESS GAMEPLAY GET IN HERE!",
         "moments": [
+            ("14:45", "Lucia sneaking through facility hallway crouching past guard checkpoints", "🥷 Silent corridor evasion & stealth movement", "*\"'Guards are right there... stay low, don't make a sound!'\"* (Whispering/Tension)", "🥷 PRISON_STEALTH_ESCAPE", "State: SNEAKING | Wanted: ★☆☆☆☆ | Stealth: 100%"),
             ("15:10", "Motorcycle ramp launch off bridge construction ramp, ragdoll into water", "🚨 Absurd ragdoll physics fail launching 100 feet", "*\"'Gadi hawa me flip ho gayi yaaar! Streamer fail moments!'\"* (Uncontrollable Laughter)", "🤣 PHYSICS_FAIL_GOLD", "State: AIRBORNE_RAGDOLL | Wanted: ☆☆☆☆☆ | Spd: 0mph")
         ]
     },
