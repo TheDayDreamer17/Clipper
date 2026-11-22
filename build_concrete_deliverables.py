@@ -22,7 +22,7 @@ def run():
     # -------------------------------------------------------------
     print("\n[1/4] Processing Character Switching / Loading Clip...")
     char_url = "https://www.youtube.com/watch?v=Yb7i5G0Hywk"
-    char_title = "GTA 5 Character Switching HD"
+    char_title = "GTA 6 Dual Protagonist Switching HD"
     char_chunk = ingest.download_clip_sample(
         char_url,
         output_name="character_switching_raw.mp4",
@@ -43,14 +43,14 @@ def run():
         start_sec=0,
         duration_sec=25,
         output_path=str(char_out),
-        overlay_text="GTA 5 vs GTA 6 Character Switching",
+        overlay_text="GTA 6 Jason & Lucia Character Switching",
         overlay_subtitle="SEAMLESS SATELLITE ZOOM & LOAD SPEED"
     )
     char_journal.record_window(
         start_sec=0,
         end_sec=25,
         visual_state="Camera zooms out to satellite orbit, switches character, and zooms in",
-        action_summary="Michael to Franklin seamless switch transition",
+        action_summary="Jason to Lucia seamless switch transition",
         matched_property="PROP_02",
         clip_path=str(char_out),
         channel_dest="English Channel"
@@ -63,7 +63,7 @@ def run():
     # -------------------------------------------------------------
     print("\n[2/4] Processing English Channel Water Physics Showcase...")
     water_url = "https://www.youtube.com/watch?v=1A4j0G8a43c"
-    water_title = "GTA 4 vs GTA 5 Ultimate Physics Comparison"
+    water_title = "GTA 6 Ultimate Water Physics Upgrade"
     water_chunk = Path("downloads/chunk_0_30.mp4")
     water_journal = StreamJournal(
         stream_id="physics_1A4j0G8a43c",
@@ -79,7 +79,7 @@ def run():
         start_sec=0,
         duration_sec=25,
         output_path=str(water_out),
-        overlay_text="GTA 5 vs GTA 6 Water Physics Upgrade",
+        overlay_text="GTA 6 Next-Gen Fluid Dynamics",
         overlay_subtitle="NEXT-GEN FLUID DYNAMICS & BOAT WAKE"
     )
     water_journal.record_window(
@@ -99,7 +99,7 @@ def run():
     # -------------------------------------------------------------
     print("\n[3/4] Processing Hindi Channel CarryMinati Reaction...")
     hindi_url = "https://www.youtube.com/watch?v=mJVVZbPGDdw"
-    hindi_title = "CarryisLive GTA 5 Heist Gone Crazy"
+    hindi_title = "CarryisLive GTA 6 Heist Gone Crazy"
     hindi_chunk = Path("downloads/gta_test_sample.mp4")
     hindi_journal = StreamJournal(
         stream_id="carry_heist_mJVVZbPGDdw",
@@ -116,7 +116,7 @@ def run():
         duration_sec=25,
         output_path=str(hindi_out),
         overlay_text="CARRYMINATI HEIST MEIN POLICE KA KHAUF!",
-        overlay_subtitle="GTA 5 HEIST GONE WRONG (4-STAR WANTED)"
+        overlay_subtitle="GTA 6 HEIST GONE WRONG (4-STAR WANTED)"
     )
     hindi_journal.record_window(
         start_sec=10,

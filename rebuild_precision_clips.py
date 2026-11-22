@@ -20,13 +20,13 @@ def run():
     # -----------------------------------------------------------------
     print("\n[1/3] Slicing Character Switch with Zero-Filler Climax...")
     char_src = "downloads/character_switch_full.mp4.webm"
-    char_out = "output/english/gta5_character_switching_satellite_orbit_9x16.mp4"
+    char_out = "output/english/gta6_character_switching_satellite_orbit_9x16.mp4"
     slicer.slice_clip(
         input_path=char_src,
         start_sec=17.5,
         duration_sec=21.0,
         output_path=char_out,
-        overlay_text="GTA 5 Seamless Character Switch",
+        overlay_text="GTA 6 Seamless Character Switch",
         overlay_subtitle="SATELLITE ZOOM & ORBIT TRANSITION"
     )
     print(f"✅ Generated: {char_out}")
@@ -67,7 +67,7 @@ def run():
         duration_sec=28.0,
         output_path=carry_out,
         overlay_text="CARRYMINATI UNDER RPG ATTACK!",
-        overlay_subtitle="GTA 5 HEIST HELICOPTER FIREFIGHT"
+        overlay_subtitle="GTA 6 HELICOPTER FIREFIGHT (4-STAR WANTED)"
     )
     print(f"✅ Generated: {carry_out}")
 
