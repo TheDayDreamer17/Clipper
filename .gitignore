@@ -40,3 +40,10 @@ config/token*.json
 config/*session*
 config/*.env
 scratch/
+
+# Temporary debug screenshots, audits & backups
+data/*.png
+data/*.jpg
+data/edgar_all_seconds/
+data/competitor_samples/
+*.bak
