@@ -18,6 +18,8 @@
 
 ## 🏗️ Architecture
 
+> 📖 **Full System Blueprint & Subsystem Diagrams**: See [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for module-by-module data flows, component boundaries, and the debugging cheat-sheet.
+
 ```mermaid
 flowchart LR
     A["Twitch / YouTube Live Stream"] --> B["Audio Stream Buffer (~1 MB/min)"]
