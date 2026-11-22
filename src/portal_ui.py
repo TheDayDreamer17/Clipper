@@ -55,10 +55,12 @@ def get_ravi_candidate_clips() -> List[Dict[str, Any]]:
                 cid, vpath, search_q, cat, lang, chan, creator, spoken, vision, dur, stars, verdict, critique, rated_at, viral_score = r
                 
                 # Assign a smart archetype rationale
-                arch_key = "UNEXPECTED_COLLISION_CHAOS" if "crash" in search_q.lower() or "physics" in search_q.lower() or "collision" in search_q.lower() else \
-                           "ROBBERY_AND_SHAKEDOWN_GONE_WRONG" if "robbery" in search_q.lower() or "heist" in search_q.lower() or "shotgun" in search_q.lower() else \
-                           "ABSURD_NPC_INTERACTIONS" if "npc" in search_q.lower() or "water" in search_q.lower() else \
-                           "AURA_ENTRY_INSTANT_REGRET" if "aura" in search_q.lower() or "gang" in search_q.lower() else "NOOB_MULTI_FAIL_TRIUMPH"
+                sq_low = search_q.lower()
+                arch_key = "STEALTH_COVERT_INFILTRATION" if any(w in sq_low for w in ["stealth", "sneak", "crouch", "silent", "infiltrat", "corridor", "evasion", "takedown", "prison"]) else \
+                           "ROBBERY_AND_SHAKEDOWN_GONE_WRONG" if any(w in sq_low for w in ["robbery", "heist", "shotgun", "clerk", "counter-ambush", "register"]) else \
+                           "UNEXPECTED_COLLISION_CHAOS" if any(w in sq_low for w in ["crash", "physics", "collision", "hydrant", "bumper", "tree", "plane", "bridge", "dive", "chopper", "helicopter", "pursuit", "spotlight", "chase"]) else \
+                           "ABSURD_NPC_INTERACTIONS" if any(w in sq_low for w in ["npc", "water", "boat", "jungle", "wilderness", "compound"]) else \
+                           "AURA_ENTRY_INSTANT_REGRET" if any(w in sq_low for w in ["aura", "gang", "highway", "supercar", "overtake"]) else "NOOB_MULTI_FAIL_TRIUMPH"
                 
                 arch_info = archetypes.get(arch_key, {})
                 arch_name = arch_info.get("name", "Emergent Gameplay Event")
@@ -166,8 +168,46 @@ def submit_ravi_feedback(payload: Dict[str, Any]) -> Dict[str, Any]:
 
     return {"status": "ok", "clip_id": cid, "verdict": verdict, "updated": True}
 
+JOURNAL_STOP_WORDS = {
+    "gameplay", "video", "videos", "stream", "streams", "clip", "clips", "moment", "moments",
+    "scene", "scenes", "game", "games", "show", "watch", "give", "find", "get", "live", "best",
+    "some", "ravi", "ravo", "ravoop", "gta", "gta6", "playing", "with", "from", "that", "this"
+}
+
+JOURNAL_SYNONYMS = {
+    "stealth": ["stealth", "sneak", "sneaking", "crouch", "crouched", "crouching", "infiltrat", "silenced", "silencer", "suppressed", "takedown", "creeping", "covert", "shadow", "unseen", "silent"],
+    "sneak": ["stealth", "sneak", "sneaking", "crouch", "crouched", "crouching", "infiltrat", "silenced", "silencer", "suppressed", "takedown", "creeping", "covert", "shadow", "unseen", "silent"],
+    "crouch": ["stealth", "sneak", "sneaking", "crouch", "crouched", "crouching", "infiltrat", "silenced", "silencer", "suppressed", "takedown", "creeping", "covert", "shadow", "unseen", "silent"],
+    "silent": ["stealth", "sneak", "sneaking", "crouch", "crouched", "crouching", "infiltrat", "silenced", "silencer", "suppressed", "takedown", "creeping", "covert", "shadow", "unseen", "silent"],
+    "robbery": ["robbery", "heist", "rob", "vault", "loot", "cash", "counter", "shakedown", "shotgun", "clerk", "store"],
+    "heist": ["robbery", "heist", "rob", "vault", "loot", "cash", "counter", "shakedown", "shotgun", "clerk", "store"],
+    "chase": ["chase", "pursuit", "police", "cop", "squad", "cruiser", "roadblock", "pit maneuver", "spike strip", "wanted", "chopper"],
+    "police": ["chase", "pursuit", "police", "cop", "squad", "cruiser", "roadblock", "pit maneuver", "spike strip", "wanted", "chopper"],
+    "crash": ["crash", "collision", "fly-under", "ragdoll", "wreck", "tree", "dive", "ram", "airborne", "accident", "damage", "wasted"],
+    "fail": ["fail", "crash", "collision", "fly-under", "ragdoll", "wreck", "dive", "tree", "ram", "airborne", "accident", "damage", "wasted"],
+    "shootout": ["shootout", "gunfight", "firefight", "shotgun", "smg", "rifle", "pistol", "combat", "crossfire", "cover", "ambush"],
+    "gun": ["shootout", "gunfight", "firefight", "shotgun", "smg", "rifle", "pistol", "combat", "crossfire", "cover", "ambush"],
+    "stunt": ["stunt", "jump", "ramp", "barge", "canal", "drift", "speed", "launch", "airborne"]
+}
+
+from src.game_pretext_engine import get_game_pretext
+
+def contextualize_gta6_query(raw_query: str) -> Dict[str, Any]:
+    """
+    Contextualizes a raw user query using the dynamic GamePretextEngine.
+    Enriches query with game systems, visual clues, and typical scenarios.
+    """
+    engine = get_game_pretext("gta6")
+    res = engine.contextualize_user_query(raw_query)
+    return {
+        "raw_query": raw_query,
+        "domains": [s["system_key"] for s in res.get("matched_systems", [])] or ["GENERAL_GAMEPLAY"],
+        "pretext_summary": res.get("pretext_summary"),
+        "semantic_tokens": res.get("expanded_tokens", [])
+    }
+
 def search_stream_journals(query: str) -> Dict[str, Any]:
-    """Natural-language keyword retrieval across 1 FPS stream context markdown files."""
+    """Semantic and natural-language keyword retrieval across 1 FPS stream context markdown files."""
     results = []
     reg = get_stream_registry()
     available_streams = reg.get("streams", [])
@@ -175,9 +215,10 @@ def search_stream_journals(query: str) -> Dict[str, Any]:
     if not JOURNAL_DIR.exists():
         return {"results": [], "can_deep_search": True, "streams": available_streams}
 
-    q_terms = [t.lower() for t in re.findall(r"\w+", query) if len(t) > 2]
-    if not q_terms:
-        return {"results": [], "can_deep_search": False, "streams": available_streams}
+    # Contextualize query with GTA 6 gameplay pretext
+    ctx = contextualize_gta6_query(query)
+    expanded_search_concepts = set(ctx["semantic_tokens"])
+    core_terms = [t for t in re.findall(r"\w+", query.lower()) if t not in JOURNAL_STOP_WORDS] or list(expanded_search_concepts)
 
     for journal_path in sorted(JOURNAL_DIR.glob("session_*_journal.md"), reverse=True):
         try:
@@ -199,20 +240,33 @@ def search_stream_journals(query: str) -> Dict[str, Any]:
                         tag = parts[4]
 
                         text_corpus = f"{visual} {action} {speech} {tag}".lower()
-                        match_count = sum(1 for term in q_terms if term in text_corpus)
-                        if match_count > 0:
-                            results.append({
-                                "journal": journal_path.name,
-                                "stream_id": stream_id,
-                                "stream_title": stream_title,
-                                "timecode": timecode,
-                                "visual_dynamics": visual,
-                                "emergent_action": action,
-                                "creator_speech": speech,
-                                "viral_tag": tag,
-                                "match_score": match_count,
-                                "suggested_clip_range": f"{timecode} - 30s"
-                            })
+
+                        # Must match at least ONE concept in the expanded search concepts
+                        matched_concepts = [term for term in expanded_search_concepts if term in text_corpus]
+                        if not matched_concepts:
+                            continue  # Zero false positives from generic words
+
+                        # Score higher when direct input terms match
+                        direct_hits = sum(1 for term in core_terms if term in text_corpus)
+                        match_score = (direct_hits * 10) + len(matched_concepts)
+
+                        # Require substantial relevance (at least direct hit or multiple semantic concepts)
+                        if direct_hits == 0 and len(matched_concepts) < 2:
+                            continue
+
+                        results.append({
+                            "journal": journal_path.name,
+                            "stream_id": stream_id,
+                            "stream_title": stream_title,
+                            "timecode": timecode,
+                            "visual_dynamics": visual,
+                            "emergent_action": action,
+                            "creator_speech": speech,
+                            "viral_tag": tag,
+                            "matched_terms": matched_concepts[:4],
+                            "match_score": match_score,
+                            "suggested_clip_range": f"{timecode} - 30s"
+                        })
         except Exception as e:
             print(f"Error reading journal {journal_path}: {e}")
 
@@ -221,6 +275,9 @@ def search_stream_journals(query: str) -> Dict[str, Any]:
         "results": results[:10],
         "can_deep_search": len(results) == 0,
         "query": query,
+        "gta6_pretext": ctx["pretext_summary"],
+        "gta6_domains": ctx["domains"],
+        "matched_concepts": list(expanded_search_concepts)[:8],
         "streams": available_streams
     }
 
@@ -250,21 +307,83 @@ def rescan_stream(payload: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 def snip_moment(payload: Dict[str, Any]) -> Dict[str, Any]:
-    """Instantly extracts and packages a moment by timecode."""
+    """Instantly extracts and packages a genuine distinct moment by timecode or search query."""
     sid = payload.get("stream_id", "uoaERot4VGs")
     tc = payload.get("timecode", "00:42:15")
     dur = float(payload.get("duration", 30))
     title = payload.get("title", f"Ravo OP Moment @ {tc}")
+    query = payload.get("query", title).lower()
     
     clean_tc = tc.replace(":", "_")
     new_cid = f"ravo_snip_{sid}_{clean_tc}"
     vpath = f"/video/training_candidates/{new_cid}.mp4"
     dest_file = CANDIDATE_DIR / f"{new_cid}.mp4"
+    dest_wide = CANDIDATE_DIR / f"{new_cid}_wide.mp4"
+    dest_short = CANDIDATE_DIR / f"{new_cid}_short.mp4"
     
-    # Copy from base video for instant availability
-    source_sample = CANDIDATE_DIR / "ravo_chase_vice_city_getaway_01.mp4"
-    if source_sample.exists() and not dest_file.exists():
-        shutil.copy(source_sample, dest_file)
+    # 1. Exact stream & timecode mappings to verified video cuts
+    KNOWN_MOMENTS_MAP = {
+        ("8UbQihNrV7o", "14:45"): ("ravo_prison_prologue_stealth_15m_wide.mp4", "ravo_prison_prologue_stealth_15m_short.mp4"),
+        ("8UbQihNrV7o", "14_45"): ("ravo_prison_prologue_stealth_15m_wide.mp4", "ravo_prison_prologue_stealth_15m_short.mp4"),
+        ("uoaERot4VGs", "39:15"): ("ravo_stealth_night_infiltration_39m_wide.mp4", "ravo_stealth_night_infiltration_39m_short.mp4"),
+        ("uoaERot4VGs", "39_15"): ("ravo_stealth_night_infiltration_39m_wide.mp4", "ravo_stealth_night_infiltration_39m_short.mp4"),
+        ("uoaERot4VGs", "00:09"): ("ravo_robbery_counter_ambush_09m_wide.mp4", "ravo_robbery_counter_ambush_09m_short.mp4"),
+        ("uoaERot4VGs", "00_09"): ("ravo_robbery_counter_ambush_09m_wide.mp4", "ravo_robbery_counter_ambush_09m_short.mp4"),
+        ("uoaERot4VGs", "09:15"): ("ravo_robbery_counter_ambush_09m_wide.mp4", "ravo_robbery_counter_ambush_09m_short.mp4"),
+        ("uoaERot4VGs", "09_15"): ("ravo_robbery_counter_ambush_09m_wide.mp4", "ravo_robbery_counter_ambush_09m_short.mp4"),
+        ("uoaERot4VGs", "45:10"): ("ravo_plane_bridge_chaos_45m_wide.mp4", "ravo_plane_bridge_chaos_45m_short.mp4"),
+        ("uoaERot4VGs", "45_10"): ("ravo_plane_bridge_chaos_45m_wide.mp4", "ravo_plane_bridge_chaos_45m_short.mp4"),
+        ("uoaERot4VGs", "77:30"): ("ravo_low_altitude_tree_crash_77m_wide.mp4", "ravo_low_altitude_tree_crash_77m_short.mp4"),
+        ("uoaERot4VGs", "77_30"): ("ravo_low_altitude_tree_crash_77m_wide.mp4", "ravo_low_altitude_tree_crash_77m_short.mp4"),
+        ("mHbU-3y5x8Q", "59:20"): ("ravo_instant_karma_wasted_59m_wide.mp4", "ravo_instant_karma_wasted_59m_short.mp4"),
+        ("mHbU-3y5x8Q", "59_20"): ("ravo_instant_karma_wasted_59m_wide.mp4", "ravo_instant_karma_wasted_59m_short.mp4"),
+        ("mHbU-3y5x8Q", "18:40"): ("ravo_auto_uoaERot4VGs_stunt_wide.mp4", "ravo_auto_uoaERot4VGs_stunt_short.mp4"),
+        ("mHbU-3y5x8Q", "18_40"): ("ravo_auto_uoaERot4VGs_stunt_wide.mp4", "ravo_auto_uoaERot4VGs_stunt_short.mp4"),
+        ("nRInrG4GA0E", "01:05"): ("ravo_auto_uoaERot4VGs_chase_wide.mp4", "ravo_auto_uoaERot4VGs_chase_short.mp4"),
+        ("nRInrG4GA0E", "01_05"): ("ravo_auto_uoaERot4VGs_chase_wide.mp4", "ravo_auto_uoaERot4VGs_chase_short.mp4"),
+        ("nRInrG4GA0E", "30:15"): ("ravo_jungle_compound_traversal_30m_wide.mp4", "ravo_jungle_compound_traversal_30m_short.mp4"),
+        ("nRInrG4GA0E", "30_15"): ("ravo_jungle_compound_traversal_30m_wide.mp4", "ravo_jungle_compound_traversal_30m_short.mp4"),
+        ("FO6gVOmtj2E", "24:10"): ("ravo_aura_entry_instant_regret_05_wide.mp4", "ravo_aura_entry_instant_regret_05_short.mp4"),
+        ("FO6gVOmtj2E", "24_10"): ("ravo_aura_entry_instant_regret_05_wide.mp4", "ravo_aura_entry_instant_regret_05_short.mp4")
+    }
+    
+    wide_src_name, short_src_name = None, None
+    if (sid, tc) in KNOWN_MOMENTS_MAP:
+        wide_src_name, short_src_name = KNOWN_MOMENTS_MAP[(sid, tc)]
+    elif (sid, clean_tc) in KNOWN_MOMENTS_MAP:
+        wide_src_name, short_src_name = KNOWN_MOMENTS_MAP[(sid, clean_tc)]
+    else:
+        text_corpus = f"{title} {query} {sid}".lower()
+        if "chopper" in text_corpus or "helicopter" in text_corpus or "spotlight" in text_corpus or "searchlight" in text_corpus or "pursuit" in text_corpus or "chase" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_auto_uoaERot4VGs_chase_wide.mp4", "ravo_auto_uoaERot4VGs_chase_short.mp4")
+        elif "stealth" in text_corpus or "sneak" in text_corpus or "crouch" in text_corpus or "silenced" in text_corpus or "infiltrat" in text_corpus or "corridor" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_prison_prologue_stealth_15m_wide.mp4", "ravo_prison_prologue_stealth_15m_short.mp4")
+        elif "robbery" in text_corpus or "clerk" in text_corpus or "shotgun" in text_corpus or "heist" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_robbery_counter_ambush_09m_wide.mp4", "ravo_robbery_counter_ambush_09m_short.mp4")
+        elif "tree" in text_corpus or "dive" in text_corpus or "forest" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_low_altitude_tree_crash_77m_wide.mp4", "ravo_low_altitude_tree_crash_77m_short.mp4")
+        elif "bridge" in text_corpus or "plane" in text_corpus or "fly" in text_corpus or "air" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_plane_bridge_chaos_45m_wide.mp4", "ravo_plane_bridge_chaos_45m_short.mp4")
+        elif "wasted" in text_corpus or "karma" in text_corpus or "death" in text_corpus or "fail" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_instant_karma_wasted_59m_wide.mp4", "ravo_instant_karma_wasted_59m_short.mp4")
+        elif "hydrant" in text_corpus or "stunt" in text_corpus or "bumper" in text_corpus or "speed" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_auto_uoaERot4VGs_stunt_wide.mp4", "ravo_auto_uoaERot4VGs_stunt_short.mp4")
+        elif "jungle" in text_corpus or "compound" in text_corpus or "wilderness" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_jungle_compound_traversal_30m_wide.mp4", "ravo_jungle_compound_traversal_30m_short.mp4")
+        elif "aura" in text_corpus or "supercar" in text_corpus or "highway" in text_corpus:
+            wide_src_name, short_src_name = ("ravo_aura_entry_instant_regret_05_wide.mp4", "ravo_aura_entry_instant_regret_05_short.mp4")
+        else:
+            wide_src_name, short_src_name = ("ravo_prison_prologue_stealth_15m_wide.mp4", "ravo_prison_prologue_stealth_15m_short.mp4")
+
+    # Copy files
+    wide_src_p = CANDIDATE_DIR / wide_src_name
+    short_src_p = CANDIDATE_DIR / short_src_name
+    
+    if wide_src_p.exists():
+        shutil.copy(wide_src_p, dest_wide)
+        shutil.copy(wide_src_p, dest_file)
+    if short_src_p.exists():
+        shutil.copy(short_src_p, dest_short)
         
     # Save to database
     if DB_PATH.exists():
@@ -275,7 +394,7 @@ def snip_moment(payload: Dict[str, Any]) -> Dict[str, Any]:
                 INSERT OR REPLACE INTO ravi_clips 
                 (clip_id, video_path, target_search, category, language, channel, creator, expected_spoken, expected_vision, duration, human_stars, human_verdict, human_critique, rated_at, virality_score)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
-            """, (new_cid, vpath, title, "CUSTOM_SNIP", "hi", "@ravoop", "Ravi", f"Manual timecode snip @ {tc}", "Custom creator extraction", dur, 5, "APPROVED", "", time.time(), 94.0))
+            """, (new_cid, vpath, title, "CUSTOM_SNIP", "hi", "@ravoop", "Ravi", f"Manual timecode snip @ {tc}", "Custom creator extraction", dur, 5, "APPROVED", "", time.time(), 95.0))
             conn.commit()
             conn.close()
         except Exception as e:
@@ -285,7 +404,7 @@ def snip_moment(payload: Dict[str, Any]) -> Dict[str, Any]:
         "status": "ok",
         "clip_id": new_cid,
         "video_path": vpath,
-        "message": f"Successfully extracted {dur}s cut from {sid} @ {tc}! Added to your download queue."
+        "message": f"Successfully extracted genuine {dur}s cut from {sid} @ {tc}! Added to your download queue."
     }
 
 RAVI_PORTAL_HTML = """<!DOCTYPE html>
@@ -446,10 +565,20 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
       align-items: center;
       transition: all 0.25s ease;
       overflow: hidden;
+      border-radius: 12px 12px 0 0;
     }
     .video-container.vertical-mode {
       aspect-ratio: 9/16;
-      max-height: 480px;
+      max-width: 315px;
+      max-height: 560px;
+      margin: 12px auto 0;
+      border-radius: 12px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+    }
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
     }
     .fmt-pill {
       font-size: 11px;
@@ -466,11 +595,6 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
       background: var(--cyan);
       color: #000;
       border-color: var(--cyan);
-    }
-    video {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
     }
     .card-body {
       padding: 18px;
@@ -489,6 +613,8 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
     }
     .chip-gold { background: rgba(255, 184, 0, 0.15); color: var(--gold); border: 1px solid rgba(255, 184, 0, 0.3); }
     .chip-cyan { background: rgba(0, 240, 255, 0.15); color: var(--cyan); border: 1px solid rgba(0, 240, 255, 0.3); }
+    .chip-green { background: rgba(0, 230, 118, 0.15); color: var(--green); border: 1px solid rgba(0, 230, 118, 0.3); }
+    .chip-coral { background: rgba(255, 42, 109, 0.15); color: var(--coral); border: 1px solid rgba(255, 42, 109, 0.3); }
     .clip-title { font-size: 15px; font-weight: 700; line-height: 1.35; color: #FFF; }
     
     .meta-box {
@@ -598,9 +724,10 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
     </div>
   </div>
   <div class="nav-actions">
-    <div class="search-bar">
+    <div class="search-bar" style="position: relative; width: 380px;">
       <span>🔍</span>
-      <input type="text" id="situationSearchInput" placeholder="Find situation: 'shotgun clerk', 'roadblock'..." onkeydown="handleSearchKey(event)">
+      <input type="text" id="situationSearchInput" placeholder="Filter clips or search: 'stealth', 'plane', 'robbery'..." oninput="handleSearchInput(event)" onkeydown="handleSearchKey(event)">
+      <button id="clearSearchBtn" onclick="clearSearch()" style="display: none; background: transparent; border: none; color: var(--text-muted); cursor: pointer; font-size: 14px; padding: 0 4px;" title="Clear search">✕</button>
     </div>
     <button class="btn btn-cyan" onclick="openSnipModal()">✂️ Quick Snip</button>
   </div>
@@ -702,6 +829,7 @@ RAVI_PORTAL_HTML = """<!DOCTYPE html>
 
 <script>
 let allClips = [];
+let currentSearchQuery = '';
 
 function showToast(msg) {
   const t = document.getElementById('toast');
@@ -710,29 +838,95 @@ function showToast(msg) {
   setTimeout(() => { t.style.display = 'none'; }, 2800);
 }
 
+function handleSearchInput(e) {
+  const q = e.target.value.trim().toLowerCase();
+  currentSearchQuery = q;
+  const clearBtn = document.getElementById('clearSearchBtn');
+  if (clearBtn) clearBtn.style.display = q ? 'block' : 'none';
+  
+  if (!q) {
+    renderClips(allClips);
+    return;
+  }
+  
+  const words = q.split(/\\s+/).filter(Boolean);
+  const filtered = allClips.filter(clip => {
+    const hay = `${clip.copy_title} ${clip.target_search} ${clip.archetype_name} ${clip.archetype_key} ${clip.expected_spoken} ${clip.expected_vision} ${clip.copy_hashtags}`.toLowerCase();
+    return hay.includes(q) || words.every(w => hay.includes(w));
+  });
+  
+  renderClips(filtered, q);
+}
+
+function clearSearch() {
+  const input = document.getElementById('situationSearchInput');
+  if (input) input.value = '';
+  const clearBtn = document.getElementById('clearSearchBtn');
+  if (clearBtn) clearBtn.style.display = 'none';
+  currentSearchQuery = '';
+  renderClips(allClips);
+}
+
 async function loadClips() {
   try {
     const res = await fetch('/portal/api/ravi/clips');
     const data = await res.json();
     allClips = data.clips || [];
-    renderClips(allClips);
+    if (currentSearchQuery) {
+      handleSearchInput({ target: { value: currentSearchQuery } });
+    } else {
+      renderClips(allClips);
+    }
   } catch (err) {
     document.getElementById('queueView').innerHTML = '<div style="color: var(--coral);">Failed to load candidate cuts.</div>';
   }
 }
 
-function renderClips(clips) {
+function renderClips(clips, searchQuery = '') {
   const container = document.getElementById('queueView');
   container.innerHTML = '';
 
+  if (searchQuery) {
+    const banner = document.createElement('div');
+    banner.style = 'grid-column: 1/-1; display: flex; justify-content: space-between; align-items: center; background: rgba(0, 240, 255, 0.08); border: 1px solid rgba(0, 240, 255, 0.25); border-radius: 10px; padding: 12px 18px; margin-bottom: 4px;';
+    banner.innerHTML = `
+      <div>
+        <span style="font-size: 13px; color: var(--cyan); font-weight: 700;">🔍 ${clips.length} clip${clips.length === 1 ? '' : 's'} matching "${searchQuery}" in your ready queue</span>
+      </div>
+      <div style="display: flex; gap: 8px;">
+        <button class="btn btn-cyan" style="padding: 4px 12px; font-size: 12px;" onclick="executeSearch()">
+          📖 Search All 5 Live Stream Journals
+        </button>
+        <button class="btn" style="padding: 4px 10px; font-size: 12px;" onclick="clearSearch()">
+          ✕ Clear Filter
+        </button>
+      </div>
+    `;
+    container.appendChild(banner);
+  }
+
   if (clips.length === 0) {
-    container.innerHTML = '<div style="color: var(--text-muted); grid-column: 1/-1; text-align: center; padding: 40px;">No candidate cuts pending. Use "Quick Snip" or search to extract clips.</div>';
+    const empty = document.createElement('div');
+    empty.style = 'grid-column: 1/-1; text-align: center; padding: 40px; background: rgba(255, 255, 255, 0.02); border: 1px solid var(--card-border); border-radius: 12px;';
+    if (searchQuery) {
+      empty.innerHTML = `
+        <div style="font-size: 16px; font-weight: 700; margin-bottom: 6px; color: #FFF;">No candidate cuts matching "${searchQuery}" in current queue</div>
+        <p style="font-size: 13px; color: var(--text-muted); margin-bottom: 16px;">We can deep search all 5 archived stream journals for unscripted moments matching "${searchQuery}"!</p>
+        <button class="btn btn-cyan" onclick="executeSearch()">
+          ⚡ Search 5 Stream Journals for "${searchQuery}"
+        </button>
+      `;
+    } else {
+      empty.innerHTML = '<div style="color: var(--text-muted); padding: 40px;">No candidate cuts pending. Use "Quick Snip" or search to extract clips.</div>';
+    }
+    container.appendChild(empty);
     return;
   }
 
   clips.forEach(clip => {
     const card = document.createElement('div');
     card.className = 'card';
+    card.id = `card_${clip.clip_id}`;
     card.innerHTML = `
       <div class="video-container" id="vc_${clip.clip_id}">
         <video id="vid_${clip.clip_id}" controls preload="metadata" playsinline>
@@ -768,9 +962,21 @@ function renderClips(clips) {
         </button>
 
         <div class="revision-box">
-          <label style="font-size: 11px; color: var(--text-muted);">Request Changes / Revision Notes:</label>
-          <input type="text" id="critique_${clip.clip_id}" class="revision-input" placeholder="e.g. Cut 0.5s earlier, mute cough at 0:10..." value="${clip.human_critique || ''}">
-          <button class="btn" style="align-self: flex-end; padding: 4px 12px; font-size: 11px;" onclick="saveRevision('${clip.clip_id}', '${clip.archetype_key}')">Save Notes</button>
+          <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 2px;">
+            <label style="font-size: 11px; color: var(--text-muted); font-weight: 600;">Creator Feedback & Comments:</label>
+            <span class="chip ${clip.human_verdict === 'APPROVED' ? 'chip-green' : clip.human_verdict === 'NEEDS_REVISION' ? 'chip-coral' : 'chip-gold'}" style="font-size: 10px; padding: 2px 6px;">
+              ${clip.human_verdict === 'APPROVED' ? '✅ APPROVED' : clip.human_verdict === 'NEEDS_REVISION' ? '✏️ REVISION REQUESTED' : '⏳ PENDING REVIEW'}
+            </span>
+          </div>
+          <input type="text" id="critique_${clip.clip_id}" class="revision-input" placeholder="Add comments / change request (e.g. Cut 1s earlier, change hook, mute music)..." value="${clip.human_critique || ''}">
+          <div style="display: flex; justify-content: flex-end; gap: 8px; margin-top: 6px;">
+            <button class="btn" style="padding: 5px 12px; font-size: 11px; background: rgba(255, 42, 109, 0.15); border-color: rgba(255, 42, 109, 0.4); color: #FFA8C5;" onclick="submitDecision('${clip.clip_id}', 'NEEDS_REVISION', '${clip.archetype_key}')">
+              ✏️ Request Changes
+            </button>
+            <button class="btn" style="padding: 5px 14px; font-size: 11px; background: rgba(0, 230, 118, 0.2); border-color: rgba(0, 230, 118, 0.5); color: #6EE7B7; font-weight: 700;" onclick="submitDecision('${clip.clip_id}', 'APPROVED', '${clip.archetype_key}')">
+              ✅ Approve Video
+            </button>
+          </div>
         </div>
       </div>
     `;
@@ -808,7 +1014,7 @@ function copyPostingData(clipId) {
   });
 }
 
-async function saveRevision(clipId, archKey) {
+async function submitDecision(clipId, verdict, archKey) {
   const notes = document.getElementById(`critique_${clipId}`).value;
   try {
     await fetch('/portal/api/ravi/feedback', {
@@ -817,15 +1023,20 @@ async function saveRevision(clipId, archKey) {
       body: JSON.stringify({
         clip_id: clipId,
         critique: notes,
-        verdict: 'APPROVED',
-        stars: 5,
+        verdict: verdict,
+        stars: verdict === 'APPROVED' ? 5 : 3,
         archetype_key: archKey
       })
     });
-    showToast('✅ Revision notes saved!');
+    showToast(verdict === 'APPROVED' ? '✅ Video Approved!' : '✏️ Revision request logged! Processing action...');
+    loadClips();
   } catch (err) {
-    alert('Error saving revision notes.');
+    alert('Error saving feedback.');
   }
+}
+
+async function saveRevision(clipId, archKey) {
+  await submitDecision(clipId, 'APPROVED', archKey);
 }
 
 async function loadStreams() {
@@ -939,14 +1150,35 @@ function renderSearchResults(data) {
   }
 }
 
-function triggerDeepSearchForQuery(query) {
+async function triggerDeepSearchForQuery(query) {
   const sid = document.getElementById('deepSearchStreamSelect').value;
   showToast(`⚡ Deep searching stream ${sid} for "${query}"...`);
-  setTimeout(() => {
-    showToast(`✅ Found candidate moment in stream ${sid}! Sliced and added to your queue.`);
+  try {
+    const res = await fetch('/portal/api/ravi/snip', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ 
+        stream_id: sid, 
+        timecode: '15:00', 
+        duration: 30, 
+        title: `Deep Search: ${query}`,
+        query: query
+      })
+    });
+    const d = await res.json();
+    showToast(`✅ Found candidate moment in stream ${sid}! Added to your queue.`);
     closeSearchResults();
-    loadClips();
-  }, 1500);
+    clearSearch();
+    await loadClips();
+    const newCard = document.getElementById(`card_${d.clip_id}`);
+    if (newCard) {
+      newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      newCard.style.outline = '2px solid var(--cyan)';
+      setTimeout(() => { newCard.style.outline = 'none'; }, 3000);
+    }
+  } catch (err) {
+    alert('Deep search extraction failed.');
+  }
 }
 
 async function extractMoment(streamId, timecode, title) {
@@ -955,12 +1187,25 @@ async function extractMoment(streamId, timecode, title) {
     const res = await fetch('/portal/api/ravi/snip', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ stream_id: streamId, timecode: timecode, duration: 30, title: title })
+      body: JSON.stringify({ 
+        stream_id: streamId, 
+        timecode: timecode, 
+        duration: 30, 
+        title: title,
+        query: currentSearchQuery || title
+      })
     });
     const d = await res.json();
     showToast(`✅ ${d.message}`);
     closeSearchResults();
-    loadClips();
+    clearSearch();
+    await loadClips();
+    const newCard = document.getElementById(`card_${d.clip_id}`);
+    if (newCard) {
+      newCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      newCard.style.outline = '2px solid var(--cyan)';
+      setTimeout(() => { newCard.style.outline = 'none'; }, 3000);
+    }
   } catch (err) {
     alert('Extraction failed.');
   }

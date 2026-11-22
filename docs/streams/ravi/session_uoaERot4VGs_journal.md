@@ -27,3 +27,9 @@
 > 🚨 **[EMERGENT ANOMALY @ 01:15]:** Canal waterway stunt landing on moving barge  
 > 🗣️ **Creator Reaction:** *"'Clean jump! Chat dekho smooth landing!'"* (Aura/Hyped)  
 > 🎯 **Curator Recommendation:** Extract 30s Short (`01:15`) -> Archetype: `🔥 WATERWAY_STUNT`
+
+| `39:15` | Tactical night compound infiltration, crouching behind perimeter fence with silenced weapon avoiding floodlights | 🥷 Covert stealth infiltration & silent takedown past guards | *"'Stealth mode on... chupke se nikalna hai, koi alarm nahi bajna chahiye!'"* (Intense Whispering) | 🔥 `🥷 STEALTH_TACTICAL_INFILTRATION` | `State: STEALTH_CROUCH | Wanted: ☆☆☆☆☆ | Weapon: Silenced Pistol` |
+
+> 🚨 **[EMERGENT ANOMALY @ 39:15]:** 🥷 Covert stealth infiltration & silent takedown past guards  
+> 🗣️ **Creator Reaction:** *"'Stealth mode on... chupke se nikalna hai, koi alarm nahi bajna chahiye!'"* (Intense Whispering)  
+> 🎯 **Curator Recommendation:** Extract 30s Short (`39:15`) -> Archetype: `🥷 STEALTH_TACTICAL_INFILTRATION`

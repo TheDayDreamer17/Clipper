@@ -69,6 +69,20 @@
         "Pacing must be sharp: build up aura for 5-8s, instant comedic cutoff within 1s of failure."
       ]
     },
+    "STEALTH_COVERT_INFILTRATION": {
+      "name": "Stealth Infiltration & Silent Takedowns",
+      "description": "Tactical crouching, sneaking past patrols, night perimeter infiltration, and suppressed takedowns.",
+      "triggers": [
+        "Crouch-walking behind cover or compound perimeter fences",
+        "Silenced weapon takedown or sneaking past security spotlights",
+        "Sudden detection alarm triggering frantic panic"
+      ],
+      "selection_weight": 1.45,
+      "preferred_sfx": "tension_covert_drone_or_metal_gear_alert",
+      "learned_user_preferences": [
+        "Include clear crouching posture, crosshair or laser sight, and stealth audio."
+      ]
+    },
     "NOOB_MULTI_FAIL_TRIUMPH": {
       "name": "The Noob Failure Arc",
       "description": "Failing the same checkpoint 2-4 times with escalating frustration, finally beating it with ecstatic celebration.",
@@ -96,6 +110,15 @@
       "timecode_notes": "Cut 0.5s earlier",
       "critique": "Elite physics collision at junction",
       "stars": 5
+    },
+    {
+      "timestamp": 1795363797.234244,
+      "clip_id": "ravo_jungle_compound_traversal_30m",
+      "verdict": "NEEDS_REVISION",
+      "reason_tags": [],
+      "timecode_notes": "",
+      "critique": "there is no stealth take down here , i think it was before this time slot or after it ",
+      "stars": 3
     }
   ]
 }
