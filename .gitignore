@@ -44,6 +44,9 @@ scratch/
 # Temporary debug screenshots, audits & backups
 data/*.png
 data/*.jpg
+data/brand_assets/*.png
+data/brand_assets/*.jpg
+data/*_processed_streams.json
 data/edgar_all_seconds/
 data/competitor_samples/
 *.bak
